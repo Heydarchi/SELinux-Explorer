@@ -18,6 +18,6 @@ class TeAnalyzer(AbstractAnalyzer):
 
 if __name__ == "__main__" :
     print(sys.argv)
-    policyEntities = PolicyEntities()
-    policyEntities.analyze(sys.argv[1])
+    teAnalyzer = TeAnalyzer()
+    teAnalyzer.analyze(sys.argv[1])
 

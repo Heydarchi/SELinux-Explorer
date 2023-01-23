@@ -1,5 +1,19 @@
 from dataclasses import dataclass
 
+class FileTypeEnum(Enum):
+    UNDEFINED = 0
+    OTHER_CONTEXT = 1
+    TE_FILE = 2
+    FILE_CONTEXTS = 3
+    SEAPP_CONTEXTS = 4
+    SERVICE_CONTEXTS = 5
+    HWSERVICE_CONTEXTS = 6
+    VNDSERVICE_CONTEXTS = 7
+    PROPERTY_CONTEXTS = 8
+
+    def __str__(self):
+        return str(self.value)
+        
 @dataclass
 class PolicyFiles:
     fileName: str
