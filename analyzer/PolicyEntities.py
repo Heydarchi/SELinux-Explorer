@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from typing import List
 
 class FileTypeEnum(Enum):
     TE_FILE = 1,".te"
@@ -18,12 +19,13 @@ class FileTypeEnum(Enum):
     def __init__(self, rank, label):
         self.rank = rank
         self.label = label
-        
+
 @dataclass
-class PolicyFiles:
-    fileName: str
-    description: str
-    
+class PolicyFunction:
+    name: str
+    params: list()
+    rules: list()
+
 @dataclass
 class Controls:
     className: str
@@ -32,9 +34,10 @@ class Controls:
 #allow source target:class permissions
 @dataclass
 class Rule:
+    rule: str
     source: str
     target: str
-    clas: str
+    classType: str
     permissions: list()
 
 #user:role:type:sensitivity[:categories]
@@ -46,6 +49,14 @@ class SecurityContext:
     level: str
     categories: str
 
+@dataclass
+class SeAppContext:
+    user: str
+    seinfo: str
+    name: str
+    domain: str
+    type: str
+    levelFrom: str
 
 #pathname_regexp [file_type] security_context
 @dataclass
@@ -54,3 +65,18 @@ class Context:
     fileType: str
     securityContext: SecurityContext
 
+@dataclass
+class Labels:
+    name: str
+    types: list()
+
+@dataclass
+class PolicyFiles:
+    fileName: str
+    description: str
+    fileType: FileTypeEnum
+    labels: List(Labels)
+    contexts: List(Context)
+    seApps: List(SeAppContext)
+    rules: List(Rule)
+    functions: List(PolicyFunction)
