@@ -1,18 +1,23 @@
 from dataclasses import dataclass
+from enum import Enum
 
 class FileTypeEnum(Enum):
-    UNDEFINED = 0
-    OTHER_CONTEXT = 1
-    TE_FILE = 2
-    FILE_CONTEXTS = 3
-    SEAPP_CONTEXTS = 4
-    SERVICE_CONTEXTS = 5
-    HWSERVICE_CONTEXTS = 6
-    VNDSERVICE_CONTEXTS = 7
-    PROPERTY_CONTEXTS = 8
+    TE_FILE = 1,".te"
+    FILE_CONTEXTS = 2,"file_contexts"
+    SEAPP_CONTEXTS = 3,"seapp_contexts"
+    SERVICE_CONTEXTS = 4,"service_contexts"
+    HWSERVICE_CONTEXTS = 5,"hwservice_contexts"
+    VNDSERVICE_CONTEXTS = 6,"vndservice_contexts"
+    PROPERTY_CONTEXTS = 7,"property_contexts"
+    OTHER_CONTEXT = 8,"contexts"
+    UNDEFINED = 9,""
 
     def __str__(self):
         return str(self.value)
+    
+    def __init__(self, rank, label):
+        self.rank = rank
+        self.label = label
         
 @dataclass
 class PolicyFiles:
