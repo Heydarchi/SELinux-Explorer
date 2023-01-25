@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import List
 
@@ -31,14 +31,26 @@ class Controls:
     className: str
     permissions: list()
 
+
+class RuleEnum(Enum):
+    ALLOW = 0, "allow"
+    NEVER_ALLOW = 1, "neverallow"
+
+    def __str__(self):
+        return str(self.value)
+    
+    def __init__(self, rank, label):
+        self.rank = rank
+        self.label = label
+
 #allow source target:class permissions
 @dataclass
 class Rule:
-    rule: str
-    source: str
-    target: str
-    classType: str
-    permissions: list()
+    rule: str = ""
+    source: str = ""
+    target: str = ""
+    classType: str = ""
+    permissions: List[str] = field(default_factory=list)
 
 #user:role:type:sensitivity[:categories]
 @dataclass
@@ -66,17 +78,17 @@ class Context:
     securityContext: SecurityContext
 
 @dataclass
-class Labels:
-    name: str
-    types: list()
+class TypeDef:
+    name: str = ""
+    types: List[str] = field(default_factory=list)
 
 @dataclass
 class PolicyFiles:
-    fileName: str
-    description: str
-    fileType: FileTypeEnum
-    labels: List(Labels)
-    contexts: List(Context)
-    seApps: List(SeAppContext)
-    rules: List(Rule)
-    functions: List(PolicyFunction)
+    fileName: str = ""
+    description: str = ""
+    fileType: FileTypeEnum = FileTypeEnum.UNDEFINED
+    typeDef: List[TypeDef]= field(default_factory=list)
+    contexts: List[Context]= field(default_factory=list)
+    seApps: List[SeAppContext]= field(default_factory=list)
+    rules: List[Rule]= field(default_factory=list)
+    functions: List[PolicyFunction]= field(default_factory=list)
