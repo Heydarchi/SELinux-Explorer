@@ -11,3 +11,4 @@ allow system_app hal_dummy_hwservice:hwservice_manager find;
 
 allow priv_app hal_dummy_hwservice:hwservice_manager find;
 allow priv_app dummy:binder { call transfer };
+neverallow system_app dummy:binder { call transfer };

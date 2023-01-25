@@ -25,19 +25,20 @@ class TeAnalyzer(AbstractAnalyzer):
         items = inputString.split()
         if len(items) > 0 :
             if items[0] == "type" :
-                self.extractDefinition(items)
+                self.extractDefinition(inputString)
             elif items[0] in ["allow", "neverallow"] :
-                self.extractRule(items)
+                self.extractRule(inputString)
 
 
-    def extractDefinition(self,  items):
-        types = items[1].replace(";","").strip().split(",") 
+    def extractDefinition(self,  inputString):
+        types = inputString.replace(";","").replace("type ","").strip().split(",") 
         typeDef = TypeDef()
         typeDef.name = types[0]
         typeDef.types.extend(types[1:])
         self.policyFile.typeDef.append( typeDef )
 
-    def extractRule(self,  items):
+    def extractRule(self,  inputString):
+        items = inputString.replace(";","").replace(": ",":").replace("{","").replace("}","").strip().split() 
         rule = Rule()
         for ruleEnum in RuleEnum:
             if ruleEnum.label == items[0].strip():
@@ -46,8 +47,9 @@ class TeAnalyzer(AbstractAnalyzer):
                 dstItems = items[2].split(":")
                 rule.target = dstItems[0]
                 rule.classType = dstItems[1]
-                permissions = items[2].replace("{","").replace("}","").strip().split()
-                rule.permissions.extend(permissions)
+                rule.permissions.extend(items[3:])
+                print(items)
+                print(rule)
                 self.policyFile.rules.append(rule)
                 return
 
