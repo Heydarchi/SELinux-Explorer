@@ -1,7 +1,6 @@
 import sys
 from pathlib import Path
 from AnalyzerUtility import *
-import re
 from AbstractAnalyzer import * 
 from PolicyEntities import *
 from PythonUtilityClasses import FileReader as FR

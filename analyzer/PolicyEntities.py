@@ -55,11 +55,11 @@ class Rule:
 #user:role:type:sensitivity[:categories]
 @dataclass
 class SecurityContext:
-    user: str
-    role: str
-    type: str
-    level: str
-    categories: str
+    user: str = ""
+    role: str = ""
+    type: str = ""
+    level: str = ""
+    categories: str = ""
 
 @dataclass
 class SeAppContext:
@@ -81,10 +81,9 @@ class SeAppContext:
 #pathname_regexp [file_type] security_context
 @dataclass
 class Context:
-    pathName: str
-    fileType: str
-    securityContext: SecurityContext
-
+    pathName: str = ""
+    fileType: str = ""
+    securityContext: SecurityContext = None
 @dataclass
 class TypeDef:
     name: str = ""
