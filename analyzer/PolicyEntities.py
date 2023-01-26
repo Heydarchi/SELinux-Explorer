@@ -63,12 +63,20 @@ class SecurityContext:
 
 @dataclass
 class SeAppContext:
-    user: str
-    seinfo: str
-    name: str
-    domain: str
-    type: str
-    levelFrom: str
+    neverAllow: bool = False
+    isSystemServer: bool = False
+    isEphemeralApp:  bool = False
+    user:  str = ""
+    seinfo:  str = ""
+    name:  str = ""
+    isPrivApp:  bool = False
+    minTargetSdkVersion:  int = 0
+    fromRunAs:  bool = False
+    domain: str = ""
+    type: str = ""
+    levelFrom: str = ""
+    levelFrom: str = ""
+
 
 #pathname_regexp [file_type] security_context
 @dataclass

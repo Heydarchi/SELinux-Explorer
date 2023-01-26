@@ -13,49 +13,39 @@ class ContextsAnalyzer(FileAnalyzer):
     def analyze(self, filePath):
         pass
 
-    def readFile(self, filePath):
-        return open(filePath, 'r').readlines()
-
-    def selectRegx(self, filePath):
-        pass
-
-    def AnalyzeSeappContexts(self):
-        pass
-    
-
-    def AnalyzeFileContexts(self):
+    def analyzeFileContexts(self):
         pass
 
 
-    def AnalyzeServiceContexts(self):
+    def analyzeServiceContexts(self):
         pass
 
 
-    def AnalyzePortContexts(self):
+    def analyzePortContexts(self):
         pass
     
 
-    def AnalyzeGenfsContexts(self):
+    def analyzeGenfsContexts(self):
         pass
 
 
-    def AnalyzeServiceContexts(self):
+    def analyzeServiceContexts(self):
         pass
 
 
-    def AnalyzeHwserviceContexts(self):
+    def analyzeHwserviceContexts(self):
         pass
 
 
-    def AnalyzeVndserviceContexts(self):
+    def analyzeVndserviceContexts(self):
         pass
 
 
-    def AnalyzePropertyContexts(self):
+    def analyzePropertyContexts(self):
         pass
 
 
-    def AnalyzeKeysConf(self):
+    def analyzeKeysConf(self):
         pass
 
 
