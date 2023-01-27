@@ -30,7 +30,8 @@ class ContextsAnalyzer(AbstractAnalyzer):
         for line in tempLines :
             self.extractDefinition(line)
 
-        print(self.policyFile)
+        #print(self.policyFile)
+        return self.policyFile
 
     def extractDefinition(self,  inputString):
         inputString = cleanLine(inputString)

@@ -12,10 +12,20 @@ class TeAnalyzer(AbstractAnalyzer):
         self.policyFile = PolicyFiles(filePath, "" , FileTypeEnum.TE_FILE) 
         fileReader = FR.FileReader()
         tempLines= fileReader.readFileLines(filePath)
+        lastLine = ""
         for line in tempLines :
-            self.processLine(line)
+            if "#" not in line and ";" not in line:
+                if "(" in line:
+                    lastLine = ""
+                    continue
+                lastLine = lastLine.replace("\\n","") + " " + line
+                continue
+            else:
+                lastLine = ""
+            self.processLine(lastLine + " " + line)
 
-        print(self.policyFile)
+        #print(self.policyFile)
+        return self.policyFile
 
     def processLine(self, inputString):
         inputString = cleanLine(inputString)
@@ -37,23 +47,40 @@ class TeAnalyzer(AbstractAnalyzer):
         self.policyFile.typeDef.append( typeDef )
 
     def extractRule(self,  inputString):
-        items = inputString.replace(";","").replace(": ",":").replace("{","").replace("}","").strip().split() 
-        rule = Rule()
-        for ruleEnum in RuleEnum:
-            if ruleEnum.label == items[0].strip():
-                rule.rule = ruleEnum
-                rule.source = items[1]
-                dstItems = items[2].split(":")
-                rule.target = dstItems[0]
-                rule.classType = dstItems[1]
-                rule.permissions.extend(items[3:])
-                print(items)
-                print(rule)
-                self.policyFile.rules.append(rule)
-                return
+            print("inputString:  ",inputString)
+            items = inputString.replace(";","").replace(": ",":").replace("{","").replace("}","").strip().split()
+            print(items)
+            #print(inputString.replace(";","").replace(": ",":").strip().split("}"))
+            for ruleEnum in RuleEnum:
+                if ruleEnum.label == items[0].strip():
+                    countBrackets = inputString.count("}")
+                    if ("}" in inputString ) and (countBrackets==2 or (inputString.replace(";","").strip().index("}") + 1 )< len(inputString.replace(";","").strip()) ):
+                        print(inputString.replace(";","").strip().index("}"))
+                        print((len(inputString.replace(";","").strip()) + 1 ))
+                        sourcesString =inputString[inputString.index("{"): inputString.index("}")].replace("{","")
+                        sources = sourcesString.replace("{","").replace("}","").strip().split() 
+                        print("sourcesString: ", sourcesString)
+                        items = inputString.replace(sourcesString, "##").replace(";","").replace(": ",":").replace("{","").replace("}","").strip().split()
+                        print ("itemsss:  ", items)
+                    else:
+                        items = inputString.replace(";","").replace(": ",":").replace("{","").replace("}","").strip().split()
+                        sources = [items[1]]
+
+                    for source in sources:
+                        rule = Rule()
+                        rule.rule = ruleEnum                    
+                        rule.source = source
+                        dstItems = items[2].split(":")
+                        rule.target = dstItems[0]
+                        rule.classType = dstItems[1]
+                        rule.permissions.extend(items[3:])
+                        #print(items)
+                        #print(rule)
+                        self.policyFile.rules.append(rule)
+                    return
 
 if __name__ == "__main__" :
     print(sys.argv)
     teAnalyzer = TeAnalyzer()
-    teAnalyzer.analyze(sys.argv[1])
+    print(teAnalyzer.analyze(sys.argv[1]))
 

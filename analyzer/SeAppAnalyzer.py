@@ -15,7 +15,8 @@ class SeAppAnalyzer(AbstractAnalyzer):
         for line in tempLines :
             self.processLine(line)
 
-        print(self.policyFile)
+        #print(self.policyFile)
+        return self.policyFile
 
     def processLine(self, inputString):
         inputString = cleanLine(inputString)

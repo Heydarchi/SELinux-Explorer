@@ -1,6 +1,6 @@
 
 def cleanLine(inputStr):
-    print(inputStr)
+    #print(inputStr)
     if "#" in inputStr:
         if inputStr.strip().index("#") > 0 :
             return inputStr.strip()[:inputStr.index("#")]
