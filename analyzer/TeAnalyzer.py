@@ -24,7 +24,7 @@ class TeAnalyzer(AbstractAnalyzer):
                 lastLine = ""
             self.processLine(lastLine + " " + line)
 
-        #print(self.policyFile)
+        print(self.policyFile)
         return self.policyFile
 
     def processLine(self, inputString):
@@ -33,35 +33,41 @@ class TeAnalyzer(AbstractAnalyzer):
             return
         items = inputString.split()
         if len(items) > 0 :
-            if items[0] == "type" :
+            if items[0].strip() == "type" or items[0].strip() == "typeattribute" :
                 self.extractDefinition(inputString)
             elif items[0] in ["allow", "neverallow"] :
                 self.extractRule(inputString)
-
+        #print(self.policyFile)
 
     def extractDefinition(self,  inputString):
-        types = inputString.replace(";","").replace("type ","").strip().split(",") 
+        type = None
+        if "typeattribute " in inputString :
+            types = inputString.replace(";","").replace("typeattribute ","").strip().split(" ")
+        else:
+            types = inputString.replace(";","").replace("type ","").strip().split(",")
+
         typeDef = TypeDef()
         typeDef.name = types[0]
         typeDef.types.extend(types[1:])
         self.policyFile.typeDef.append( typeDef )
+        print (typeDef)
 
     def extractRule(self,  inputString):
-            print("inputString:  ",inputString)
+            #print("inputString:  ",inputString)
             items = inputString.replace(";","").replace(": ",":").replace("{","").replace("}","").strip().split()
-            print(items)
+            #print(items)
             #print(inputString.replace(";","").replace(": ",":").strip().split("}"))
             for ruleEnum in RuleEnum:
                 if ruleEnum.label == items[0].strip():
                     countBrackets = inputString.count("}")
                     if ("}" in inputString ) and (countBrackets==2 or (inputString.replace(";","").strip().index("}") + 1 )< len(inputString.replace(";","").strip()) ):
-                        print(inputString.replace(";","").strip().index("}"))
-                        print((len(inputString.replace(";","").strip()) + 1 ))
+                        #print(inputString.replace(";","").strip().index("}"))
+                        #print((len(inputString.replace(";","").strip()) + 1 ))
                         sourcesString =inputString[inputString.index("{"): inputString.index("}")].replace("{","")
                         sources = sourcesString.replace("{","").replace("}","").strip().split() 
-                        print("sourcesString: ", sourcesString)
+                        #print("sourcesString: ", sourcesString)
                         items = inputString.replace(sourcesString, "##").replace(";","").replace(": ",":").replace("{","").replace("}","").strip().split()
-                        print ("itemsss:  ", items)
+                        #print ("itemsss:  ", items)
                     else:
                         items = inputString.replace(";","").replace(": ",":").replace("{","").replace("}","").strip().split()
                         sources = [items[1]]

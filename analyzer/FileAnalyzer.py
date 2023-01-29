@@ -22,10 +22,13 @@ class FileAnalyzer(AbstractAnalyzer):
             fileType = self.detectLang(filePath)
             if fileType != FileTypeEnum.UNDEFINED :
                 print("- Analyzing: " + filePath, fileType)
-                self.listOfPolicyFiles.append(self.invokeAnalyzerClass(fileType, filePath))
+                policyFile = self.invokeAnalyzerClass(fileType, filePath)
+                self.listOfPolicyFiles.append(policyFile)
                 self.drawUmls(self.listOfPolicyFiles)
             else:
                 print("- Undefined file extension : " + filePath)
+        if len(self.listOfPolicyFiles) > 0:
+            RelationDrawer().drawListOfUml(self.listOfPolicyFiles)
     
     def drawUmls(self, listOfPolicyFiles):
         for policyFile in listOfPolicyFiles:
