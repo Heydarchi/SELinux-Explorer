@@ -116,3 +116,8 @@ class PolicyFiles:
     seApps: List[SeAppContext]= field(default_factory=list)
     rules: List[Rule]= field(default_factory=list)
     functions: List[PolicyFunction]= field(default_factory=list)
+
+@dataclass
+class DrawerClass:
+    participants : List[str] = field(default_factory=list)
+    rules: List[str] = field(default_factory=list)

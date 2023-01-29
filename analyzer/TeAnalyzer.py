@@ -24,7 +24,7 @@ class TeAnalyzer(AbstractAnalyzer):
                 lastLine = ""
             self.processLine(lastLine + " " + line)
 
-        print(self.policyFile)
+        #print(self.policyFile)
         return self.policyFile
 
     def processLine(self, inputString):
@@ -50,7 +50,7 @@ class TeAnalyzer(AbstractAnalyzer):
         typeDef.name = types[0]
         typeDef.types.extend(types[1:])
         self.policyFile.typeDef.append( typeDef )
-        print (typeDef)
+        #print (typeDef)
 
     def extractRule(self,  inputString):
             #print("inputString:  ",inputString)

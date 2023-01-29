@@ -12,11 +12,12 @@ class RelationDrawer:
 
         self.dataTypeToIgnore = []
         self.dictOfParticipant = dict()
-        self.listOfParticipantCorrection = list()
+        self.drawerClass = DrawerClass()
 
     def drawUml(self, policyFile: PolicyFiles):
         self.dictOfParticipant = dict()
-        self.listOfParticipantCorrection = list()
+        self.drawerClass = DrawerClass()
+
         plantUmlList = list()
         plantUmlList.append("@startuml")
 
@@ -26,7 +27,9 @@ class RelationDrawer:
         else:
             plantUmlList.append("class " + policyFile.name)
         '''
-        plantUmlList.extend(self.dumpPolicyFile(policyFile))
+        self.dumpPolicyFile(policyFile)
+        plantUmlList.extend(self.drawerClass.participants)
+        plantUmlList.extend(self.drawerClass.rules)
 
         plantUmlList.append("@enduml")
 
@@ -40,7 +43,8 @@ class RelationDrawer:
 
     def drawListOfUml(self, policyFiles: List[PolicyFiles]):
         self.dictOfParticipant = dict()
-        self.listOfParticipantCorrection = list()
+        self.drawerClass = DrawerClass()
+
         plantUmlList = list()
         plantUmlList.append("@startuml")
 
@@ -51,12 +55,15 @@ class RelationDrawer:
             plantUmlList.append("class " + policyFile.name)
         '''
         for policyFile in policyFiles:
-            plantUmlList.extend(self.dumpPolicyFile(policyFile))
+            self.dumpPolicyFile(policyFile)
+
+        plantUmlList.extend(self.drawerClass.participants)
+        plantUmlList.extend(self.drawerClass.rules)
 
         plantUmlList.append("@enduml")
 
         #Remove redundance items
-        #plantUmlList = list(dict.fromkeys(plantUmlList))
+        plantUmlList = list(dict.fromkeys(plantUmlList))
         #print(plantUmlList)
         filePath = "out/Integrated-" + datetime.today().strftime("%d-%m-%y---%H-%M-%s")+"_relation.puml"
         self.writeToFile(filePath, plantUmlList)
@@ -66,14 +73,10 @@ class RelationDrawer:
     def dumpPolicyFile(self, policyFile: PolicyFiles):
         plantUmlList = list()
 
-        plantUmlList.extend(self.drawSeApp(policyFile.seApps))
-        plantUmlList.extend(self.drawTypeDef(policyFile.typeDef))
-        plantUmlList.extend(self.drawContext(policyFile.contexts))
-        
-        #listOfParticipantCorrection should be added before the rules
-        listOfRules = self.drawRule(policyFile.rules)
-        plantUmlList.extend(self.listOfParticipantCorrection)
-        plantUmlList.extend(listOfRules)
+        self.drawerClass.participants.extend(self.drawSeApp(policyFile.seApps))
+        self.drawerClass.participants.extend(self.drawTypeDef(policyFile.typeDef))
+        self.drawerClass.participants.extend(self.drawContext(policyFile.contexts))
+        self.drawerClass.rules.extend(self.drawRule(policyFile.rules))
 
         return plantUmlList
 
@@ -81,9 +84,9 @@ class RelationDrawer:
     def drawTypeDef(self, typeDefs: List[TypeDef]):
         typeDefList = list()
         for typeDef in typeDefs:
-                    print("------------------" , typeDef)
+                    #print("------------------" , typeDef)
                     #typeDef.append("\"" + typeDef.name + "\" -----> \"" + typeDef.types + "\"" )
-                    typeDefList.append("participant " +  self.insertNewParticipant(typeDef.name)  + " [\n=" + typeDef.name + "\n ----- \n\"\"" + ','.join(typeDef.types) + "\"\"\n]" )
+                    typeDefList.append("participant " +  self.insertNewParticipant(typeDef.name)  + " [\n=" + typeDef.name + "\n ----- \n\"\"" + ', '.join(typeDef.types) + "\"\"\n]" )
         return typeDefList
 
     def drawContext(self, contexts: List[Context]):
@@ -109,9 +112,9 @@ class RelationDrawer:
                         src=rule.source
 
                     if rule.rule == RuleEnum.NEVER_ALLOW :
-                        ruleList.append("" + self.insertNewParticipant(rule.source) + " -----[#red]>x \"" + rule.target + "\" : " + rule.rule.label )
+                        ruleList.append("" + self.insertNewParticipant(rule.source) + " -----[#red]>x \"" + rule.target + "\" : " + rule.rule.label + " (" + ', '.join(rule.permissions) + ")")
                     else:
-                        ruleList.append("" + self.insertNewParticipant(rule.source) + " -----[#green]> \"" + rule.target + "\" : " + rule.rule.label )
+                        ruleList.append("" + self.insertNewParticipant(rule.source) + " -----[#green]> \"" + rule.target + "\" : " + rule.rule.label + " (" + ', '.join(rule.permissions) + ")")
 
         return ruleList
 
@@ -119,8 +122,8 @@ class RelationDrawer:
         if  any(x in name for x in ["-","/",":"]) :
             if name not in self.dictOfParticipant:
                 self.dictOfParticipant[name]=name.replace("-","__").replace("/","_1_").replace(":","_2_")
-                print ( "==========", name, self.dictOfParticipant[name])
-                self.listOfParticipantCorrection.append("participant " +  self.insertNewParticipant(self.dictOfParticipant[name])  + " [\n=" + name + "\n ]" )
+                #print ( "==========", name, self.dictOfParticipant[name])
+                self.drawerClass.participants.append("participant " +  self.insertNewParticipant(self.dictOfParticipant[name])  + " [\n=" + name + "\n ]" )
             return self.dictOfParticipant[name]
         else:
             return name

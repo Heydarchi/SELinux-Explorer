@@ -43,14 +43,14 @@ class ContextsAnalyzer(AbstractAnalyzer):
         if len(items) > 1 :
             securityItems = items[1].split(":")
             context.securityContext= SecurityContext()
-            print(securityItems)
+            #print(securityItems)
             context.securityContext.user = securityItems[0]
             context.securityContext.role = securityItems[1]
             context.securityContext.type = securityItems[2]
             context.securityContext.level = securityItems[3]
             if len(securityItems) > 4 :
                 context.securityContext.categories = securityItems[4]
-        print(context)
+        #print(context)
         self.policyFile.contexts.append(context)    
 
     def analyzePortContexts(self):
