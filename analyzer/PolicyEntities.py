@@ -2,6 +2,23 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import List
 
+
+
+
+class InheritanceEnum(Enum):
+    EXTENDED = 1
+    IMPLEMENTED = 2
+    DEPENDED = 3
+@dataclass
+class Inheritance:
+    name: str 
+    relationship: InheritanceEnum    
+
+@dataclass
+class UmlRelationMap:
+    name: str = "" 
+    relationship: InheritanceEnum = InheritanceEnum.DEPENDED  
+    
 class FileTypeEnum(Enum):
     TE_FILE = 1,".te"
     FILE_CONTEXTS = 2,"file_contexts"

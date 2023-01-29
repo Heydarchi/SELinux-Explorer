@@ -7,11 +7,12 @@ from PythonUtilityClasses import SystemUtility as SU
 from TeAnalyzer import *
 from ContextsAnalyzer import *
 from SeAppAnalyzer import *
+from RelationDrawer import *
 class FileAnalyzer(AbstractAnalyzer):
     def __init__(self) -> None:
         self.listOfPolicyFiles = list()
-        if not os.path.exists("../out"):
-            os.makedirs("../out")
+        if not os.path.exists("out"):
+            os.makedirs("out")
 
     def analyze(self, targetPath, pattern):
         systemUtility = SU.SystemUtility()
@@ -22,14 +23,15 @@ class FileAnalyzer(AbstractAnalyzer):
             if fileType != FileTypeEnum.UNDEFINED :
                 print("- Analyzing: " + filePath, fileType)
                 self.listOfPolicyFiles.append(self.invokeAnalyzerClass(fileType, filePath))
-                #self.drawUmls(listOfClasses)
+                self.drawUmls(self.listOfPolicyFiles)
             else:
                 print("- Undefined file extension : " + filePath)
-    """     def drawUmls(self, listOfClassNodes):
-        for classInfo in listOfClassNodes:
-            umlDrawer = ClassUmlDrawer()
-            umlDrawer.drawUml(classInfo)
-    """
+    
+    def drawUmls(self, listOfPolicyFiles):
+        for policyFile in listOfPolicyFiles:
+            relationDrawer = RelationDrawer()
+            relationDrawer.drawUml(policyFile)
+    
 
     def detectLang(self, fileName):
         for fileType in FileTypeEnum:
