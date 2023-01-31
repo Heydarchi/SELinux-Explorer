@@ -48,9 +48,11 @@ class FileAnalyzer(AbstractAnalyzer):
             return TeAnalyzer().analyze(filePath)
         elif fileType == FileTypeEnum.SEAPP_CONTEXTS:
             return SeAppAnalyzer().analyze(filePath)
-        elif fileType in [FileTypeEnum.FILE_CONTEXTS, FileTypeEnum.SERVICE_CONTEXTS, FileTypeEnum.HWSERVICE_CONTEXTS, FileTypeEnum.VNDSERVICE_CONTEXTS]:
+        elif fileType in [FileTypeEnum.FILE_CONTEXTS, FileTypeEnum.SERVICE_CONTEXTS, FileTypeEnum.HWSERVICE_CONTEXTS, FileTypeEnum.VNDSERVICE_CONTEXTS, FileTypeEnum.PROPERTY_CONTEXTS]:
             return ContextsAnalyzer().analyze(filePath)
-
+        else:
+            return FileTypeEnum.UNDEFINED
+            
 if __name__ == "__main__" :
     print(sys.argv)
     fileAnalyzer = FileAnalyzer()

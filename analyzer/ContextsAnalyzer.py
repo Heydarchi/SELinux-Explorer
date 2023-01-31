@@ -34,9 +34,11 @@ class ContextsAnalyzer(AbstractAnalyzer):
         return self.policyFile
 
     def extractDefinition(self,  inputString):
+        #print (inputString)
         inputString = cleanLine(inputString)
         if inputString == None :
             return
+        #print ("Cleaned: ",inputString)
         context = Context()
         items = inputString.replace(";","").strip().split() 
         context.pathName = items[0]

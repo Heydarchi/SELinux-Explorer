@@ -73,10 +73,11 @@ class RelationDrawer:
     def dumpPolicyFile(self, policyFile: PolicyFiles):
         plantUmlList = list()
 
-        self.drawerClass.participants.extend(self.drawSeApp(policyFile.seApps))
-        self.drawerClass.participants.extend(self.drawTypeDef(policyFile.typeDef))
-        self.drawerClass.participants.extend(self.drawContext(policyFile.contexts))
-        self.drawerClass.rules.extend(self.drawRule(policyFile.rules))
+        if policyFile!=None:
+            self.drawerClass.participants.extend(self.drawSeApp(policyFile.seApps))
+            self.drawerClass.participants.extend(self.drawTypeDef(policyFile.typeDef))
+            self.drawerClass.participants.extend(self.drawContext(policyFile.contexts))
+            self.drawerClass.rules.extend(self.drawRule(policyFile.rules))
 
         return plantUmlList
 
