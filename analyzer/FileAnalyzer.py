@@ -38,7 +38,8 @@ class FileAnalyzer(AbstractAnalyzer):
 
     def detectLang(self, fileName):
         for fileType in FileTypeEnum:
-            if fileType.label in fileName:
+            if fileType.label in os.path.basename(fileName):
+                print(os.path.basename(fileName))
                 return fileType
 
         return FileTypeEnum.UNDEFINED
@@ -51,8 +52,8 @@ class FileAnalyzer(AbstractAnalyzer):
         elif fileType in [FileTypeEnum.FILE_CONTEXTS, FileTypeEnum.SERVICE_CONTEXTS, FileTypeEnum.HWSERVICE_CONTEXTS, FileTypeEnum.VNDSERVICE_CONTEXTS, FileTypeEnum.PROPERTY_CONTEXTS]:
             return ContextsAnalyzer().analyze(filePath)
         else:
-            return FileTypeEnum.UNDEFINED
-            
+            return
+
 if __name__ == "__main__" :
     print(sys.argv)
     fileAnalyzer = FileAnalyzer()

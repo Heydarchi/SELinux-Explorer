@@ -72,6 +72,7 @@ python FileAnalyzer.py ../samples
 ### TODO:
 - [ ] Fix extracting rules for multiple source/target/etc in one line
 - [ ] Enable multi-threading
+- [ ] Put the drawing in another thread since it's the time consumer
 - [ ] Add filtering the result
 - [ ] Enable using the generated data for drawing new diagrams
 - [ ] Analyze only the changed files to save time

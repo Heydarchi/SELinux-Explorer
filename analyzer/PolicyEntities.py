@@ -27,8 +27,10 @@ class FileTypeEnum(Enum):
     HWSERVICE_CONTEXTS = 5,"hwservice_contexts"
     VNDSERVICE_CONTEXTS = 6,"vndservice_contexts"
     PROPERTY_CONTEXTS = 7,"property_contexts"
-    OTHER_CONTEXT = 8,"contexts"
+    #OTHER_CONTEXT = 8,"contexts"
     UNDEFINED = 9,""
+
+    # GENFS_CONTEXTS = 10, "genfs_contexts"
 
     def __str__(self):
         return str(self.value)
