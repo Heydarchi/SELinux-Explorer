@@ -76,3 +76,4 @@ python FileAnalyzer.py ../samples
 - [ ] Enable using the generated data for drawing new diagrams
 - [ ] Analyze only the changed files to save time
 - [ ] Refactoring the code architecture 
+- [ ] Make it possible to de-active drawing and only make a schema of data
