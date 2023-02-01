@@ -13,33 +13,30 @@ class FileAnalyzer(AbstractAnalyzer):
         self.listOfPolicyFiles = list()
         if not os.path.exists("out"):
             os.makedirs("out")
+        self.relationDrawer = RelationDrawer()
 
     def analyze(self, targetPath, pattern):
+        self.relationDrawer.start()
+
         systemUtility = SU.SystemUtility()
         listOfFiles = systemUtility.getListOfFiles(targetPath, "*")
-        print(listOfFiles)
+        #print(listOfFiles)
         for filePath in listOfFiles:
             fileType = self.detectLang(filePath)
             if fileType != FileTypeEnum.UNDEFINED :
-                print("- Analyzing: " + filePath, fileType)
+                print("Analyzing: " + filePath)#, fileType)
                 policyFile = self.invokeAnalyzerClass(fileType, filePath)
-                self.listOfPolicyFiles.append(policyFile)
-                self.drawUmls(self.listOfPolicyFiles)
+                self.relationDrawer.enqueuePolicyFile(policyFile)
             else:
-                print("- Undefined file extension : " + filePath)
-        if len(self.listOfPolicyFiles) > 0:
-            RelationDrawer().drawListOfUml(self.listOfPolicyFiles)
-    
-    def drawUmls(self, listOfPolicyFiles):
-        for policyFile in listOfPolicyFiles:
-            relationDrawer = RelationDrawer()
-            relationDrawer.drawUml(policyFile)
+                print("Undefined file extension : " + filePath)
+        self.relationDrawer.letShutdownThread = True
+        self.relationDrawer.join()
     
 
     def detectLang(self, fileName):
         for fileType in FileTypeEnum:
             if fileType.label in os.path.basename(fileName):
-                print(os.path.basename(fileName))
+                #print(os.path.basename(fileName))
                 return fileType
 
         return FileTypeEnum.UNDEFINED
@@ -55,6 +52,8 @@ class FileAnalyzer(AbstractAnalyzer):
             return
 
 if __name__ == "__main__" :
-    print(sys.argv)
+    #print(sys.argv)
+    print("Input path/file: ", sys.argv[1])
+    print("-----------------------------------------------------")
     fileAnalyzer = FileAnalyzer()
     fileAnalyzer.analyze(sys.argv[1], None)

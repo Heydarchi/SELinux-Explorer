@@ -2,9 +2,15 @@ import os, sys
 from PolicyEntities import  *
 from PythonUtilityClasses import FileWriter as FW
 from datetime import *
-class RelationDrawer:
+from queue import Queue
+from threading import Thread
+from time import sleep
+
+
+class RelationDrawer(Thread):
 
     def __init__(self) -> None:
+        Thread.__init__(self)
         self.mapList = list()
         self.mapList.append( UmlRelationMap("", InheritanceEnum.DEPENDED))
         self.mapList.append( UmlRelationMap("", InheritanceEnum.EXTENDED))
@@ -14,6 +20,24 @@ class RelationDrawer:
         self.dictOfParticipant = dict()
         self.drawerClass = DrawerClass()
 
+        self.letShutdownThread = False
+        self.queuePolicyFiles = Queue()
+        self.listOfPolicyFiles = list()
+
+    def run(self):
+        while self.letShutdownThread == False or not self.queuePolicyFiles.empty():
+            if self.queuePolicyFiles.empty():
+                sleep(0.05)
+            else:
+                self.drawUml(self.queuePolicyFiles.get())
+
+        if len(self.listOfPolicyFiles) > 0:
+            self.drawListOfUml(self.listOfPolicyFiles)
+
+    def enqueuePolicyFile(self, policyFile):
+        self.queuePolicyFiles.put(policyFile)
+        self.listOfPolicyFiles.append(policyFile)
+
     def drawUml(self, policyFile: PolicyFiles):
         self.dictOfParticipant = dict()
         self.drawerClass = DrawerClass()
@@ -21,12 +45,6 @@ class RelationDrawer:
         plantUmlList = list()
         plantUmlList.append("@startuml")
 
-        '''
-        if policyFile.isInterface:
-            plantUmlList.append("interface " + policyFile.name)
-        else:
-            plantUmlList.append("class " + policyFile.name)
-        '''
         self.dumpPolicyFile(policyFile)
         plantUmlList.extend(self.drawerClass.participants)
         plantUmlList.extend(self.drawerClass.rules)
@@ -38,6 +56,7 @@ class RelationDrawer:
         #print(plantUmlList)
         filePath = "out/" + policyFile.fileName.replace("/","-")+"_relation.puml"
         self.writeToFile(filePath, plantUmlList)
+        print("drawing: ", filePath)
         self.generatePng(filePath)
         #print(policyFile)
 
@@ -48,18 +67,11 @@ class RelationDrawer:
         plantUmlList = list()
         plantUmlList.append("@startuml")
 
-        '''
-        if policyFile.isInterface:
-            plantUmlList.append("interface " + policyFile.name)
-        else:
-            plantUmlList.append("class " + policyFile.name)
-        '''
         for policyFile in policyFiles:
             self.dumpPolicyFile(policyFile)
 
         plantUmlList.extend(self.drawerClass.participants)
         plantUmlList.extend(self.drawerClass.rules)
-
         plantUmlList.append("@enduml")
 
         #Remove redundance items
@@ -67,6 +79,7 @@ class RelationDrawer:
         #print(plantUmlList)
         filePath = "out/Integrated-" + datetime.today().strftime("%d-%m-%y---%H-%M-%s")+"_relation.puml"
         self.writeToFile(filePath, plantUmlList)
+        print("drawing: ", filePath)
         self.generatePng(filePath)
         #print(policyFile)
 
@@ -85,7 +98,6 @@ class RelationDrawer:
     def drawTypeDef(self, typeDefs: List[TypeDef]):
         typeDefList = list()
         for typeDef in typeDefs:
-                    #print("------------------" , typeDef)
                     #typeDef.append("\"" + typeDef.name + "\" -----> \"" + typeDef.types + "\"" )
                     typeDefList.append("participant " +  self.insertNewParticipant(typeDef.name)  + " [\n=" + typeDef.name + "\n ----- \n\"\"" + ', '.join(typeDef.types) + "\"\"\n]" )
         return typeDefList
