@@ -15,8 +15,9 @@ class FileAnalyzer(AbstractAnalyzer):
             os.makedirs("out")
         self.relationDrawer = RelationDrawer()
 
-    def analyze(self, targetPath, pattern):
+    def analyze(self, targetPath, pattern, disableDrawing = False, drawExisting = False):
         self.relationDrawer.start()
+        self.relationDrawer.setDisableDrawing(disableDrawing)
 
         systemUtility = SU.SystemUtility()
         listOfFiles = systemUtility.getListOfFiles(targetPath, "*")
@@ -29,6 +30,8 @@ class FileAnalyzer(AbstractAnalyzer):
                 self.relationDrawer.enqueuePolicyFile(policyFile)
             else:
                 print("Undefined file extension : " + filePath)
+        
+        #Wait till the drawing thread is done
         self.relationDrawer.letShutdownThread = True
         self.relationDrawer.join()
     

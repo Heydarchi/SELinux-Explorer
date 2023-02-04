@@ -23,6 +23,10 @@ class RelationDrawer(Thread):
         self.letShutdownThread = False
         self.queuePolicyFiles = Queue()
         self.listOfPolicyFiles = list()
+        self.disableDrawing = False
+
+    def setDisableDrawing(self, state):
+        self.disableDrawing = state
 
     def run(self):
         while self.letShutdownThread == False or not self.queuePolicyFiles.empty():
@@ -57,7 +61,9 @@ class RelationDrawer(Thread):
         filePath = "out/" + policyFile.fileName.replace("/","-")+"_relation.puml"
         self.writeToFile(filePath, plantUmlList)
         print("drawing: ", filePath)
-        self.generatePng(filePath)
+
+        if self.disableDrawing == False:
+            self.generatePng(filePath)
         #print(policyFile)
 
     def drawListOfUml(self, policyFiles: List[PolicyFiles]):
@@ -80,7 +86,9 @@ class RelationDrawer(Thread):
         filePath = "out/Integrated-" + datetime.today().strftime("%d-%m-%y---%H-%M-%s")+"_relation.puml"
         self.writeToFile(filePath, plantUmlList)
         print("drawing: ", filePath)
-        self.generatePng(filePath)
+
+        if self.disableDrawing == False:
+            self.generatePng(filePath)
         #print(policyFile)
 
     def dumpPolicyFile(self, policyFile: PolicyFiles):
