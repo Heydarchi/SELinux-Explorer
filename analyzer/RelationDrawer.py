@@ -58,7 +58,7 @@ class RelationDrawer(Thread):
         #Remove redundance items
         plantUmlList = list(dict.fromkeys(plantUmlList))
         #print(plantUmlList)
-        filePath = "out/" + policyFile.fileName.replace("/","-")+"_relation.puml"
+        filePath = "out/" + self.generatePumlFileName(policyFile.fileName)
         self.writeToFile(filePath, plantUmlList)
         print("drawing: ", filePath)
 
@@ -90,6 +90,13 @@ class RelationDrawer(Thread):
         if self.disableDrawing == False:
             self.generatePng(filePath)
         #print(policyFile)
+
+    def generatePumlFileName(self, fileName):
+        return fileName.replace("/","-")+"_relation.puml"
+
+    def generatePngFileName(self, fileName):
+        return fileName.replace("/","-")+"_relation.png"
+
 
     def dumpPolicyFile(self, policyFile: PolicyFiles):
         plantUmlList = list()

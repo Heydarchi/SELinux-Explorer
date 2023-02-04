@@ -8,33 +8,53 @@ from TeAnalyzer import *
 from ContextsAnalyzer import *
 from SeAppAnalyzer import *
 from RelationDrawer import *
+from AnalyzerEntites import *
 class FileAnalyzer(AbstractAnalyzer):
     def __init__(self) -> None:
         self.listOfPolicyFiles = list()
+        self.listOfAnalyzerInfo = list()
         if not os.path.exists("out"):
             os.makedirs("out")
-        self.relationDrawer = RelationDrawer()
+
+        
 
     def analyze(self, targetPath, pattern, disableDrawing = False, drawExisting = False):
-        self.relationDrawer.start()
-        self.relationDrawer.setDisableDrawing(disableDrawing)
 
-        systemUtility = SU.SystemUtility()
-        listOfFiles = systemUtility.getListOfFiles(targetPath, "*")
+
+        listOfFiles = self.gatherFileInfo(targetPath, "*")
+        if listOfFiles == None or len(listOfFiles) == 0:
+            print( "Nothing to analyze!")
+            return
+
+        relationDrawer = RelationDrawer()
+        relationDrawer.start()
+        relationDrawer.setDisableDrawing(disableDrawing)
+
         #print(listOfFiles)
         for filePath in listOfFiles:
             fileType = self.detectLang(filePath)
             if fileType != FileTypeEnum.UNDEFINED :
                 print("Analyzing: " + filePath)#, fileType)
                 policyFile = self.invokeAnalyzerClass(fileType, filePath)
-                self.relationDrawer.enqueuePolicyFile(policyFile)
+                relationDrawer.enqueuePolicyFile(policyFile)
             else:
                 print("Undefined file extension : " + filePath)
         
         #Wait till the drawing thread is done
-        self.relationDrawer.letShutdownThread = True
-        self.relationDrawer.join()
-    
+        relationDrawer.letShutdownThread = True
+        relationDrawer.join()
+
+    def gatherFileInfo(self, targetPath, pattern):
+        
+        systemUtility = SU.SystemUtility()
+        listOfFiles = systemUtility.getListOfFiles(targetPath, pattern)
+        for file in listOfFiles :
+            analyzerInfo = AnalyzerInfo()
+            analyzerInfo.sourceFile = systemUtility.getFileInfo(file)
+            self.listOfAnalyzerInfo.append(analyzerInfo)
+
+        print(self.listOfAnalyzerInfo)
+        return listOfFiles
 
     def detectLang(self, fileName):
         for fileType in FileTypeEnum:
