@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QFileD
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QPushButton, QListWidget, QListWidgetItem
 from PyQt5.QtCore import Qt
 
+from FileAnalyzer import  * 
+
 import sys
 
 class MainWindow(QMainWindow):
@@ -33,6 +35,8 @@ class MainWindow(QMainWindow):
         self.mainLayout = QVBoxLayout()
 
         self.container = QWidget()
+
+        self.analyzer = FileAnalyzer()
 
         self.initUI()
 
@@ -72,6 +76,10 @@ class MainWindow(QMainWindow):
         self.layoutAnalyzer.addWidget(self.btnAnalyzeSelected)
         self.layoutAnalyzer.addWidget(self.btnClearAnalyze)
 
+        self.btnAnalyzeAll.clicked.connect(self.analyzeAll)
+        self.btnAnalyzeSelected.clicked.connect(self.analyzeSelectedPaths)
+
+
         #mainLayout
         self.mainLayout.addLayout(self.layoutPath)
         self.mainLayout.addLayout(self.layoutSelectedPath)
@@ -88,6 +96,7 @@ class MainWindow(QMainWindow):
             self.edtCurrentSelectedPath.setText(dlg.selectedFiles()[0])
 
     def browseFolderPath(self):
+
         self.edtCurrentSelectedPath.setText(QFileDialog.getExistingDirectory(self, 'Hey! Select a Folder', options=QFileDialog.ShowDirsOnly))
 
     def addSelectedPathToList(self):
@@ -100,6 +109,20 @@ class MainWindow(QMainWindow):
         if not listItems: return        
         for item in listItems:
             self.lstSelectedPath.takeItem(self.lstSelectedPath.row(item))
+
+    def analyzeSelectedPaths(self):
+        paths = list()
+        items = self.lstSelectedPath.selectedItems()
+        for item in items:
+            paths.append(item.text())
+
+        self.analyzer.analyze(paths, None)
+    def analyzeAll(self):
+        paths = list()
+        for i in range(self.lstSelectedPath.count()):
+            paths.append(self.lstSelectedPath.item(i).text())
+
+        self.analyzer.analyze(paths, None)
 
 app = QApplication(sys.argv)
 

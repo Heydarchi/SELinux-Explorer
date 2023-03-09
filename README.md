@@ -53,12 +53,21 @@ git submodule update --init --recursive
 ```
 <br/>
 
-## **How to run**
+## **How to run in command line**
 After the packages above are installed go to the Analyzer folder and run the command below
 ```
 cd analyzer
 python FileAnalyzer.py [folder/file path]
 ```
+<br/>
+
+## **How to run via GUI**
+```
+cd analyzer
+python main.py
+```
+<br/>
+
 #### **To run sample** 
 
 ```
@@ -67,12 +76,27 @@ python FileAnalyzer.py ../samples
 
 >The result can be found in the **out** folder
 
+
+
+
 <br/>
 
-### TODO:
+### Analyzer TODO:
 - [ ] Fix extracting rules for multiple source/target/etc in one line
 - [ ] Enable multi-threading
 - [ ] Add filtering the result
 - [ ] Enable using the generated data for drawing new diagrams
 - [ ] Analyze only the changed files to save time
 - [ ] Refactoring the code architecture 
+
+### GUI TODO:
+- [ ] Show the progress of analyze
+- [ ] show the number of files and folder in the list
+- [ ] Add a new window for search
+    - [ ] Search the input file
+    - [ ] Search the generated files
+    - [ ] Generated output for the selected items
+    - [ ] Generated output for the selected Files
+- [ ] Add Analyzer to GUI
+- [ ] Show the list of generated files
+- [ ] Pop up a dialog to show the image of the selected file 

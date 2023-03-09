@@ -18,10 +18,11 @@ class FileAnalyzer(AbstractAnalyzer):
 
         
 
-    def analyze(self, targetPath, pattern, disableDrawing = False, drawExisting = False):
+    def analyze(self, targetPaths, pattern, disableDrawing = False, drawExisting = False):
+        listOfFiles = list()
+        for path in targetPaths:
+            listOfFiles.extend( self.gatherFileInfo(path, "*"))
 
-
-        listOfFiles = self.gatherFileInfo(targetPath, "*")
         if listOfFiles == None or len(listOfFiles) == 0:
             print( "Nothing to analyze!")
             return
