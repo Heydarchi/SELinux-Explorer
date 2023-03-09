@@ -1,0 +1,11 @@
+### TODO:
+- [ ] Show the progress of analyze
+- [ ] show the number of files and folder in the list
+- [ ] Add a new window for search
+    - [ ] Search the input file
+    - [ ] Search the generated files
+    - [ ] Generated output for the selected items
+    - [ ] Generated output for the selected Files
+- [ ] Add Analyzer to GUI
+- [ ] Show the list of generated files
+- [ ] Pop up a dialog to show the image of the selected file 

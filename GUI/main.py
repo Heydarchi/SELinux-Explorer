@@ -1,6 +1,6 @@
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QFileDialog
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget,QPushButton, QListWidget
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QPushButton, QListWidget, QListWidgetItem
 from PyQt5.QtCore import Qt
 
 import sys
@@ -51,7 +51,6 @@ class MainWindow(QMainWindow):
 
         self.btnBrowseFile.clicked.connect(self.browseFilePath)
         self.btnBrowseFolder.clicked.connect(self.browseFolderPath)
-        self.btnAddToList.clicked.connect(self.addSelectedPathToList)
 
 
         #layoutSelectedPath
@@ -64,6 +63,9 @@ class MainWindow(QMainWindow):
 
         self.layoutSelectedPath.addLayout(self.layoutSelectedPathButton)
         self.layoutSelectedPath.addWidget(self.lstSelectedPath)
+
+        self.btnAddToList.clicked.connect(self.addSelectedPathToList)
+        self.btnRemoveFromList.clicked.connect(self.removeFromTheList)
 
         #layoutAnalyzer
         self.layoutAnalyzer.addWidget(self.btnAnalyzeAll)
@@ -89,7 +91,15 @@ class MainWindow(QMainWindow):
         self.edtCurrentSelectedPath.setText(QFileDialog.getExistingDirectory(self, 'Hey! Select a Folder', options=QFileDialog.ShowDirsOnly))
 
     def addSelectedPathToList(self):
-        pass
+        item = QListWidgetItem(self.edtCurrentSelectedPath.text())
+        print(self.edtCurrentSelectedPath.text())
+        self.lstSelectedPath.addItem(item)
+
+    def removeFromTheList(self):
+        listItems=self.lstSelectedPath.selectedItems()
+        if not listItems: return        
+        for item in listItems:
+            self.lstSelectedPath.takeItem(self.lstSelectedPath.row(item))
 
 app = QApplication(sys.argv)
 
