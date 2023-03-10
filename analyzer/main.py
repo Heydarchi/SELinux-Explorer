@@ -2,17 +2,17 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QFileDialog, QCheckBox, QDesktopWidget
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QPushButton, QListWidget, QListWidgetItem
 from PyQt5.QtCore import Qt
-
-from FileAnalyzer import  * 
-
+from AnalyzerLogic import *
 import sys
+
+
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("SELinux-Explorer")
         self.initVariables()
-        self.initAnalyzer()
 
         self.createPathLayout()
         self.createAnalyzeLayout()
@@ -20,9 +20,7 @@ class MainWindow(QMainWindow):
 
     def initVariables(self):
         self.keepResult = False
-
-    def initAnalyzer(self):
-        self.analyzer = FileAnalyzer()
+        self.analyzerLogic = AnalyzerLogic()
 
     def createPathLayout(self):
         self.layoutPath = QHBoxLayout()
@@ -87,9 +85,9 @@ class MainWindow(QMainWindow):
         #layoutAnalyzerConfig
         self.layoutAnalyzerConfig.addWidget(self.chkKeepAnalyze)
 
-        self.btnAnalyzeAll.clicked.connect(self.analyzeAll)
-        self.btnAnalyzeSelected.clicked.connect(self.analyzeSelectedPaths)
-        self.btnClearAnalyze.clicked.connect(self.clearAnalyze)
+        self.btnAnalyzeAll.clicked.connect(self.onAnalyzeAll)
+        self.btnAnalyzeSelected.clicked.connect(self.onAnalyzeSelectedPaths)
+        self.btnClearAnalyze.clicked.connect(self.onClearAnalyze)
 
         self.chkKeepAnalyze.toggled.connect(self.onClickedKeepResult)       
 
@@ -137,30 +135,24 @@ class MainWindow(QMainWindow):
         for item in listItems:
             self.lstSelectedPath.takeItem(self.lstSelectedPath.row(item))
 
-    def analyzeSelectedPaths(self):
+    def onAnalyzeSelectedPaths(self):
         paths = list()
         items = self.lstSelectedPath.selectedItems()
         for item in items:
             paths.append(item.text())
+        self.analyzerLogic.analyzeAll(paths)
 
-        self.analyzer.analyze(paths, None)
-
-    def analyzeAll(self):
+    def onAnalyzeAll(self):
         paths = list()
         for i in range(self.lstSelectedPath.count()):
             paths.append(self.lstSelectedPath.item(i).text())
+        self.analyzerLogic.analyzeAll(paths)
 
-        if not self.keepResult :
-            self.analyzer.clear()
-
-        self.analyzer.analyze(paths, None)
-
-    def clearAnalyze(self):
-        self.analyzer.clear()     
+    def onClearAnalyze(self):
+        self.analyzerLogic.clear()     
 
     def onClickedKeepResult(self):
-        self.keepResult = self.sender().isChecked()
-        print("self.keepResult:", self.keepResult)
+        self.analyzerLogic.setKeepResult( self.sender().isChecked())
 
 app = QApplication(sys.argv)
 
