@@ -52,7 +52,7 @@ class TeAnalyzer(AbstractAnalyzer):
         self.policyFile.typeDef.append( typeDef )
         #print (typeDef)
 
-    def extractRule(self,  inputString):
+    def extractRule2(self,  inputString):
             #print("inputString:  ",inputString)
             items = inputString.replace(";","").replace(": ",":").replace("{","").replace("}","").strip().split()
             #print(items)
@@ -85,8 +85,47 @@ class TeAnalyzer(AbstractAnalyzer):
                         self.policyFile.rules.append(rule)
                     return
 
+    def extractRule(self,  inputString):
+            items = inputString.replace(";","").replace(": ",":").strip().split()
+            for ruleEnum in RuleEnum:
+                if ruleEnum.label == items[0].strip():
+                    
+                    countBrackets = inputString.count("}")
+                    lstBracketItems = list()
+                    if countBrackets > 0 :
+                        offset = 0
+                        while '{' in inputString[offset:]:
+                            print (inputString[offset:])
+                            start = inputString.find('{', offset)
+                            end = inputString.find('}', start )
+                            bracketString = inputString[start + 1: end]
+                            inputString = inputString[:start] + "###" + inputString[end +1 :]
+                            lstBracketItems.append(bracketString)
+                            offset = start
+
+                    items = inputString.replace(";","").replace(": ",":").strip().split()
+                    sources = [items[1]] if "###" not in items[1] else lstBracketItems.pop(0).strip().split()
+                    sec_context = items[2] if "###" not in items[2] else (lstBracketItems.pop(0) + ":" + items[2].split(":")[1])
+                    permissions = [items[3]] if "###" not in items[3] != "###" else lstBracketItems.pop(0).strip().split()
+
+                    for source in sources:
+                        rule = Rule()
+                        rule.rule = ruleEnum                    
+                        rule.source = source
+                        dstItems = sec_context.split(":")
+                        targets = dstItems[0].split()
+                        for target in targets:
+                            rule.target = target
+                            rule.classType = dstItems[1]
+                            rule.permissions = permissions
+                        self.policyFile.rules.append(rule)
+                    return
+
 if __name__ == "__main__" :
     print(sys.argv)
     teAnalyzer = TeAnalyzer()
-    print(teAnalyzer.analyze(sys.argv[1]))
-
+    #print(teAnalyzer.analyze(sys.argv[1]))
+    
+    print( teAnalyzer.extractRule2("allow dummy servicemanager:binder { call transfer };"))
+    print( teAnalyzer.extractRule2("allow 1111111111111 22222:CCC 333333333"))
+    print( teAnalyzer.extractRule2("allow {MM NN} {AA BB }:CCC { DD EE}"))
