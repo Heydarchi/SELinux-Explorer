@@ -1,5 +1,5 @@
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QFileDialog, QCheckBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QFileDialog, QCheckBox, QDesktopWidget
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QPushButton, QListWidget, QListWidgetItem
 from PyQt5.QtCore import Qt
 
@@ -108,6 +108,14 @@ class MainWindow(QMainWindow):
         self.container.setLayout(self.mainLayout)
         # Set the central widget of the Window.
         self.setCentralWidget(self.container)
+
+        self.setWindowPosition()
+
+    def setWindowPosition(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
 
     def browseFilePath(self):
         dlg = QFileDialog()
