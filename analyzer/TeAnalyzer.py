@@ -24,7 +24,6 @@ class TeAnalyzer(AbstractAnalyzer):
                 lastLine = ""
             self.processLine(lastLine + " " + line)
 
-        #print(self.policyFile)
         return self.policyFile
 
     def processLine(self, inputString):
@@ -37,7 +36,6 @@ class TeAnalyzer(AbstractAnalyzer):
                 self.extractDefinition(inputString)
             elif items[0] in ["allow", "neverallow"] :
                 self.extractRule(inputString)
-        #print(self.policyFile)
 
     def extractDefinition(self,  inputString):
         type = None
@@ -50,40 +48,7 @@ class TeAnalyzer(AbstractAnalyzer):
         typeDef.name = types[0]
         typeDef.types.extend(types[1:])
         self.policyFile.typeDef.append( typeDef )
-        #print (typeDef)
 
-    def extractRule2(self,  inputString):
-            #print("inputString:  ",inputString)
-            items = inputString.replace(";","").replace(": ",":").replace("{","").replace("}","").strip().split()
-            #print(items)
-            #print(inputString.replace(";","").replace(": ",":").strip().split("}"))
-            for ruleEnum in RuleEnum:
-                if ruleEnum.label == items[0].strip():
-                    countBrackets = inputString.count("}")
-                    if ("}" in inputString ) and (countBrackets==2 or (inputString.replace(";","").strip().index("}") + 1 )< len(inputString.replace(";","").strip()) ):
-                        #print(inputString.replace(";","").strip().index("}"))
-                        #print((len(inputString.replace(";","").strip()) + 1 ))
-                        sourcesString =inputString[inputString.index("{"): inputString.index("}")].replace("{","")
-                        sources = sourcesString.replace("{","").replace("}","").strip().split() 
-                        #print("sourcesString: ", sourcesString)
-                        items = inputString.replace(sourcesString, "##").replace(";","").replace(": ",":").replace("{","").replace("}","").strip().split()
-                        #print ("itemsss:  ", items)
-                    else:
-                        items = inputString.replace(";","").replace(": ",":").replace("{","").replace("}","").strip().split()
-                        sources = [items[1]]
-
-                    for source in sources:
-                        rule = Rule()
-                        rule.rule = ruleEnum                    
-                        rule.source = source
-                        dstItems = items[2].split(":")
-                        rule.target = dstItems[0]
-                        rule.classType = dstItems[1]
-                        rule.permissions.extend(items[3:])
-                        #print(items)
-                        #print(rule)
-                        self.policyFile.rules.append(rule)
-                    return
 
     def extractRule(self,  inputString):
             items = inputString.replace(";","").replace(": ",":").strip().split()
@@ -124,8 +89,4 @@ class TeAnalyzer(AbstractAnalyzer):
 if __name__ == "__main__" :
     print(sys.argv)
     teAnalyzer = TeAnalyzer()
-    #print(teAnalyzer.analyze(sys.argv[1]))
-    
-    print( teAnalyzer.extractRule2("allow dummy servicemanager:binder { call transfer };"))
-    print( teAnalyzer.extractRule2("allow 1111111111111 22222:CCC 333333333"))
-    print( teAnalyzer.extractRule2("allow {MM NN} {AA BB }:CCC { DD EE}"))
+    print(teAnalyzer.analyze(sys.argv[1]))
