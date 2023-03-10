@@ -1,5 +1,5 @@
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QFileDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QFileDialog, QCheckBox
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QPushButton, QListWidget, QListWidgetItem
 from PyQt5.QtCore import Qt
 
@@ -10,8 +10,24 @@ import sys
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-
         self.setWindowTitle("SELinux-Explorer")
+        self.initVariables()
+        self.initAnalyzer()
+
+        self.createPathLayout()
+        self.createAnalyzeLayout()
+        self.initMainLayout()
+
+    def initVariables(self):
+        self.keepResult = False
+
+    def initAnalyzer(self):
+        self.analyzer = FileAnalyzer()
+
+    def createPathLayout(self):
+        self.layoutPath = QHBoxLayout()
+        self.layoutSelectedPath = QHBoxLayout()
+        self.layoutSelectedPathButton = QVBoxLayout()
 
         self.lblPath = QLabel("Path")
         self.lblSelectedPath = QLabel("Selected Path")
@@ -23,25 +39,6 @@ class MainWindow(QMainWindow):
         self.btnBrowseFolder = QPushButton("Browse Folder")
         self.btnAddToList = QPushButton("Add to")
         self.btnRemoveFromList = QPushButton("Remove from")
-        self.btnAnalyzeAll = QPushButton("Analyze All")
-        self.btnAnalyzeSelected = QPushButton("Analyze Selected")
-        self.btnClearAnalyze = QPushButton("Clear Analyze")
-
-
-        self.layoutPath = QHBoxLayout()
-        self.layoutSelectedPath = QHBoxLayout()
-        self.layoutSelectedPathButton = QVBoxLayout()
-        self.layoutAnalyzer = QHBoxLayout()
-        self.mainLayout = QVBoxLayout()
-
-        self.container = QWidget()
-
-        self.analyzer = FileAnalyzer()
-
-        self.initUI()
-
-    def initUI(self):
-        self.setMinimumWidth(400)
 
         #layoutPath
         self.edtCurrentSelectedPath.setFixedWidth(500)
@@ -55,7 +52,6 @@ class MainWindow(QMainWindow):
 
         self.btnBrowseFile.clicked.connect(self.browseFilePath)
         self.btnBrowseFolder.clicked.connect(self.browseFolderPath)
-
 
         #layoutSelectedPath
         self.layoutSelectedPathButton.addWidget(self.btnAddToList)
@@ -71,14 +67,38 @@ class MainWindow(QMainWindow):
         self.btnAddToList.clicked.connect(self.addSelectedPathToList)
         self.btnRemoveFromList.clicked.connect(self.removeFromTheList)
 
+    def createAnalyzeLayout(self):
+        self.layoutAnalyzer = QVBoxLayout()
+        self.layoutAnalyzerConfig = QHBoxLayout()
+        self.layoutAnalyzerAnalyze = QHBoxLayout()
+
+        self.btnAnalyzeAll = QPushButton("Analyze All")
+        self.btnAnalyzeSelected = QPushButton("Analyze Selected")
+        self.btnClearAnalyze = QPushButton("Clear Analyze")
+
+        self.chkKeepAnalyze = QCheckBox("Keep the analyze result")
+        self.chkKeepAnalyze.setEnabled(False)
+
         #layoutAnalyzer
-        self.layoutAnalyzer.addWidget(self.btnAnalyzeAll)
-        self.layoutAnalyzer.addWidget(self.btnAnalyzeSelected)
-        self.layoutAnalyzer.addWidget(self.btnClearAnalyze)
+        self.layoutAnalyzerAnalyze.addWidget(self.btnAnalyzeAll)
+        self.layoutAnalyzerAnalyze.addWidget(self.btnAnalyzeSelected)
+        self.layoutAnalyzerAnalyze.addWidget(self.btnClearAnalyze)
+
+        #layoutAnalyzerConfig
+        self.layoutAnalyzerConfig.addWidget(self.chkKeepAnalyze)
 
         self.btnAnalyzeAll.clicked.connect(self.analyzeAll)
         self.btnAnalyzeSelected.clicked.connect(self.analyzeSelectedPaths)
+        self.btnClearAnalyze.clicked.connect(self.clearAnalyze)
 
+        self.chkKeepAnalyze.toggled.connect(self.onClickedKeepResult)       
+
+        self.layoutAnalyzer.addLayout(self.layoutAnalyzerAnalyze)
+        self.layoutAnalyzer.addLayout(self.layoutAnalyzerConfig)
+
+    def initMainLayout(self):
+        self.mainLayout = QVBoxLayout()
+        self.container = QWidget()
 
         #mainLayout
         self.mainLayout.addLayout(self.layoutPath)
@@ -86,7 +106,6 @@ class MainWindow(QMainWindow):
         self.mainLayout.addLayout(self.layoutAnalyzer)
 
         self.container.setLayout(self.mainLayout)
-
         # Set the central widget of the Window.
         self.setCentralWidget(self.container)
 
@@ -117,12 +136,23 @@ class MainWindow(QMainWindow):
             paths.append(item.text())
 
         self.analyzer.analyze(paths, None)
+
     def analyzeAll(self):
         paths = list()
         for i in range(self.lstSelectedPath.count()):
             paths.append(self.lstSelectedPath.item(i).text())
 
+        if not self.keepResult :
+            self.analyzer.clear()
+
         self.analyzer.analyze(paths, None)
+
+    def clearAnalyze(self):
+        self.analyzer.clear()     
+
+    def onClickedKeepResult(self):
+        self.keepResult = self.sender().isChecked()
+        print("self.keepResult:", self.keepResult)
 
 app = QApplication(sys.argv)
 

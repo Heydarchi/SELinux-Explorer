@@ -16,6 +16,10 @@ class FileAnalyzer(AbstractAnalyzer):
         if not os.path.exists("out"):
             os.makedirs("out")
 
+    def clear(self):
+        self.listOfPolicyFiles = list()
+        self.listOfAnalyzerInfo = list()
+        print("The previous analyze result is cleared!")
         
 
     def analyze(self, targetPaths, pattern, disableDrawing = False, drawExisting = False):
@@ -27,6 +31,7 @@ class FileAnalyzer(AbstractAnalyzer):
             print( "Nothing to analyze!")
             return
 
+        #Setting up drawing
         relationDrawer = RelationDrawer()
         relationDrawer.start()
         relationDrawer.setDisableDrawing(disableDrawing)
