@@ -1,4 +1,5 @@
 from FileAnalyzer import  * 
+from RelationDrawer import *
 
 
 class AnalyzerLogic:

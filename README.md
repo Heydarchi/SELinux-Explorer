@@ -1,6 +1,14 @@
 # SELinux-Explorer
-A utility helping developers to explorer SELinux policies
 
+### A utility helping developers to explorer SELinux policies. (At present it supports Android SELinux)
+This project was started as a tool to use through the command line. But after some time I realized that it's crucial to have a GUI.
+Having a GUI helps to provide more facilities alongside the analyzer such as filtering the result to generate custom output.
+Also it leads to reusing the data rather than running the analyzer from scratch.
+<br/>
+
+### Of course, it's required some improvement in sense of architecture, performance and functionality.
+<br/>
+<br/>
 
 ### The supported languages are:
 - file_contexts
@@ -11,6 +19,7 @@ A utility helping developers to explorer SELinux policies
 - seapp_contexts
 - *.te
 
+<br/>
 <br/>
 
 The code is tested for the files mentioned above. Of course, it is not completed yet and has some flaws and issues in processing and also some refactoring to improve the performance. Very welcome to report or any kind of contribution.
