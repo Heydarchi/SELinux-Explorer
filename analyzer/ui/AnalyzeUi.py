@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QCheckBox
 from PyQt5.QtCore import Qt
 from AnalyzerLogic import *
 import sys
+from PythonUtilityClasses.SystemUtility import *
 
 
 
@@ -26,6 +27,7 @@ class AnalyzeUi(QVBoxLayout):
         self.btnAnalyzeAll = QPushButton("Analyze All")
         self.btnAnalyzeSelected = QPushButton("Analyze Selected")
         self.btnClearAnalyze = QPushButton("Clear Analyze")
+        self.btnClearOutput = QPushButton("Clear Output")
 
         self.chkKeepAnalyze = QCheckBox("Keep the analyze result")
         self.chkKeepAnalyze.setEnabled(False)
@@ -35,6 +37,7 @@ class AnalyzeUi(QVBoxLayout):
         self.btnAnalyzeAll.clicked.connect(self.onAnalyzeAll)
         self.btnAnalyzeSelected.clicked.connect(self.onAnalyzeSelectedPaths)
         self.btnClearAnalyze.clicked.connect(self.onClearAnalyze)
+        self.btnClearOutput.clicked.connect(self.onClearOutput)
         self.chkKeepAnalyze.toggled.connect(self.onClickedKeepResult) 
 
 
@@ -43,6 +46,7 @@ class AnalyzeUi(QVBoxLayout):
         self.layoutAnalyzerAnalyze.addWidget(self.btnAnalyzeAll)
         self.layoutAnalyzerAnalyze.addWidget(self.btnAnalyzeSelected)
         self.layoutAnalyzerAnalyze.addWidget(self.btnClearAnalyze)
+        self.layoutAnalyzerAnalyze.addWidget(self.btnClearOutput)
 
         #layoutAnalyzerConfig
         self.layoutAnalyzerConfig.addWidget(self.chkKeepAnalyze)
@@ -66,6 +70,14 @@ class AnalyzeUi(QVBoxLayout):
 
     def onClearAnalyze(self):
         self.analyzerLogic.clear()     
+
+    def onClearOutput(self):
+        files = SystemUtility().getListOfFiles(os.getcwd() + "/out/","*")
+        #print(files)
+        for file in files :
+            if os.path.isfile(file):
+                #print(file)
+                SystemUtility().deleteFiles(file)
 
     def onClickedKeepResult(self):
         self.analyzerLogic.setKeepResult( self.sender().isChecked())
