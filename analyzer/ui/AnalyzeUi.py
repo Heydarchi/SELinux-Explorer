@@ -13,6 +13,7 @@ class AnalyzeUi(QVBoxLayout):
         super().__init__()
         self.mainWindow = mainWindow
         self.analyzerLogic = analyzerLogic
+        self.initVariables()
         self.initWidgets()
         self.configSignals()
         self.configLayout()
@@ -81,3 +82,4 @@ class AnalyzeUi(QVBoxLayout):
 
     def onClickedKeepResult(self):
         self.analyzerLogic.setKeepResult( self.sender().isChecked())
+

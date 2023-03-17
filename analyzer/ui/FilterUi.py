@@ -1,5 +1,6 @@
 
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QGroupBox, QRadioButton, QLabel
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QGroupBox, QLabel
+from PyQt5.QtWidgets import QCheckBox
 from PyQt5.QtCore import Qt
 from AnalyzerLogic import *
 import sys
@@ -26,10 +27,10 @@ class FilterUi(QVBoxLayout):
         self.edtPattern = QLineEdit()
         self.btnFilter = QPushButton("Filter")
 
-        self.rdbBtnDomain = QRadioButton("Domain")
-        self.rdbBtnFilename = QRadioButton("File name")
-        self.rdbBtnClassType = QRadioButton("Type def(Class type)")
-        self.rdbBtnPermission = QRadioButton("Permission")
+        self.chbxDomain = QCheckBox("Domain")
+        self.chbxFilename = QCheckBox("File name")
+        self.chbxClassType = QCheckBox("Type def(Class type)")
+        self.chbxPermission = QCheckBox("Permission")
         self.grpLayout = QHBoxLayout()
         self.grpFilterOption = QGroupBox("Filter options")
 
@@ -38,10 +39,10 @@ class FilterUi(QVBoxLayout):
 
     def configLayout(self):
         #layoutAnalyzer
-        self.grpLayout.addWidget(self.rdbBtnDomain)
-        self.grpLayout.addWidget(self.rdbBtnFilename)
-        self.grpLayout.addWidget(self.rdbBtnClassType)
-        self.grpLayout.addWidget(self.rdbBtnPermission)
+        self.grpLayout.addWidget(self.chbxDomain)
+        self.grpLayout.addWidget(self.chbxFilename)
+        self.grpLayout.addWidget(self.chbxClassType)
+        self.grpLayout.addWidget(self.chbxPermission)
         self.grpFilterOption.setLayout(self.grpLayout)
 
         #layoutAnalyzerConfig
@@ -51,3 +52,28 @@ class FilterUi(QVBoxLayout):
         self.layoutFilterOption.addWidget(self.grpFilterOption)
         self.addLayout(self.layoutFilterOption)
         self.addLayout(self.layoutFilterEntry)
+
+    def isClassTypeSelected(self):
+        return self.chbxClassType.isChecked()
+    
+    def isDomaineSelected(self):
+        return self.chbxDomain.isChecked()
+    
+    def isFilenameSelected(self):
+        return self.chbxFilename.isChecked()
+    
+    def isPermissionSelected(self):
+        return self.chbxPermission.isChecked()
+        
+    def setClassTypeSelected(self, state):
+        self.chbxClassType.setChecked(state)
+
+    def setDomainSelected(self, state):
+        self.chbxDomain.setChecked(state)
+
+    def setFilenameSelected(self, state):
+        self.chbxFilename.setChecked(state)
+
+    def setPermissionSelected(self, state):
+        self.chbxPermission.setChecked(state)
+

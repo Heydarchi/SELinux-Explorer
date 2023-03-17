@@ -4,7 +4,7 @@ from PolicyEntities import  *
 class FilterResult:
 
 
-    def filterDomain(self, domain):
+    def filterDomain(self, domain, pocliFiles):
         pass
 
     def filterFilename(self, fileName):
