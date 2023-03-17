@@ -31,7 +31,7 @@ class AnalyzeUi(QVBoxLayout):
         self.btnClearOutput = QPushButton("Clear Output")
 
         self.chkKeepAnalyze = QCheckBox("Keep the analyze result")
-        self.chkKeepAnalyze.setEnabled(False)
+        #self.chkKeepAnalyze.setEnabled(False)
 
 
     def configSignals(self):
@@ -76,5 +76,6 @@ class AnalyzeUi(QVBoxLayout):
         self.analyzerLogic.clearOutput()
 
     def onClickedKeepResult(self):
+        self.keepResult = self.sender().isChecked()
         self.analyzerLogic.setKeepResult( self.sender().isChecked())
 

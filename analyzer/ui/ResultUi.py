@@ -36,6 +36,7 @@ class ResultUi(QVBoxLayout):
         super().__init__()
         self.mainWindow = mainWindow
         self.analyzerLogic = analyzerLogic
+        self.initVariables()
         self.initWidgets()
         self.configSignals()
         self.configLayout()
