@@ -91,6 +91,9 @@ class MainWindow(QMainWindow):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
+    def disposeObjects(self):
+        self.layoutResult.onDispose()
+
     def closeEvent(self,event):
             result = QMessageBox().question(self,
                         "Confirm Exit...",
@@ -100,5 +103,6 @@ class MainWindow(QMainWindow):
 
             if result == QMessageBox.Yes:
                 self.saveSetting()
+                self.disposeObjects()
                 event.accept()
 

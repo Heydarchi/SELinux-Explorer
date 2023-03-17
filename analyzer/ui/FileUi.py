@@ -74,11 +74,11 @@ class FileUi(QVBoxLayout):
         dlg = QFileDialog(directory = self.lastOpenedPath)
         if dlg.exec_():
             self.edtCurrentSelectedPath.setText(dlg.selectedFiles()[0])
-            self.lastOpenedPath = os.path.dirname(self.edtCurrentSelectedPath.text())
+            self.lastOpenedPath = self.edtCurrentSelectedPath.text()
 
     def browseFolderPath(self):
         self.edtCurrentSelectedPath.setText(QFileDialog(directory = self.lastOpenedPath).getExistingDirectory(self.mainWindow, 'Hey! Select a Folder', options=QFileDialog.ShowDirsOnly))
-        self.lastOpenedPath = os.path.dirname(self.edtCurrentSelectedPath.text())
+        self.lastOpenedPath = self.edtCurrentSelectedPath.text()
 
     def addSelectedPathToList(self):
         item = QListWidgetItem(self.edtCurrentSelectedPath.text())

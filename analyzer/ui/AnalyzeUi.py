@@ -73,12 +73,7 @@ class AnalyzeUi(QVBoxLayout):
         self.analyzerLogic.clear()     
 
     def onClearOutput(self):
-        files = SystemUtility().getListOfFiles(os.getcwd() + "/out/","*")
-        #print(files)
-        for file in files :
-            if os.path.isfile(file):
-                #print(file)
-                SystemUtility().deleteFiles(file)
+        self.analyzerLogic.clearOutput()
 
     def onClickedKeepResult(self):
         self.analyzerLogic.setKeepResult( self.sender().isChecked())

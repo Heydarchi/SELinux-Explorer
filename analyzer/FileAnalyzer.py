@@ -42,6 +42,7 @@ class FileAnalyzer(AbstractAnalyzer):
             if fileType != FileTypeEnum.UNDEFINED :
                 print("Analyzing: " + filePath)#, fileType)
                 policyFile = self.invokeAnalyzerClass(fileType, filePath)
+                self.listOfPolicyFiles.append(policyFile)
                 relationDrawer.enqueuePolicyFile(policyFile)
             else:
                 print("Undefined file extension : " + filePath)
@@ -49,6 +50,8 @@ class FileAnalyzer(AbstractAnalyzer):
         #Wait till the drawing thread is done
         relationDrawer.letShutdownThread = True
         relationDrawer.join()
+
+        return self.listOfPolicyFiles
 
     def gatherFileInfo(self, targetPath, pattern):
         
