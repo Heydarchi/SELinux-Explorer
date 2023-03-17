@@ -6,6 +6,7 @@ from AnalyzerLogic import *
 from ui.FileUi import *
 from ui.AnalyzeUi import *
 from ui.FilterUi import *
+from ui.ResultUi import *
 from AppSetting import *
 from PythonUtilityClasses.FileWriter import *
 from PythonUtilityClasses.FileReader import *
@@ -53,13 +54,26 @@ class MainWindow(QMainWindow):
         self.layoutPath = FileUi(self)
         self.layoutAnalyzer = AnalyzeUi(self, self.analyzerLogic)
         self.layoutFilter = FilterUi(self, self.analyzerLogic)
-        self.mainLayout = QVBoxLayout()
+        self.layoutResult = ResultUi(self, self.analyzerLogic)
+        self.mainLayoutLeft = QVBoxLayout()
+        self.mainLayoutRight = QVBoxLayout()
+        self.mainLayout = QHBoxLayout()
         self.container = QWidget()
 
         #mainLayout
-        self.mainLayout.addLayout(self.layoutPath)
-        self.mainLayout.addLayout(self.layoutAnalyzer)
-        self.mainLayout.addLayout(self.layoutFilter)
+        #....................................
+        #.                 .                .
+        #. Path Layout     .  Result Layout .
+        #. Analyzer Layout .                .
+        #. Left Filter     .                .
+        #....................................
+
+        self.mainLayoutLeft.addLayout(self.layoutPath)
+        self.mainLayoutLeft.addLayout(self.layoutAnalyzer)
+        self.mainLayoutLeft.addLayout(self.layoutFilter)
+        self.mainLayoutRight.addLayout(self.layoutResult)
+        self.mainLayout.addLayout(self.mainLayoutLeft)
+        self.mainLayout.addLayout(self.mainLayoutRight)
 
         self.container.setLayout(self.mainLayout)
         # Set the central widget of the Window.

@@ -161,3 +161,4 @@ cython_debug/
 
 out/
 analyzer/out
+analyzer/app_setting.json
