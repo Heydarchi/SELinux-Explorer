@@ -1,49 +1,73 @@
 import os, sys
 from PolicyEntities import  *
 from RelationDrawer import *
+from dataclasses import dataclass, field
+import dataclasses
+from enum import Enum
+from typing import List
+import json
+from dataclass_wizard import JSONWizard
+
+class FilterType(Enum):
+    DOMAIN = 1
+    FILE_NAME = 2
+    TYPE_DEF = 3
+    PERMISSION = 4
+@dataclass
+class FilterRule(JSONWizard):
+    filterType: FilterType = FilterType.DOMAIN
+    keyword : str = ""
+    exactWord: bool = False
+
 class FilterResult:
 
-
-    def filterDomain(self, domain, policyFiles, exactWord = False):
-        filteredPolicyFile = PolicyFiles()
-        filteredPolicyFile.fileName = "domain_filtered_" + ("ExactWord_" if exactWord  else "") + domain
-        for policyFile in policyFiles:
-            for typeDef in policyFile.typeDef:
-                if self.checkSimilarity(exactWord, domain, typeDef.name):
-                    filteredPolicyFile.typeDef.append(typeDef)
-
-            for context in policyFile.contexts:
-                if self.checkSimilarity(exactWord, domain, context.securityContext.type):
-                    filteredPolicyFile.contexts.append(context)     
-
-            for seApp in policyFile.seApps:
-                if self.checkSimilarity(exactWord, domain, seApp.domain):
-                    filteredPolicyFile.seApps.append(seApp)                                   
-
-            for rule in policyFile.rules:
-                if self.checkSimilarity(exactWord, domain, rule.source) or self.checkSimilarity(exactWord, domain, rule.target):
-                    filteredPolicyFile.rules.append(rule)
+    def filter(self, lstRules, policyFiles):
+        self.filteredPolicyFile = PolicyFiles()
+        self.filteredPolicyFile.fileName = "domain_filtered" 
+        for filterRule in lstRules :
+            self.filteredPolicyFile.fileName =  self.filteredPolicyFile.fileName + ("_EW_" if filterRule.exactWord  else "_") + filterRule.keyword
+            if filterRule.filterType == FilterType.DOMAIN:
+                self.filterDomain(filterRule, policyFiles)
             
         
         drawer = RelationDrawer()
-        drawer.drawUml(filteredPolicyFile)
-        return drawer.generatePngFileName(filteredPolicyFile.fileName)                                 
+        drawer.drawUml(self.filteredPolicyFile)
+        return drawer.generatePngFileName(self.filteredPolicyFile.fileName)  
 
 
-    def filterFilename(self, fileName, policyFiles, exactWord = False):
+    def filterDomain(self, filterRule, policyFiles):
+            for policyFile in policyFiles:
+                for typeDef in policyFile.typeDef:
+                    if self.checkSimilarity(filterRule, typeDef.name):
+                        self.filteredPolicyFile.typeDef.append(typeDef)
+
+                for context in policyFile.contexts:
+                    if self.checkSimilarity(filterRule, context.securityContext.type):
+                        self.filteredPolicyFile.contexts.append(context)     
+
+                for seApp in policyFile.seApps:
+                    if self.checkSimilarity(filterRule, seApp.domain):
+                        self.filteredPolicyFile.seApps.append(seApp)                                   
+
+                for rule in policyFile.rules:
+                    if self.checkSimilarity(filterRule, rule.source) or self.checkSimilarity(filterRule, rule.target):
+                        self.filteredPolicyFile.rules.append(rule)
+            
+
+    def filterFilename(self, fileName, policyFiles):
         pass
 
-    def filterPermission(self, permission, policyFiles, exactWord = False):
+    def filterPermission(self, permission, policyFiles):
         pass
 
-    def filterPathName(self, pathName, policyFiles, exactWord = False):
+    def filterPathName(self, pathName, policyFiles):
         pass
 
-    def filterTypedef(self, typeDef, policyFiles, exactWord = False):
+    def filterTypedef(self, typeDef, policyFiles):
         pass
 
-    def checkSimilarity(self, exactWord, word, stringToCheck):
-        if exactWord:
-            return stringToCheck.strip() == word.strip()
+    def checkSimilarity(self, filterRule, stringToCheck):
+        if filterRule.exactWord:
+            return stringToCheck.strip() == filterRule.keyword.strip()
         else:
-            return word.strip() in stringToCheck.strip()
+            return filterRule.keyword.strip() in stringToCheck.strip()
