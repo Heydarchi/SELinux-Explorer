@@ -91,7 +91,6 @@ python FileAnalyzer.py ../samples
 <br/>
 
 ### Analyzer TODO:
-- [ ] Fix extracting rules for multiple source/target/etc in one line
 - [ ] Enable multi-threading
 - [ ] Add filtering the result
 - [ ] Enable using the generated data for drawing new diagrams
@@ -107,3 +106,9 @@ python FileAnalyzer.py ../samples
     - [ ] Generated output for the selected items
     - [ ] Generated output for the selected Files
 - [ ] Make it possible to open multiple diagram
+- [ ] Make it possible to disable generating the diagram
+- [ ] Add toolbar ( Path, File, Clear Analyze Result, Clear Result, Analyze All)
+- [ ] Add lowercase/uppercase check for filter's keyword
+- [ ] Sort result files by date
+- [ ] Open filtered diagram automatically
+- [ ] Add Folder/File to the list of search automatically
