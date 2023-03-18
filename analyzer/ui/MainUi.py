@@ -1,7 +1,8 @@
 
-from PyQt5.QtWidgets import QMainWindow, QDesktopWidget
+from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QLabel
 from PyQt5.QtWidgets import QVBoxLayout,  QWidget, QMessageBox
 from PyQt5.QtGui import *
+from PyQt5.QtCore import QSize
 from AnalyzerLogic import *
 from ui.FileUi import *
 from ui.AnalyzeUi import *
@@ -80,6 +81,16 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.container)
 
         self.setWindowPosition()
+
+        appIcon = QIcon()
+        iconPath = './ui/icons/'
+        appIcon.addFile(iconPath + 'icon_16.png', QSize(16,16))
+        appIcon.addFile(iconPath + 'icon_24.png', QSize(24,24))
+        appIcon.addFile(iconPath + 'icon_32.png', QSize(32,32))
+        appIcon.addFile(iconPath + 'icon_64.png', QSize(64,64))
+        appIcon.addFile(iconPath + 'icon_256.png', QSize(256,256))
+        self.setWindowIcon(appIcon)
+
 
     def configSignals(self):
         self.layoutAnalyzer.connectToGetSelectedPaths( self.layoutPath.getSelectedPaths)
