@@ -106,4 +106,4 @@ python FileAnalyzer.py ../samples
     - [ ] Search the generated files
     - [ ] Generated output for the selected items
     - [ ] Generated output for the selected Files
-- [] Make it possible to open multiple diagram
+- [ ] Make it possible to open multiple diagram

@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QG
 from PyQt5.QtWidgets import QCheckBox
 from PyQt5.QtCore import Qt
 from AnalyzerLogic import *
+from FilterResult import *
 import sys
 from PythonUtilityClasses.SystemUtility import *
 
@@ -35,7 +36,7 @@ class FilterUi(QVBoxLayout):
         self.grpFilterOption = QGroupBox("Filter options")
 
     def configSignals(self):
-        pass
+        self.btnFilter.clicked.connect(self.onFilter)
 
     def configLayout(self):
         #layoutAnalyzer
@@ -52,6 +53,15 @@ class FilterUi(QVBoxLayout):
         self.layoutFilterOption.addWidget(self.grpFilterOption)
         self.addLayout(self.layoutFilterOption)
         self.addLayout(self.layoutFilterEntry)
+
+    def onFilter(self):
+        if self.isDomaineSelected():
+            fileName = FilterResult().filterDomain(self.edtPattern.text(), self.analyzerLogic.listOfPolicyFiles)
+            print(fileName)
+            self.updateResult()
+
+    def connectToUpdateResult(self, updateResult):
+        self.updateResult = updateResult
 
     def isClassTypeSelected(self):
         return self.chbxClassType.isChecked()

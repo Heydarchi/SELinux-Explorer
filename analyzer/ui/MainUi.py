@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
     def loadSetting(self):
         if os.path.isfile("app_setting.json"):
             json_str = FileReader().readFile("app_setting.json")
-            self.appSetting = AppSetting.from_json(json_str) 
+            self.appSetting = AppSetting.from_json(json_str) ,,
             self.layoutPath.lastOpenedPath = self.appSetting.lastOpenedPath
             self.layoutAnalyzer.keepResult = self.appSetting.keepTheResult
             self.layoutFilter.setClassTypeSelected(self.appSetting.filterClassType)
@@ -84,6 +84,7 @@ class MainWindow(QMainWindow):
     def configSignals(self):
         self.layoutAnalyzer.connectToGetSelectedPaths( self.layoutPath.getSelectedPaths)
         self.layoutAnalyzer.connectToGetAllPaths( self.layoutPath.getAllPaths)
+        self.layoutFilter.connectToUpdateResult( self.layoutResult.onAnalyzeFinished)
 
     def setWindowPosition(self):
         qr = self.frameGeometry()
