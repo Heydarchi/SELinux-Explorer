@@ -28,6 +28,7 @@ class FilterUi(QVBoxLayout):
         self.edtPattern = QLineEdit()
         self.btnFilter = QPushButton("Filter")
 
+        self.chbxExactWord = QCheckBox("Exact Word")
         self.chbxDomain = QCheckBox("Domain")
         self.chbxFilename = QCheckBox("File name")
         self.chbxClassType = QCheckBox("Type def(Class type)")
@@ -49,6 +50,7 @@ class FilterUi(QVBoxLayout):
         #layoutAnalyzerConfig
         self.layoutFilterEntry.addWidget(self.lblPattern)
         self.layoutFilterEntry.addWidget(self.edtPattern)
+        self.layoutFilterEntry.addWidget(self.chbxExactWord)
         self.layoutFilterEntry.addWidget(self.btnFilter)
         self.layoutFilterOption.addWidget(self.grpFilterOption)
         self.addLayout(self.layoutFilterOption)
@@ -56,12 +58,9 @@ class FilterUi(QVBoxLayout):
 
     def onFilter(self):
         if self.isDomaineSelected():
-            fileName = FilterResult().filterDomain(self.edtPattern.text(), self.analyzerLogic.listOfPolicyFiles)
+            fileName = FilterResult().filterDomain(self.edtPattern.text(), self.analyzerLogic.listOfPolicyFiles, self.chbxExactWord.isChecked())
             print(fileName)
-            self.updateResult()
-
-    def connectToUpdateResult(self, updateResult):
-        self.updateResult = updateResult
+            self.analyzerLogic.onAnalyzeFinished()
 
     def isClassTypeSelected(self):
         return self.chbxClassType.isChecked()
