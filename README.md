@@ -106,9 +106,9 @@ python FileAnalyzer.py ../samples
     - [ ] Generated output for the selected items
     - [ ] Generated output for the selected Files
 - [ ] Make it possible to open multiple diagram
-- [ ] Make it possible to disable generating the diagram
 - [ ] Add toolbar ( Path, File, Clear Analyze Result, Clear Result, Analyze All)
 - [ ] Add lowercase/uppercase check for filter's keyword
 - [ ] Sort result files by date
 - [ ] Open filtered diagram automatically
 - [ ] Add Folder/File to the list of search automatically
+- [ ] Add AND / OR for combining the filter rules

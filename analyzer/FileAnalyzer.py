@@ -22,7 +22,7 @@ class FileAnalyzer(AbstractAnalyzer):
         print("The previous analyze result is cleared!")
         
 
-    def analyze(self, targetPaths, pattern, disableDrawing = False, drawExisting = False):
+    def analyzeAndDraw(self, targetPaths, pattern, disableDrawing = False, drawExisting = False):
         listOfFiles = list()
         for path in targetPaths:
             listOfFiles.extend( self.gatherFileInfo(path, "*"))
@@ -52,6 +52,26 @@ class FileAnalyzer(AbstractAnalyzer):
         relationDrawer.join()
 
         return self.listOfPolicyFiles
+    
+    def analyze(self, targetPaths):
+        listOfFiles = list()
+        for path in targetPaths:
+            listOfFiles.extend( self.gatherFileInfo(path, "*"))
+
+        if listOfFiles == None or len(listOfFiles) == 0:
+            print( "Nothing to analyze!")
+            return
+
+        for filePath in listOfFiles:
+            fileType = self.detectLang(filePath)
+            if fileType != FileTypeEnum.UNDEFINED :
+                print("Analyzing: " + filePath)
+                policyFile = self.invokeAnalyzerClass(fileType, filePath)
+                self.listOfPolicyFiles.append(policyFile)
+            else:
+                print("Undefined file extension : " + filePath)
+
+        return self.listOfPolicyFiles    
 
     def gatherFileInfo(self, targetPath, pattern):
         
@@ -62,7 +82,7 @@ class FileAnalyzer(AbstractAnalyzer):
             analyzerInfo.sourceFile = systemUtility.getFileInfo(file)
             self.listOfAnalyzerInfo.append(analyzerInfo)
 
-        print(self.listOfAnalyzerInfo)
+        #print(self.listOfAnalyzerInfo)
         return listOfFiles
 
     def detectLang(self, fileName):
@@ -88,4 +108,4 @@ if __name__ == "__main__" :
     print("Input path/file: ", sys.argv[1])
     print("-----------------------------------------------------")
     fileAnalyzer = FileAnalyzer()
-    fileAnalyzer.analyze(sys.argv[1], None)
+    fileAnalyzer.analyzeAndDraw(sys.argv[1], None)

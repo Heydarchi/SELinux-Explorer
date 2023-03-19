@@ -20,17 +20,17 @@ class AnalyzerLogic:
 
     def analyzeAll(self, paths):
         if self.keepResult :
-            self.listOfPolicyFiles.extend(self.analyzer.analyze(paths, None))
+            self.listOfPolicyFiles.extend(self.analyzer.analyze(paths))
         else:
-            self.listOfPolicyFiles =  self.analyzer.analyze(paths, None)
+            self.listOfPolicyFiles =  self.analyzer.analyze(paths)
 
         self.onAnalyzeFinished()
 
     def onAnalyzeSelectedPaths(self, paths):
         if self.keepResult :
-            self.listOfPolicyFiles.extend(self.analyzer.analyze(paths, None))
+            self.listOfPolicyFiles.extend(self.analyzer.analyze(paths))
         else:
-            self.listOfPolicyFiles = self.analyzer.analyze(paths, None)
+            self.listOfPolicyFiles = self.analyzer.analyze(paths)
 
         self.onAnalyzeFinished()
 

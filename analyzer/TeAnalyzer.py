@@ -60,7 +60,7 @@ class TeAnalyzer(AbstractAnalyzer):
                     if countBrackets > 0 :
                         offset = 0
                         while '{' in inputString[offset:]:
-                            print (inputString[offset:])
+                            #print (inputString[offset:])
                             start = inputString.find('{', offset)
                             end = inputString.find('}', start )
                             bracketString = inputString[start + 1: end]
