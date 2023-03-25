@@ -1,7 +1,8 @@
 
 from PyQt5.QtWidgets import QLabel, QLineEdit, QFileDialog
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QListWidget, QListWidgetItem
-from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt, QSize
 from AnalyzerLogic import *
 import sys
 
@@ -21,69 +22,35 @@ class FileUi(QVBoxLayout):
         self.lastOpenedPath = ""
 
     def initWidgets(self):
-        self.layoutPath = QHBoxLayout()
+        iconPath = './ui/icons/'
+
         self.layoutSelectedPath = QHBoxLayout()
         self.layoutSelectedPathButton = QVBoxLayout()
 
-        self.lblPath = QLabel("Path")
-        self.lblSelectedPath = QLabel("Selected Path")
-        self.edtCurrentSelectedPath = QLineEdit()
-
         self.lstSelectedPath = QListWidget()
-
-        self.btnBrowseFile = QPushButton("Browse File")
-        self.btnBrowseFolder = QPushButton("Browse Folder")
-        self.btnAddToList = QPushButton("Add to")
-        self.btnRemoveFromList = QPushButton("Remove from")
-
+        self.btnRemoveFromList = QPushButton(icon = QIcon(iconPath + "minus.png"))
+        self.btnRemoveFromList.setToolTip("Remove selected item from the list")
+        self.btnRemoveFromList.setMinimumSize(24,24)
+        self.btnRemoveFromList.setIconSize(QSize(24,24))
 
     def configSignals(self):
-        self.btnBrowseFile.clicked.connect(self.browseFilePath)
-        self.btnBrowseFolder.clicked.connect(self.browseFolderPath)
-        self.btnAddToList.clicked.connect(self.addSelectedPathToList)
         self.btnRemoveFromList.clicked.connect(self.removeFromTheList)
 
 
     def configLayout(self):
-        #layoutPath
-        self.edtCurrentSelectedPath.setFixedWidth(500)
-        self.edtCurrentSelectedPath.setReadOnly(True)
-
-        self.layoutPath.addWidget(self.lblPath)
-        self.layoutPath.addWidget(self.edtCurrentSelectedPath)
-        self.layoutPath.addWidget(self.btnBrowseFile)
-        self.layoutPath.addWidget(self.btnBrowseFolder)
-        self.layoutPath.addStretch()
 
         #layoutSelectedPath
-        self.layoutSelectedPathButton.addWidget(self.btnAddToList)
         self.layoutSelectedPathButton.addWidget(self.btnRemoveFromList)
+        self.layoutSelectedPathButton.setAlignment(Qt.AlignTop)
 
-        self.lblSelectedPath.setAlignment(Qt.AlignTop)
         self.lstSelectedPath.setFixedHeight(120)
         self.layoutSelectedPath.setAlignment(Qt.AlignTop)
 
-        self.layoutSelectedPath.addLayout(self.layoutSelectedPathButton)
         self.layoutSelectedPath.addWidget(self.lstSelectedPath)
+        self.layoutSelectedPath.addLayout(self.layoutSelectedPathButton)
 
-        self.addLayout(self.layoutPath)
         self.addLayout(self.layoutSelectedPath)
 
-
-    def browseFilePath(self):
-        dlg = QFileDialog(directory = self.lastOpenedPath)
-        if dlg.exec_():
-            self.edtCurrentSelectedPath.setText(dlg.selectedFiles()[0])
-            self.lastOpenedPath = self.edtCurrentSelectedPath.text()
-
-    def browseFolderPath(self):
-        self.edtCurrentSelectedPath.setText(QFileDialog(directory = self.lastOpenedPath).getExistingDirectory(self.mainWindow, 'Hey! Select a Folder', options=QFileDialog.ShowDirsOnly))
-        self.lastOpenedPath = self.edtCurrentSelectedPath.text()
-
-    def addSelectedPathToList(self):
-        item = QListWidgetItem(self.edtCurrentSelectedPath.text())
-        print(self.edtCurrentSelectedPath.text())
-        self.lstSelectedPath.addItem(item)
 
     def removeFromTheList(self):
         listItems=self.lstSelectedPath.selectedItems()
@@ -103,3 +70,8 @@ class FileUi(QVBoxLayout):
         for i in range(self.lstSelectedPath.count()):
             paths.append(self.lstSelectedPath.item(i).text())
         return paths
+    
+    def onAddFileFolder(self, path):
+        print(path)
+        item = QListWidgetItem(path)
+        self.lstSelectedPath.addItem(item)

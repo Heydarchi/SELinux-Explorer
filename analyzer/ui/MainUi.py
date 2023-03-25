@@ -5,7 +5,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import QSize
 from AnalyzerLogic import *
 from ui.FileUi import *
-from ui.AnalyzeUi import *
 from ui.FilterUi import *
 from ui.ResultUi import *
 from ui.ToolbarUi import *
@@ -33,7 +32,7 @@ class MainWindow(QMainWindow):
             json_str = FileReader().readFile("app_setting.json")
             self.appSetting = AppSetting.from_json(json_str) 
             self.layoutPath.lastOpenedPath = self.appSetting.lastOpenedPath
-            self.layoutAnalyzer.keepResult = self.appSetting.keepTheResult
+            self.toolbar.keepResult = self.appSetting.keepTheResult
             self.layoutFilter.setClassTypeSelected(self.appSetting.filterClassType)
             self.layoutFilter.setDomainSelected(self.appSetting.filterDomain)
             self.layoutFilter.setFilenameSelected(self.appSetting.filterFilename)
@@ -44,7 +43,7 @@ class MainWindow(QMainWindow):
 
     def saveSetting(self):
         self.appSetting.lastOpenedPath = self.layoutPath.lastOpenedPath
-        self.appSetting.keepTheResult = self.layoutAnalyzer.keepResult
+        self.appSetting.keepTheResult = self.toolbar.keepResult
         self.appSetting.filterClassType = self.layoutFilter.isClassTypeSelected()
         self.appSetting.filterDomain = self.layoutFilter.isDomaineSelected()
         self.appSetting.filterFilename = self.layoutFilter.isFilenameSelected()
@@ -55,7 +54,6 @@ class MainWindow(QMainWindow):
 
     def initMainLayout(self):
         self.layoutPath = FileUi(self)
-        self.layoutAnalyzer = AnalyzeUi(self, self.analyzerLogic)
         self.layoutFilter = FilterUi(self, self.analyzerLogic)
         self.layoutResult = ResultUi(self, self.analyzerLogic)
         self.toolbar = ToolbarUi(self, self.analyzerLogic, self.appSetting)
@@ -74,7 +72,6 @@ class MainWindow(QMainWindow):
         #....................................
 
         self.mainLayoutLeft.addLayout(self.layoutPath)
-        self.mainLayoutLeft.addLayout(self.layoutAnalyzer)
         self.mainLayoutLeft.addLayout(self.layoutFilter)
         self.mainLayoutRight.addLayout(self.layoutResult)
         self.mainLayout.addLayout(self.mainLayoutLeft)
@@ -100,8 +97,9 @@ class MainWindow(QMainWindow):
 
 
     def configSignals(self):
-        self.layoutAnalyzer.connectToGetSelectedPaths( self.layoutPath.getSelectedPaths)
-        self.layoutAnalyzer.connectToGetAllPaths( self.layoutPath.getAllPaths)
+        self.toolbar.connectToGetSelectedPaths( self.layoutPath.getSelectedPaths)
+        self.toolbar.connectToGetAllPaths( self.layoutPath.getAllPaths)
+        self.toolbar.connectOnAddFileFolder( self.layoutPath.onAddFileFolder)
 
     def setWindowPosition(self):
         qr = self.frameGeometry()

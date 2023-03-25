@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QAction, QToolBar, QFileDialog, QSpacerItem, QSizePo
 from PyQt5.QtGui import QPixmap, QIcon
 from AnalyzerLogic import *
 from PyQt5.QtCore import Qt
+from ui.UiUtility import *
 import sys
 from PythonUtilityClasses.SystemUtility import *
 
@@ -20,7 +21,7 @@ class ToolbarUi(QToolBar):
         self.configLayout()
 
     def initVariables(self):
-        pass
+        self.keepResult = False
 
     def initWidgets(self):
         iconPath = './ui/icons/'
@@ -31,7 +32,9 @@ class ToolbarUi(QToolBar):
         self.actWipeAll = QAction(QIcon(iconPath + 'broom.png'),"Wipe all(output, analyze, etc.)", self.mainWindow)
         self.actMakeReference = QAction(QIcon(iconPath + 'reference.png'),"Make reference from the analyzed data", self.mainWindow)
         self.actAnalyzeAll = QAction(QIcon(iconPath + 'data-integration.png'),"Analyze all the files/paths", self.mainWindow)
+        self.actKeepResult = QAction(QIcon(iconPath + 'hosting.png'),"Don't erase the current result before Analyzing", self.mainWindow)
 
+        self.actKeepResult.setCheckable(True)
 
     def configSignals(self):
         self.addAction(self.actAddFile)
@@ -44,26 +47,40 @@ class ToolbarUi(QToolBar):
         self.addAction(self.actRemoveOutput)
         self.addAction(self.actClearAnalyze)
         self.addAction(self.actWipeAll)
+        self.addSeparator()
+        self.addAction(self.actKeepResult)
 
     def configLayout(self):
         self.actAddFile.triggered.connect(self.onAddFile)
         self.actAddPath.triggered.connect(self.onAddPath)
+        self.actAnalyzeAll.triggered.connect(self.onAnalyzeAll)
+        self.actClearAnalyze.triggered.connect(self.onClearAnalyze)
+        self.actRemoveOutput.triggered.connect(self.onClearOutput)
+        self.actWipeAll.triggered.connect(self.onWipeAll)
+        self.actKeepResult.triggered.connect(self.onClickedKeepResult)
 
         self.setOrientation(Qt.Vertical)
 
     def onAddFile(self):
         dlg = QFileDialog(directory = self.appSetting.lastOpenedPath)
         if dlg.exec_():
-            self.appSetting.lastOpenedPath = dlg.selectedFiles()[0]
+            self.addPathToList(dlg.selectedFiles()[0])
 
     def onAddPath(self):
-        self.appSetting.lastOpenedPath = QFileDialog(directory = self.appSetting.lastOpenedPath).getExistingDirectory(self.mainWindow, 'Hey! Select a Folder', options=QFileDialog.ShowDirsOnly)
+        self.addPathToList( QFileDialog(directory = self.appSetting.lastOpenedPath).getExistingDirectory(self.mainWindow, 'Hey! Select a Folder', options=QFileDialog.ShowDirsOnly))
 
-    def addSelectedPathToList(self):
-        item = QListWidgetItem(self.edtCurrentSelectedPath.text())
-        print(self.edtCurrentSelectedPath.text())
-        self.lstSelectedPath.addItem(item)
+    def addPathToList(self, path):
+        self.appSetting.lastOpenedPath = path
+        self.addFileFolder(path)
 
+    def connectOnAddFileFolder(self, onAddFileFolder):
+        self.addFileFolder = onAddFileFolder
+
+    def connectToGetSelectedPaths(self, getSelectedPath):
+        self.getSelectedPaths = getSelectedPath
+
+    def connectToGetAllPaths(self, getAllPaths):
+        self.getAllPaths = getAllPaths        
 
     def onAnalyzeSelectedPaths(self):
         paths = self.getSelectedPaths()
@@ -84,6 +101,10 @@ class ToolbarUi(QToolBar):
     def onDeleteAllFile(self):
         self.analyzerLogic.clearOutput()
 
+    def onWipeAll(self):
+        self.onClearOutput()
+        self.onClearAnalyze()
+
     def onResultAdded(self, filePath):
         item = QListWidgetItem(filePath)
         self.lstResults.addItem(item)
@@ -99,3 +120,6 @@ class ToolbarUi(QToolBar):
             self.diagram = DiagramWindow(listItems[0].text())
             self.diagram.show()
 
+    def onClickedKeepResult(self):
+        self.keepResult = self.sender().isChecked()
+        self.analyzerLogic.setKeepResult( self.sender().isChecked())
