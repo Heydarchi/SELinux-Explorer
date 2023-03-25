@@ -1,7 +1,8 @@
 
-from PyQt5.QtWidgets import QAction, QToolBar, QFileDialog
+from PyQt5.QtWidgets import QAction, QToolBar, QFileDialog, QSpacerItem, QSizePolicy
 from PyQt5.QtGui import QPixmap, QIcon
 from AnalyzerLogic import *
+from PyQt5.QtCore import Qt
 import sys
 from PythonUtilityClasses.SystemUtility import *
 
@@ -29,18 +30,26 @@ class ToolbarUi(QToolBar):
         self.actClearAnalyze = QAction(QIcon(iconPath + 'reset.png'),"Clear Analyze", self.mainWindow)
         self.actWipeAll = QAction(QIcon(iconPath + 'broom.png'),"Wipe all(output, analyze, etc.)", self.mainWindow)
         self.actMakeReference = QAction(QIcon(iconPath + 'reference.png'),"Make reference from the analyzed data", self.mainWindow)
+        self.actAnalyzeAll = QAction(QIcon(iconPath + 'data-integration.png'),"Analyze all the files/paths", self.mainWindow)
+
 
     def configSignals(self):
         self.addAction(self.actAddFile)
         self.addAction(self.actAddPath)
+        self.addSeparator()
+        self.addAction(self.actAnalyzeAll)
+        self.addSeparator()
+        self.addAction(self.actMakeReference)
+        self.addSeparator()
         self.addAction(self.actRemoveOutput)
         self.addAction(self.actClearAnalyze)
         self.addAction(self.actWipeAll)
-        self.addAction(self.actMakeReference)
 
     def configLayout(self):
         self.actAddFile.triggered.connect(self.onAddFile)
         self.actAddPath.triggered.connect(self.onAddPath)
+
+        self.setOrientation(Qt.Vertical)
 
     def onAddFile(self):
         dlg = QFileDialog(directory = self.appSetting.lastOpenedPath)

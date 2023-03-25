@@ -84,7 +84,7 @@ class MainWindow(QMainWindow):
         # Set the central widget of the Window.
         self.setCentralWidget(self.container)
 
-        self.addToolBar(self.toolbar)
+        self.addToolBar(Qt.LeftToolBarArea, self.toolbar)
         self.setStatusBar(self.statusbar)
 
         self.setWindowPosition()
