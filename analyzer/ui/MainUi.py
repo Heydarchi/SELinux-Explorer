@@ -26,6 +26,7 @@ class MainWindow(QMainWindow):
     def initVariables(self):
         self.analyzerLogic = AnalyzerLogic()
         self.appSetting = AppSetting()
+        self.settingUtil = SettingClass()
 
     def loadSetting(self):
         if os.path.isfile("app_setting.json"):

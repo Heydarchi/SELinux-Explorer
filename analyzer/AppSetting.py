@@ -5,7 +5,7 @@ from typing import List
 from PythonUtilityClasses.SystemUtility import *
 import json
 from dataclass_wizard import JSONWizard
-
+from PythonUtilityClasses.FileWriter import *
 
 @dataclass
 class AppSetting(JSONWizard):
@@ -16,6 +16,28 @@ class AppSetting(JSONWizard):
     filterDomain: bool = False
     filterFilename: bool = False
     filterPermission: bool = False
+
+class SettingClass:
+    def __init__(self) -> None:
+        self.refDir = "ref"
+        self.outDir = "out"
+        self.initDirs()
+
+    def initDirs(self):
+        if not os.path.exists(self.outDir):
+            os.makedirs(self.outDir)
+
+        if not os.path.exists(self.refDir):
+            os.makedirs(self.refDir)
+
+    @staticmethod
+    def saveListAsJson(fileName, lstOfObjects):
+        lstStr = list()
+        for item in lstOfObjects:
+            lstStr.append(item.to_json())
+        FileWriter().writeListToFile("ref/"+fileName+".json", lstStr)
+
+        
 
 
 if __name__ == "__main__" :

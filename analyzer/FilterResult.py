@@ -7,6 +7,7 @@ from enum import Enum
 from typing import List
 import json
 from dataclass_wizard import JSONWizard
+from drawer.DrawerHelper import *
 
 class FilterType(Enum):
     DOMAIN = 1
@@ -32,7 +33,7 @@ class FilterResult:
         
         drawer = RelationDrawer()
         drawer.drawUml(self.filteredPolicyFile)
-        return drawer.generatePngFileName(self.filteredPolicyFile.fileName)  
+        return generatePngFileName(self.filteredPolicyFile.fileName)  
 
 
     def filterDomain(self, filterRule, policyFiles):

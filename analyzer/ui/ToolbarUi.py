@@ -1,12 +1,14 @@
 
-from PyQt5.QtWidgets import QAction, QToolBar, QFileDialog, QSpacerItem, QSizePolicy
+from PyQt5.QtWidgets import QAction, QToolBar, QFileDialog, QSpacerItem, QSizePolicy, QInputDialog
 from PyQt5.QtGui import QPixmap, QIcon
 from AnalyzerLogic import *
 from PyQt5.QtCore import Qt
 from ui.UiUtility import *
+from AppSetting import *
 import sys
 from PythonUtilityClasses.SystemUtility import *
-
+from PythonUtilityClasses.FileWriter import *
+from PythonUtilityClasses.FileReader import *
 
 
 class ToolbarUi(QToolBar):
@@ -58,6 +60,7 @@ class ToolbarUi(QToolBar):
         self.actRemoveOutput.triggered.connect(self.onClearOutput)
         self.actWipeAll.triggered.connect(self.onWipeAll)
         self.actKeepResult.triggered.connect(self.onClickedKeepResult)
+        self.actMakeReference.triggered.connect(self.onMakeReference)
 
         self.setOrientation(Qt.Vertical)
 
@@ -124,3 +127,9 @@ class ToolbarUi(QToolBar):
     def onClickedKeepResult(self):
         self.keepResult = self.sender().isChecked()
         self.analyzerLogic.setKeepResult( self.sender().isChecked())
+
+    def onMakeReference(self):
+        refName, ok = QInputDialog.getText(self, 'Text Input Dialog', 'Enter your name:')
+        if ok:
+            SettingClass.saveListAsJson(refName, self.analyzerLogic.listOfPolicyFiles)
+            print("AppSetting saved!")

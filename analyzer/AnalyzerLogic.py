@@ -1,5 +1,6 @@
 from FileAnalyzer import  * 
 from RelationDrawer import *
+from drawer.DrawerHelper import *
 
 
 class AnalyzerLogic:
@@ -43,15 +44,15 @@ class AnalyzerLogic:
 
     def clearFileFromAnalyzer(self, filePath):
         self.analyzer.clear()     
-        SystemUtility().deleteFiles(self.drawer.generatePngFileName(filePath))    
-        SystemUtility().deleteFiles(self.drawer.generatePumlFileName(filePath)) 
+        SystemUtility().deleteFiles(generatePngFileName(filePath))    
+        SystemUtility().deleteFiles(generatePumlFileName(filePath)) 
         self.onAnalyzeFinished()
 
     def clear(self):
         self.listOfPolicyFiles = list()
 
     def getImagePath(self, filePath):
-        return self.drawer.generatePngFileName(filePath)
+        return generatePngFileName(filePath)
     
     def setKeepResult(self, state):
         self.keepResult = state

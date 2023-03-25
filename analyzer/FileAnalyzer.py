@@ -13,8 +13,7 @@ class FileAnalyzer(AbstractAnalyzer):
     def __init__(self) -> None:
         self.listOfPolicyFiles = list()
         self.listOfAnalyzerInfo = list()
-        if not os.path.exists("out"):
-            os.makedirs("out")
+
 
     def clear(self):
         self.listOfPolicyFiles = list()

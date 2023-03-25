@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import List
+from dataclass_wizard import JSONWizard
 
 
 
@@ -10,12 +11,12 @@ class InheritanceEnum(Enum):
     IMPLEMENTED = 2
     DEPENDED = 3
 @dataclass
-class Inheritance:
+class Inheritance(JSONWizard):
     name: str 
     relationship: InheritanceEnum    
 
 @dataclass
-class UmlRelationMap:
+class UmlRelationMap(JSONWizard):
     name: str = "" 
     relationship: InheritanceEnum = InheritanceEnum.DEPENDED  
     
@@ -46,7 +47,7 @@ class PolicyFunction:
     rules: list()
 
 @dataclass
-class Controls:
+class Controls(JSONWizard):
     className: str
     permissions: list()
 
@@ -64,7 +65,7 @@ class RuleEnum(Enum):
 
 #allow source target:class permissions
 @dataclass
-class Rule:
+class Rule(JSONWizard):
     rule: str = ""
     source: str = ""
     target: str = ""
@@ -73,7 +74,7 @@ class Rule:
 
 #user:role:type:sensitivity[:categories]
 @dataclass
-class SecurityContext:
+class SecurityContext(JSONWizard):
     user: str = ""
     role: str = ""
     type: str = ""
@@ -81,7 +82,7 @@ class SecurityContext:
     categories: str = ""
 
 @dataclass
-class SeAppContext:
+class SeAppContext(JSONWizard):
     neverAllow: bool = False
     isSystemServer: bool = False
     isEphemeralApp:  bool = False
@@ -99,17 +100,17 @@ class SeAppContext:
 
 #pathname_regexp [file_type] security_context
 @dataclass
-class Context:
+class Context(JSONWizard):
     pathName: str = ""
     fileType: str = ""
     securityContext: SecurityContext = None
 @dataclass
-class TypeDef:
+class TypeDef(JSONWizard):
     name: str = ""
     types: List[str] = field(default_factory=list)
 
 @dataclass
-class PolicyFiles:
+class PolicyFiles(JSONWizard):
     fileName: str = ""
     description: str = ""
     fileType: FileTypeEnum = FileTypeEnum.UNDEFINED
@@ -120,6 +121,6 @@ class PolicyFiles:
     functions: List[PolicyFunction]= field(default_factory=list)
 
 @dataclass
-class DrawerClass:
+class DrawerClass(JSONWizard):
     participants : List[str] = field(default_factory=list)
     rules: List[str] = field(default_factory=list)
