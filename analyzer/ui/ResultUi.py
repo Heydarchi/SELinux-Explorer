@@ -1,7 +1,8 @@
 
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QWidget, QGridLayout
 from PyQt5.QtWidgets import QListWidget, QGroupBox, QListWidgetItem
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QDesktopWidget
 from AnalyzerLogic import *
 import sys
@@ -46,23 +47,27 @@ class ResultUi(QVBoxLayout):
 
 
     def initWidgets(self):
+        iconPath = './ui/icons/'
+
         self.lstResults = QListWidget()
-        self.btnDeleteSelected = QPushButton("Delete selected")
-        self.btnDeleteAll = QPushButton("Delete All")
         self.layoutButton = QHBoxLayout()
         self.grpLayout = QVBoxLayout()
         self.grpResult = QGroupBox("Results")
 
+        self.btnDeleteSelected = QPushButton(icon = QIcon(iconPath + "delete.png"))
+        self.btnDeleteSelected.setToolTip("Delete the selected file")
+        self.btnDeleteSelected.setMinimumSize(24,24)
+        self.btnDeleteSelected.setIconSize(QSize(24,24))
+
+
     def configSignals(self):
         self.btnDeleteSelected.clicked.connect(self.onDeleteSelectedFile)
-        self.btnDeleteAll.clicked.connect(self.onDeleteAllFile)
         self.lstResults.itemClicked.connect(self.onSelectedResult) 
 
         self.analyzerLogic.setUiUpdateSignal(self.onAnalyzeFinished)
 
     def configLayout(self):
         self.layoutButton.addWidget(self.btnDeleteSelected)
-        self.layoutButton.addWidget(self.btnDeleteAll)
 
         self.grpLayout.addWidget(self.lstResults)
         self.grpLayout.addLayout(self.layoutButton)
@@ -74,9 +79,6 @@ class ResultUi(QVBoxLayout):
         items = self.lstResults.selectedItems()
         for item in items:
             path = item.text()
-    
-    def onDeleteAllFile(self):
-        self.analyzerLogic.clearOutput()
 
     def onResultAdded(self, filePath):
         item = QListWidgetItem(filePath)

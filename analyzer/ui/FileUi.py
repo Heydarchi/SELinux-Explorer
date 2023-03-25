@@ -1,6 +1,6 @@
 
-from PyQt5.QtWidgets import QLabel, QLineEdit, QFileDialog
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QListWidget, QListWidgetItem
+from PyQt5.QtWidgets import QGroupBox, QListWidget, QListWidgetItem
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QSize
 from AnalyzerLogic import *
@@ -24,11 +24,13 @@ class FileUi(QVBoxLayout):
     def initWidgets(self):
         iconPath = './ui/icons/'
 
+        self.grpResult = QGroupBox("Files and Paths")
+
         self.layoutSelectedPath = QHBoxLayout()
         self.layoutSelectedPathButton = QVBoxLayout()
 
         self.lstSelectedPath = QListWidget()
-        self.btnRemoveFromList = QPushButton(icon = QIcon(iconPath + "minus.png"))
+        self.btnRemoveFromList = QPushButton(icon = QIcon(iconPath + "delete.png"))
         self.btnRemoveFromList.setToolTip("Remove selected item from the list")
         self.btnRemoveFromList.setMinimumSize(24,24)
         self.btnRemoveFromList.setIconSize(QSize(24,24))
@@ -49,7 +51,11 @@ class FileUi(QVBoxLayout):
         self.layoutSelectedPath.addWidget(self.lstSelectedPath)
         self.layoutSelectedPath.addLayout(self.layoutSelectedPathButton)
 
-        self.addLayout(self.layoutSelectedPath)
+
+        self.grpResult.setLayout(self.layoutSelectedPath)
+
+        self.addWidget(self.grpResult)
+        #self.addLayout(self.layoutSelectedPath)
 
 
     def removeFromTheList(self):
