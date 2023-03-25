@@ -96,6 +96,7 @@ python FileAnalyzer.py ../samples
 - [ ] Enable using the generated data for drawing new diagrams
 - [ ] Analyze only the changed files to save time
 - [ ] Refactoring the code architecture 
+- [ ] Analyze functions
 
 ### GUI TODO:
 - [ ] Show the progress of analyze
@@ -112,3 +113,5 @@ python FileAnalyzer.py ../samples
 - [ ] Open filtered diagram automatically
 - [ ] Add Folder/File to the list of search automatically
 - [ ] Add AND / OR for combining the filter rules
+- [ ] Making reference from path & files
+- [ ] Add autocomplete for filter edit box

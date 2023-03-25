@@ -8,6 +8,8 @@ from ui.FileUi import *
 from ui.AnalyzeUi import *
 from ui.FilterUi import *
 from ui.ResultUi import *
+from ui.ToolbarUi import *
+from ui.StatusbarUi import *
 from AppSetting import *
 from PythonUtilityClasses.FileWriter import *
 from PythonUtilityClasses.FileReader import *
@@ -56,6 +58,8 @@ class MainWindow(QMainWindow):
         self.layoutAnalyzer = AnalyzeUi(self, self.analyzerLogic)
         self.layoutFilter = FilterUi(self, self.analyzerLogic)
         self.layoutResult = ResultUi(self, self.analyzerLogic)
+        self.toolbar = ToolbarUi(self, self.analyzerLogic, self.appSetting)
+        self.statusbar = StatusbarUi(self, self.analyzerLogic)
         self.mainLayoutLeft = QVBoxLayout()
         self.mainLayoutRight = QVBoxLayout()
         self.mainLayout = QHBoxLayout()
@@ -79,6 +83,9 @@ class MainWindow(QMainWindow):
         self.container.setLayout(self.mainLayout)
         # Set the central widget of the Window.
         self.setCentralWidget(self.container)
+
+        self.addToolBar(self.toolbar)
+        self.setStatusBar(self.statusbar)
 
         self.setWindowPosition()
 

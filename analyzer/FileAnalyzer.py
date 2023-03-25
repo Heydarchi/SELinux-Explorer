@@ -8,7 +8,7 @@ from TeAnalyzer import *
 from ContextsAnalyzer import *
 from SeAppAnalyzer import *
 from RelationDrawer import *
-from AnalyzerEntites import *
+from AnalyzerEntities import *
 class FileAnalyzer(AbstractAnalyzer):
     def __init__(self) -> None:
         self.listOfPolicyFiles = list()
