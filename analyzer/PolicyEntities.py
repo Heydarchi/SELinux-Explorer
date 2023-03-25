@@ -82,6 +82,15 @@ class SecurityContext(JSONWizard):
     categories: str = ""
 
 @dataclass
+class TypeDef(JSONWizard):
+    name: str = ""
+    types: List[str] = field(default_factory=list)
+
+@dataclass
+class Attribute(JSONWizard):
+    name: str = ""
+    attributes: List[str] = field(default_factory=list)
+@dataclass
 class SeAppContext(JSONWizard):
     neverAllow: bool = False
     isSystemServer: bool = False
@@ -96,7 +105,8 @@ class SeAppContext(JSONWizard):
     type: str = ""
     levelFrom: str = ""
     levelFrom: str = ""
-
+    typeDef: TypeDef = TypeDef()
+    attribute: Attribute = Attribute()
 
 #pathname_regexp [file_type] security_context
 @dataclass
@@ -104,10 +114,7 @@ class Context(JSONWizard):
     pathName: str = ""
     fileType: str = ""
     securityContext: SecurityContext = None
-@dataclass
-class TypeDef(JSONWizard):
-    name: str = ""
-    types: List[str] = field(default_factory=list)
+    typeDef: TypeDef = TypeDef()
 
 @dataclass
 class PolicyFiles(JSONWizard):
@@ -115,6 +122,7 @@ class PolicyFiles(JSONWizard):
     description: str = ""
     fileType: FileTypeEnum = FileTypeEnum.UNDEFINED
     typeDef: List[TypeDef]= field(default_factory=list)
+    attribute: List[Attribute]= field(default_factory=list)
     contexts: List[Context]= field(default_factory=list)
     seApps: List[SeAppContext]= field(default_factory=list)
     rules: List[Rule]= field(default_factory=list)

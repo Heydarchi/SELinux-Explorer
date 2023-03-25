@@ -5,6 +5,7 @@ from datetime import *
 from queue import Queue
 from threading import Thread
 from time import sleep
+from drawer.DrawerHelper import *
 
 
 class RelationDrawer(Thread):
@@ -58,12 +59,12 @@ class RelationDrawer(Thread):
         #Remove redundance items
         plantUmlList = list(dict.fromkeys(plantUmlList))
         #print(plantUmlList)
-        filePath = "out/" + self.generatePumlFileName(policyFile.fileName)
+        filePath = "out/" + generatePumlFileName(policyFile.fileName)
         self.writeToFile(filePath, plantUmlList)
         print("drawing: ", filePath)
 
         if self.disableDrawing == False:
-            self.generatePng(filePath)
+            generatePng(filePath)
         #print(policyFile)
 
     def drawListOfUml(self, policyFiles: List[PolicyFiles]):
@@ -90,13 +91,6 @@ class RelationDrawer(Thread):
         if self.disableDrawing == False:
             self.generatePng(filePath)
         #print(policyFile)
-
-    def generatePumlFileName(self, fileName):
-        return fileName.replace("/","-")+"_relation.puml"
-
-    def generatePngFileName(self, fileName):
-        return fileName.replace("/","-")+"_relation.png"
-
 
     def dumpPolicyFile(self, policyFile: PolicyFiles):
         plantUmlList = list()
@@ -156,8 +150,6 @@ class RelationDrawer(Thread):
         else:
             return name
 
-    def generatePng(self, filepath):
-        os.system("java -jar plantuml/plantuml.jar " + filepath)
 
     def writeToFile(self, fileName, listOfStr):
         fw = FW.FileWriter()

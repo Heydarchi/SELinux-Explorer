@@ -32,22 +32,27 @@ class TeAnalyzer(AbstractAnalyzer):
             return
         items = inputString.split()
         if len(items) > 0 :
-            if items[0].strip() == "type" or items[0].strip() == "typeattribute" :
+            if items[0].strip() == "type" :
                 self.extractDefinition(inputString)
+            elif items[0].strip() == "typeattribute":
+                self.extractAttribite(inputString)
             elif items[0] in ["allow", "neverallow"] :
                 self.extractRule(inputString)
 
     def extractDefinition(self,  inputString):
-        type = None
-        if "typeattribute " in inputString :
-            types = inputString.replace(";","").replace("typeattribute ","").strip().split(" ")
-        else:
-            types = inputString.replace(";","").replace("type ","").strip().split(",")
-
+        types = inputString.replace(";","").replace("type ","").strip().split(",")
         typeDef = TypeDef()
         typeDef.name = types[0]
         typeDef.types.extend(types[1:])
         self.policyFile.typeDef.append( typeDef )
+        
+
+    def extractAttribite(self,  inputString):
+        types = inputString.replace(";","").replace("typeattribute ","").strip().split(" ")
+        typeDef = TypeDef()
+        typeDef.name = types[0]
+        typeDef.types.extend(types[1:])
+        self.policyFile.attribute.append( typeDef )
 
 
     def extractRule(self,  inputString):

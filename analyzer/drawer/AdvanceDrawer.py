@@ -5,7 +5,7 @@ from datetime import *
 from queue import Queue
 from threading import Thread
 from time import sleep
-
+from drawer.DrawerHelper import *
 
 class AdvancedDrawer:
 
@@ -19,15 +19,14 @@ class AdvancedDrawer:
         self.dictOfParticipant = dict()
         self.drawerClass = DrawerClass()
 
-    def drawListOfUml(self, policyFiles: List[PolicyFiles]):
+    def drawUml(self, policyFile):
         self.dictOfParticipant = dict()
         self.drawerClass = DrawerClass()
 
         plantUmlList = list()
         plantUmlList.append("@startuml")
 
-        for policyFile in policyFiles:
-            self.dumpPolicyFile(policyFile)
+        self.dumpPolicyFile(policyFile)
 
         plantUmlList.extend(self.drawerClass.participants)
         plantUmlList.extend(self.drawerClass.rules)
@@ -36,19 +35,18 @@ class AdvancedDrawer:
         #Remove redundance items
         plantUmlList = list(dict.fromkeys(plantUmlList))
         #print(plantUmlList)
-        filePath = "out/Integrated-" + datetime.today().strftime("%d-%m-%y---%H-%M-%s")+"_relation.puml"
+        filePath = "out/Integrated-" + datetime.today().strftime("%d-%m-%y---%H-%M-%s")+"_relation_adv.puml"
         self.writeToFile(filePath, plantUmlList)
         print("drawing: ", filePath)
 
-        if self.disableDrawing == False:
-            self.generatePng(filePath)
+        generatePng(filePath)
         #print(policyFile)
-
-
 
 
     def dumpPolicyFile(self, policyFile: PolicyFiles):
         plantUmlList = list()
+
+        self.correlateData(policyFile)
 
         if policyFile!=None:
             self.drawerClass.participants.extend(self.drawSeApp(policyFile.seApps))
@@ -58,26 +56,43 @@ class AdvancedDrawer:
 
         return plantUmlList
 
+    def correlateData(self, policyFile: PolicyFiles):
+         for seapp in policyFile.seApps:
+              for typeDef in policyFile.typeDef:
+                if seapp.domain == typeDef.name :
+                    seapp.typeDef = typeDef
+                    policyFile.typeDef.remove(typeDef)
+                    break
 
+              for attribute in policyFile.attribute:
+                if seapp.domain == attribute.name :
+                    seapp.attribute = attribute
+                    policyFile.attribute.remove(attribute)
+                    break
+
+         for context in policyFile.contexts:
+              for typeDef in policyFile.typeDef:
+                if context.securityContext.type == typeDef.name :
+                    context.typeDef = typeDef
+                    policyFile.typeDef.remove(typeDef)
+                    break
+    
     def drawTypeDef(self, typeDefs: List[TypeDef]):
         typeDefList = list()
         for typeDef in typeDefs:
-                    #typeDef.append("\"" + typeDef.name + "\" -----> \"" + typeDef.types + "\"" )
-                    typeDefList.append("participant " +  self.insertNewParticipant(typeDef.name)  + " [\n=" + typeDef.name + "\n ----- \n\"\"" + ', '.join(typeDef.types) + "\"\"\n]" )
+                    typeDefList.append("rectangle \"" + '/'.join(typeDef.types) + "/" + typeDef.name + "\" as " + self.insertNewParticipant(typeDef.name) )
         return typeDefList
 
     def drawContext(self, contexts: List[Context]):
         contextList = list()
         for context in contexts:
-                    #contextList.append("\"" + context.pathName + "\" -----> \"" + context.securityContext.type + "\"" )
-                    contextList.append("participant " +  self.insertNewParticipant(context.securityContext.type)   + " [\n=" + context.securityContext.type  + "\n ----- \n\"\"" + context.pathName + "\"\"\n]" )
+                    contextList.append("rectangle \"" + context.pathName + "/" + context.securityContext.type  + '/'.join(context.typeDef.types) + "\" as " + self.insertNewParticipant(context.securityContext.type) )
         return contextList
 
     def drawSeApp(self, seAppContexts: List[SeAppContext]):
         seAppList = list()
         for seAppContext in seAppContexts:
-                    #seAppList.append("\"" + seAppContext.user + "\" -----> \"" + seAppContext.domain + "\"" )
-                    seAppList.append("participant " +  self.insertNewParticipant(seAppContext.domain)  + " [\n=" + seAppContext.domain + "\n ----- \n\"\"" + seAppContext.user + "\"\"\n]" )
+                    seAppList.append("rectangle \"" + seAppContext.user + '/'.join(seAppContext.typeDef.types) + '/'.join(seAppContext.attribute.attributes) + "/" + seAppContext.domain + "\" as " + self.insertNewParticipant(seAppContext.domain) )
         return seAppList
 
     def drawRule(self, rules: List[Rule]):
@@ -89,7 +104,7 @@ class AdvancedDrawer:
                         src=rule.source
 
                     if rule.rule == RuleEnum.NEVER_ALLOW :
-                        ruleList.append("" + self.insertNewParticipant(rule.source) + " -----[#red]>x \"" + rule.target + "\" : " + rule.rule.label + " (" + ', '.join(rule.permissions) + ")")
+                        ruleList.append("" + self.insertNewParticipant(rule.source) + " -----[#red]> \"" + rule.target + "\" : " + rule.rule.label + " (" + ', '.join(rule.permissions) + ")")
                     else:
                         ruleList.append("" + self.insertNewParticipant(rule.source) + " -----[#green]> \"" + rule.target + "\" : " + rule.rule.label + " (" + ', '.join(rule.permissions) + ")")
 
@@ -104,9 +119,6 @@ class AdvancedDrawer:
             return self.dictOfParticipant[name]
         else:
             return name
-
-    def generatePng(self, filepath):
-        os.system("java -jar plantuml/plantuml.jar " + filepath)
 
     def writeToFile(self, fileName, listOfStr):
         fw = FW.FileWriter()

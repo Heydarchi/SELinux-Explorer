@@ -1,6 +1,7 @@
 import os, sys
 from PolicyEntities import  *
 from RelationDrawer import *
+from drawer.AdvanceDrawer import *
 from dataclasses import dataclass, field
 import dataclasses
 from enum import Enum
@@ -33,6 +34,10 @@ class FilterResult:
         
         drawer = RelationDrawer()
         drawer.drawUml(self.filteredPolicyFile)
+
+        drawerAdv = AdvancedDrawer()
+        drawerAdv.drawUml(self.filteredPolicyFile)
+
         return generatePngFileName(self.filteredPolicyFile.fileName)  
 
 
