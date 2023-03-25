@@ -61,6 +61,16 @@ class ToolbarUi(QToolBar):
 
         self.setOrientation(Qt.Vertical)
 
+
+    def connectOnAddFileFolder(self, onAddFileFolder):
+        self.addFileFolder = onAddFileFolder
+
+    def connectToGetSelectedPaths(self, getSelectedPath):
+        self.getSelectedPaths = getSelectedPath
+
+    def connectToGetAllPaths(self, getAllPaths):
+        self.getAllPaths = getAllPaths        
+
     def onAddFile(self):
         dlg = QFileDialog(directory = self.appSetting.lastOpenedPath)
         if dlg.exec_():
@@ -72,15 +82,6 @@ class ToolbarUi(QToolBar):
     def addPathToList(self, path):
         self.appSetting.lastOpenedPath = path
         self.addFileFolder(path)
-
-    def connectOnAddFileFolder(self, onAddFileFolder):
-        self.addFileFolder = onAddFileFolder
-
-    def connectToGetSelectedPaths(self, getSelectedPath):
-        self.getSelectedPaths = getSelectedPath
-
-    def connectToGetAllPaths(self, getAllPaths):
-        self.getAllPaths = getAllPaths        
 
     def onAnalyzeSelectedPaths(self):
         paths = self.getSelectedPaths()

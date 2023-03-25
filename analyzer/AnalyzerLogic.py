@@ -47,6 +47,9 @@ class AnalyzerLogic:
         SystemUtility().deleteFiles(self.drawer.generatePumlFileName(filePath)) 
         self.onAnalyzeFinished()
 
+    def clear(self):
+        self.listOfPolicyFiles = list()
+
     def getImagePath(self, filePath):
         return self.drawer.generatePngFileName(filePath)
     
