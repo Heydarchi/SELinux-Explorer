@@ -28,12 +28,16 @@ class AdvancedDrawer:
 
         self.dumpPolicyFile(policyFile)
 
+        plantUmlList.extend(DrawingTool.defineDomainStyle())
+        plantUmlList.extend(DrawingTool.defineNoteStyle())
+        plantUmlList.extend(self.drawerClass.participants)
         plantUmlList.extend(self.drawerClass.participants)
         plantUmlList.extend(self.drawerClass.rules)
         plantUmlList.append("@enduml")
 
         #Remove redundance items
-        plantUmlList = list(dict.fromkeys(plantUmlList))
+        #Temporary disabled since removes blindlt : plantUmlList = list(dict.fromkeys(plantUmlList))
+        
         #print(plantUmlList)
         filePath = "out/Integrated-" + datetime.today().strftime("%d-%m-%y---%H-%M-%s")+"_relation_adv.puml"
         self.writeToFile(filePath, plantUmlList)
@@ -46,7 +50,7 @@ class AdvancedDrawer:
     def dumpPolicyFile(self, policyFile: PolicyFiles):
         plantUmlList = list()
 
-        self.correlateData(policyFile)
+        policyFile = self.correlateData(policyFile)
 
         if policyFile!=None:
             self.drawerClass.participants.extend(self.drawSeApp(policyFile.seApps))
@@ -57,7 +61,7 @@ class AdvancedDrawer:
         return plantUmlList
 
     def correlateData(self, policyFile: PolicyFiles):
-         for seapp in policyFile.seApps:
+        for seapp in policyFile.seApps:
               for typeDef in policyFile.typeDef:
                 if seapp.domain == typeDef.name :
                     seapp.typeDef = typeDef
@@ -70,29 +74,47 @@ class AdvancedDrawer:
                     policyFile.attribute.remove(attribute)
                     break
 
-         for context in policyFile.contexts:
+        for context in policyFile.contexts:
               for typeDef in policyFile.typeDef:
                 if context.securityContext.type == typeDef.name :
                     context.typeDef = typeDef
                     policyFile.typeDef.remove(typeDef)
                     break
+        return policyFile
     
     def drawTypeDef(self, typeDefs: List[TypeDef]):
         typeDefList = list()
         for typeDef in typeDefs:
-                    typeDefList.append("rectangle \"" + '/'.join(typeDef.types) + "/" + typeDef.name + "\" as " + self.insertNewParticipant(typeDef.name) )
+                    #typeDefList.append("rectangle \""  + typeDef.name + "\" as " + self.insertNewParticipant(typeDef.name) )
+                    typeDefList.extend(DrawingTool.generateDomain(typeDef.name))
+
+                    lstNote=list()
+                    lstNote.extend(typeDef.types)
+                    typeDefList.extend(DrawingTool.generateNote(typeDef.name, DrawingPosition.TOP, lstNote))
         return typeDefList
 
     def drawContext(self, contexts: List[Context]):
         contextList = list()
         for context in contexts:
-                    contextList.append("rectangle \"" + context.pathName + "/" + context.securityContext.type  + '/'.join(context.typeDef.types) + "\" as " + self.insertNewParticipant(context.securityContext.type) )
+                    contextList.append("rectangle \""  + context.securityContext.type  + "\" as " + self.insertNewParticipant(context.securityContext.type) )
+
+                    lstNote=list()
+                    lstNote.append("Path: " + context.pathName)
+                    lstNote.extend(context.typeDef.types)
+                    contextList.extend(DrawingTool.generateNote(context.securityContext.type, DrawingPosition.TOP, lstNote))
         return contextList
 
     def drawSeApp(self, seAppContexts: List[SeAppContext]):
         seAppList = list()
         for seAppContext in seAppContexts:
-                    seAppList.append("rectangle \"" + seAppContext.user + '/'.join(seAppContext.typeDef.types) + '/'.join(seAppContext.attribute.attributes) + "/" + seAppContext.domain + "\" as " + self.insertNewParticipant(seAppContext.domain) )
+                    #seAppList.append("rectangle \"" + seAppContext.user + '/'.join(seAppContext.typeDef.types) + '/'.join(seAppContext.attribute.attributes) + "/" + seAppContext.domain + "\" as " + self.insertNewParticipant(seAppContext.domain) )
+                    seAppList.extend(DrawingTool.generateDomain(seAppContext.domain))
+
+                    lstNote=list()
+                    lstNote.append(seAppContext.user)
+                    lstNote.extend(seAppContext.typeDef.types)
+                    lstNote.extend(seAppContext.attribute.attributes)
+                    seAppList.extend(DrawingTool.generateNote(seAppContext.domain, DrawingPosition.TOP, lstNote))
         return seAppList
 
     def drawRule(self, rules: List[Rule]):
