@@ -4,7 +4,7 @@ from typing import List
 from dataclass_wizard import JSONWizard
 
 
-
+DOMAIN_EXECUTABLE = "_exec"
 
 class InheritanceEnum(Enum):
     EXTENDED = 1
@@ -115,6 +115,7 @@ class Context(JSONWizard):
     fileType: str = ""
     securityContext: SecurityContext = None
     typeDef: TypeDef = TypeDef()
+    domainName: str = ""
 
 @dataclass
 class PolicyFiles(JSONWizard):

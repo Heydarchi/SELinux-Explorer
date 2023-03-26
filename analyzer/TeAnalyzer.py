@@ -42,10 +42,21 @@ class TeAnalyzer(AbstractAnalyzer):
     def extractDefinition(self,  inputString):
         types = inputString.replace(";","").replace("type ","").strip().split(",")
         typeDef = TypeDef()
-        typeDef.name = types[0]
+        typeDef.name = types[0].strip()
         typeDef.types.extend(types[1:])
-        self.policyFile.typeDef.append( typeDef )
-        
+        if DOMAIN_EXECUTABLE in typeDef.name:
+            if not self.mergeExecDomain(typeDef):
+                self.policyFile.typeDef.append( typeDef )
+        else:
+            self.policyFile.typeDef.append( typeDef )
+
+    def mergeExecDomain(self, typeDefExec):
+        title = typeDefExec.name.replace(DOMAIN_EXECUTABLE,"")
+        for typeDef in self.policyFile.typeDef:
+            if typeDef.name == title:
+                typeDef.types.extend(typeDefExec.types)
+                return True
+        return False
 
     def extractAttribite(self,  inputString):
         types = inputString.replace(";","").replace("typeattribute ","").strip().split(" ")

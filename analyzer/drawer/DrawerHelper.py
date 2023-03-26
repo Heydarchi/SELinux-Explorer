@@ -42,6 +42,7 @@ class DrawingTool:
         lstDomain.append("}")
         lstDomain.append("")
         return lstDomain
+    
         
     @staticmethod
     def generateNote(title, position: DrawingPosition, items):
@@ -51,7 +52,6 @@ class DrawingTool:
             lstNote.append("  - " + item)
         lstNote.append("end " + DrawingStyle.NOTE.value)
         lstNote.append("")
-        print(lstNote)
         return lstNote
     
     @staticmethod
@@ -61,8 +61,16 @@ class DrawingTool:
         lstDomain.append("[" +  title + "]" )
         lstDomain.append("}")
         lstDomain.append("")
-        print(lstDomain)
         return lstDomain    
+    
+    @staticmethod
+    def generateOtherLabel(title, description = None):
+        lstDomain = list()
+        lstDomain.append(DrawingStyle.DOMAIN.value + " \"*" +  title + "*\" #FFA07A{")
+        lstDomain.append("[" +  title + "]" )
+        lstDomain.append("}")
+        lstDomain.append("")
+        return lstDomain        
 
 if __name__ == "__main__" :
         print(DrawingStyle.NOTE)

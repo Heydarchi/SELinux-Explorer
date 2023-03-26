@@ -31,7 +31,6 @@ class AdvancedDrawer:
         plantUmlList.extend(DrawingTool.defineDomainStyle())
         plantUmlList.extend(DrawingTool.defineNoteStyle())
         plantUmlList.extend(self.drawerClass.participants)
-        plantUmlList.extend(self.drawerClass.participants)
         plantUmlList.extend(self.drawerClass.rules)
         plantUmlList.append("@enduml")
 
@@ -75,11 +74,15 @@ class AdvancedDrawer:
                     break
 
         for context in policyFile.contexts:
-              for typeDef in policyFile.typeDef:
-                if context.securityContext.type == typeDef.name :
-                    context.typeDef = typeDef
-                    policyFile.typeDef.remove(typeDef)
+              for  i in reversed(range(len(policyFile.typeDef))):
+                if context.securityContext.type.replace(DOMAIN_EXECUTABLE, "") == typeDef.name :
+                    print(context.securityContext.type, policyFile.typeDef[i].name)
+                    context.domainName = policyFile.typeDef[i].name
+                    context.typeDef.types.extend(policyFile.typeDef[i].types)
+                    policyFile.typeDef.remove_at(i)
+                    #print(context, typeDef)
                     break
+                
         return policyFile
     
     def drawTypeDef(self, typeDefs: List[TypeDef]):
@@ -96,7 +99,8 @@ class AdvancedDrawer:
     def drawContext(self, contexts: List[Context]):
         contextList = list()
         for context in contexts:
-                    contextList.append("rectangle \""  + context.securityContext.type  + "\" as " + self.insertNewParticipant(context.securityContext.type) )
+                    #contextList.append("rectangle \""  + context.securityContext.type  + "\" as " + self.insertNewParticipant(context.securityContext.type) )
+                    contextList.extend(DrawingTool.generateOtherLabel(context.securityContext.type))
 
                     lstNote=list()
                     lstNote.append("Path: " + context.pathName)
