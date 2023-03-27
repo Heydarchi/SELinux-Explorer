@@ -46,31 +46,35 @@ class DrawingTool:
         
     @staticmethod
     def generateNote(title, position: DrawingPosition, items, firstLine = ""):
+        items = list(dict.fromkeys(items))
         lstNote = list()
-        lstNote.append(DrawingStyle.NOTE.value + " " + position.value +  " of " + title)
-        lstNote.append("<b>" + firstLine + "</b>")
-        for item in items:
-            lstNote.append("  - " + item)
-        lstNote.append("end " + DrawingStyle.NOTE.value)
-        lstNote.append("")
+        if title.strip() != "" and len(items) >= 1 :
+            lstNote.append(DrawingStyle.NOTE.value + " " + position.value +  " of " + title)
+            lstNote.append("<b>" + firstLine + "</b>")
+            for item in items:
+                lstNote.append("  - " + item)
+            lstNote.append("end " + DrawingStyle.NOTE.value)
+            lstNote.append("")
         return lstNote
     
     @staticmethod
     def generateDomain(title, description = None):
         lstDomain = list()
-        lstDomain.append(DrawingStyle.DOMAIN.value + " \"*" +  title + "*\" {")
-        lstDomain.append("[" +  title + "]" )
-        lstDomain.append("}")
-        lstDomain.append("")
+        if title.strip() != "" :
+            lstDomain.append(DrawingStyle.DOMAIN.value + " \"*" +  title + "*\" {")
+            lstDomain.append("[" +  title + "]" )
+            lstDomain.append("}")
+            lstDomain.append("")
         return lstDomain    
     
     @staticmethod
-    def generateOtherLabel(title, description = ""):
+    def generateOtherLabel(title, description = ""):       
         lstDomain = list()
-        lstDomain.append(DrawingStyle.DOMAIN.value + " \"" +  description + "\" #FFA07A{")
-        lstDomain.append("[" +  title + "]" )
-        lstDomain.append("}")
-        lstDomain.append("")
+        if title.strip() != "" :
+            lstDomain.append(DrawingStyle.DOMAIN.value + " \"" +  description + "\" #FFA07A{")
+            lstDomain.append("[" +  title + "]" )
+            lstDomain.append("}")
+            lstDomain.append("")
         return lstDomain        
 
 if __name__ == "__main__" :
