@@ -1,5 +1,6 @@
 # SELinux-Explorer
 
+## !! The README file needs to be updated !!
 ### A utility helping developers to explorer SELinux policies. (At present it supports Android SELinux)
 This project was started as a tool to use through the command line. But after some time I realized that it's crucial to have a GUI.
 Having a GUI helps to provide more facilities alongside the analyzer such as filtering the result to generate custom output.
@@ -92,11 +93,9 @@ python FileAnalyzer.py ../samples
 
 ### Analyzer TODO:
 - [ ] Enable multi-threading
-- [ ] Add filtering the result
 - [ ] Enable using the generated data for drawing new diagrams
 - [ ] Analyze only the changed files to save time
 - [ ] Refactoring the code architecture 
-- [ ] Analyze functions
 
 ### GUI TODO:
 - [ ] Show the progress of analyze
@@ -107,11 +106,9 @@ python FileAnalyzer.py ../samples
     - [ ] Generated output for the selected items
     - [ ] Generated output for the selected Files
 - [ ] Make it possible to open multiple diagram
-- [ ] Add toolbar ( Path, File, Clear Analyze Result, Clear Result, Analyze All)
 - [ ] Add lowercase/uppercase check for filter's keyword
 - [ ] Sort result files by date
 - [ ] Open filtered diagram automatically
-- [ ] Add Folder/File to the list of search automatically
 - [ ] Add AND / OR for combining the filter rules
 - [ ] Making reference from path & files
 - [ ] Add autocomplete for filter edit box
