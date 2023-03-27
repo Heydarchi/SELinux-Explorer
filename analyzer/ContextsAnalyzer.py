@@ -43,6 +43,7 @@ class ContextsAnalyzer(AbstractAnalyzer):
         items = inputString.replace(";","").strip().split() 
         context.pathName = items[0]
         if len(items) > 1 :
+            context.typeDef = TypeDef()
             securityItems = items[1].split(":")
             context.securityContext= SecurityContext()
             #print(securityItems)
