@@ -1,5 +1,5 @@
 
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QTableWidget,QTableWidgetItem
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QTableWidget,QTableWidgetItem, QGroupBox
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QDesktopWidget
@@ -23,13 +23,15 @@ class AnalyzerResultUi(QVBoxLayout):
     def initVariables(self):
         self.diagram = None
         self.TABLE_MINIMUM_HEIGHT = 240
-        self.TABLE_MAX_WIDTH = 240  
+        self.TABLE_MAX_WIDTH = 480  
+        self.TABLE_COLUMNS_NUMBER = 3  
 
     def initWidgets(self):
         iconPath = './ui/icons/'
 
         self.tblResult = QTableWidget()
         self.layoutButton = QHBoxLayout()
+        self.groupBox = QGroupBox("Analyzer result")
         self.grpLayout = QVBoxLayout()
 
         self.btnAddSelected = QPushButton(icon = QIcon(iconPath + "add.png"))
@@ -37,15 +39,18 @@ class AnalyzerResultUi(QVBoxLayout):
         self.btnAddSelected.setMinimumSize(24,24)
         self.btnAddSelected.setIconSize(QSize(24,24))
 
-        self.tblResult.setColumnCount(2)
+        self.tblResult.setColumnCount(self.TABLE_COLUMNS_NUMBER)
         self.tblResult.setMaximumWidth(self.TABLE_MAX_WIDTH)
         self.tblResult.setMinimumHeight(self.TABLE_MINIMUM_HEIGHT)
+
+        self.tblResult.setColumnWidth(0, 70)
+
 
     def configSignals(self):
         self.btnAddSelected.clicked.connect(self.onAddSelectedFile)
         self.tblResult.itemClicked.connect(self.onSelectedResult) 
 
-        #self.analyzerLogic.setUiUpdateSignal(self.onAnalyzeFinished)
+        self.analyzerLogic.setUiUpdateAnalyzerDataSignal(self.onAnalyzeFinished)
 
     def configLayout(self):
         self.layoutButton.addWidget(self.btnAddSelected)
@@ -53,7 +58,9 @@ class AnalyzerResultUi(QVBoxLayout):
         self.grpLayout.addWidget(self.tblResult)
         self.grpLayout.addLayout(self.layoutButton)
 
-        self.addLayout(self.grpLayout)
+        self.groupBox.setLayout(self.grpLayout)
+
+        self.addWidget(self.groupBox)
 
     def onAddSelectedFile(self):
         '''items = self.tblResult.selectedItems()
@@ -66,11 +73,44 @@ class AnalyzerResultUi(QVBoxLayout):
         self.tblResult.addItem(item)'''
         pass
 
-    def onAnalyzeFinished(self):
-        '''self.tblResult.clear()
-        for file in self.analyzerLogic.listOfDiagrams:
-            self.tblResult.addItem(QListWidgetItem(file))'''
-        pass
+    def onAnalyzeFinished(self, policyFiles):
+        for policyFile in policyFiles:
+            if policyFile == None:
+                self.tblResult.clear
+                return
+            
+            for typeDef in policyFile.typeDef:
+                if typeDef.name.strip() != "":
+                    index = self.tblResult.rowCount()
+                    self.tblResult.insertRow(index)
+                    self.tblResult.setItem(index , 0, QTableWidgetItem(index))
+                    self.tblResult.setItem(index , 1, QTableWidgetItem(typeDef.name))
+                    self.tblResult.setItem(index , 2, QTableWidgetItem(FilterType.DOMAIN.name))
+
+            for seApps in policyFile.seApps:
+                if seApps.domain.strip() != "":
+                    index = self.tblResult.rowCount()
+                    self.tblResult.insertRow(index)
+                    self.tblResult.setItem(index , 0, QTableWidgetItem(index))
+                    self.tblResult.setItem(index , 1, QTableWidgetItem(seApps.domain))
+                    self.tblResult.setItem(index , 2, QTableWidgetItem(FilterType.DOMAIN.name))
+
+            for context in policyFile.contexts:
+                if context.domainName.strip() != "":
+                    index = self.tblResult.rowCount()
+                    self.tblResult.insertRow(index)
+                    self.tblResult.setItem(index , 0, QTableWidgetItem(index))
+                    self.tblResult.setItem(index , 1, QTableWidgetItem(context.domainName))
+                    self.tblResult.setItem(index , 2, QTableWidgetItem(FilterType.DOMAIN.name))
+
+            for context in policyFile.contexts:
+                if context.pathName.strip() != "":
+                    index = self.tblResult.rowCount()
+                    self.tblResult.insertRow(index)
+                    self.tblResult.setItem(index , 0, QTableWidgetItem(index))
+                    self.tblResult.setItem(index , 1, QTableWidgetItem(context.pathName))
+                    self.tblResult.setItem(index , 2, QTableWidgetItem(FilterType.FILE_NAME.name))
+
 
     def onSelectedResult(self):
         listItems=self.tblResult.selectedItems()

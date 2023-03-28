@@ -1,16 +1,18 @@
 
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QGroupBox, QLabel
-from PyQt5.QtWidgets import QCheckBox, QListWidget, QListWidgetItem, QRadioButton
+from PyQt5.QtWidgets import QCheckBox, QListWidget, QListWidgetItem, QRadioButton, QComboBox
+from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import Qt
 from AnalyzerLogic import *
 from FilterResult import *
+from ui.UiUtility import *
 import sys
 from PythonUtilityClasses.SystemUtility import *
 
 
 
 
-class FilterUi(QVBoxLayout):
+class FilterUi(QHBoxLayout):
     def __init__(self, mainWindow, analyzerLogic):
         super().__init__()
         self.mainWindow = mainWindow
@@ -23,19 +25,28 @@ class FilterUi(QVBoxLayout):
     def initVariables(self):
         self.lstRules = list()
         self.TABLE_MINIMUM_HEIGHT = 240
-        self.TABLE_MAX_WIDTH = 240        
+        self.TABLE_MAX_WIDTH = 360        
+        self.BTN_WIDTH = 24        
+        self.BTN_HEIGHT = 24        
+        self.selectedFilterType = None
 
     def initWidgets(self):
-        self.layoutFilterOption = QHBoxLayout()
+        iconPath = './ui/icons/'
+
+        self.layoutUserInput = QHBoxLayout()
         self.layoutFilterEntry = QHBoxLayout()
-        self.layoutFilterButtons = QHBoxLayout()
+        self.layoutFilterButtons = QVBoxLayout()
+
+        self.layoutLeft = QVBoxLayout()
 
         self.lblPattern = QLabel("Pattern")
+        self.lblFilterType = QLabel("Rule type")
         self.edtPattern = QLineEdit()
-        self.btnFilter = QPushButton("Filter")
-        self.btnAddFilterRule = QPushButton("Add")
-        self.btnClearFilterRules = QPushButton("Clear Filters")
-        self.btnRemoveSelected = QPushButton("Remove Selected")
+
+        self.btnFilter =UiUtility.createButton("Generate output", QIcon(iconPath + "filter.png"), self.BTN_WIDTH, self.BTN_HEIGHT)        
+        self.btnAddFilterRule =UiUtility.createButton("Add a new filter", QIcon(iconPath + "add.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
+        self.btnClearFilterRules =UiUtility.createButton("Clear all the filters", QIcon(iconPath + "broom.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
+        self.btnRemoveSelected =UiUtility.createButton("Remove the selected filter", QIcon(iconPath + "minus.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
 
         self.lstFilterRules = QListWidget()
 
@@ -44,43 +55,50 @@ class FilterUi(QVBoxLayout):
         self.rdFilename = QRadioButton("File name")
         self.rdClassType = QRadioButton("Type def(Class type)")
         self.rdPermission = QRadioButton("Permission")
+
+        self.cmbRuleType = QComboBox()
         self.grpLayout = QHBoxLayout()
-        self.grpFilterOption = QGroupBox("Filter options")
+
+        for filterType in FilterType:
+            self.cmbRuleType.addItem(filterType.name)        
 
     def configSignals(self):
         self.btnFilter.clicked.connect(self.onFilter)
         self.btnAddFilterRule.clicked.connect(self.onAddFilterRule)
         self.btnClearFilterRules.clicked.connect(self.onClearFilterRules)
         self.btnRemoveSelected.clicked.connect(self.onRemoveSelected)
+        self.cmbRuleType.currentIndexChanged.connect(self.onIndexChanged)
 
     def configLayout(self):
         #layoutAnalyzer
-        self.grpLayout.addWidget(self.rdDomain)
-        self.grpLayout.addWidget(self.rdFilename)
-        self.grpLayout.addWidget(self.rdClassType)
-        self.grpLayout.addWidget(self.rdPermission)
-        self.grpFilterOption.setLayout(self.grpLayout)
+        self.grpLayout.addWidget(self.lblFilterType)
+        self.grpLayout.addWidget(self.cmbRuleType)
 
         #layoutAnalyzerConfig
         self.layoutFilterEntry.addWidget(self.lblPattern)
         self.layoutFilterEntry.addWidget(self.edtPattern)
-        self.layoutFilterEntry.addWidget(self.chbxExactWord)
-        self.layoutFilterEntry.addWidget(self.btnAddFilterRule)
-        self.layoutFilterOption.addWidget(self.grpFilterOption)
+
+        self.layoutFilterButtons.addWidget(self.btnAddFilterRule)
         self.layoutFilterButtons.addWidget(self.btnRemoveSelected)
         self.layoutFilterButtons.addWidget(self.btnClearFilterRules)
         self.layoutFilterButtons.addWidget(self.btnFilter)
 
-        self.addLayout(self.layoutFilterOption)
-        self.addLayout(self.layoutFilterEntry)
-        self.addWidget(self.lstFilterRules)
-        self.addLayout(self.layoutFilterButtons)
+        self.layoutUserInput.addWidget(self.lstFilterRules)
+        self.layoutUserInput.addLayout(self.layoutFilterButtons)
+
+        self.layoutLeft.addLayout(self.grpLayout)
+        self.layoutLeft.addLayout(self.layoutFilterEntry)
+        self.layoutLeft.addWidget(self.chbxExactWord)
+        self.layoutLeft.addLayout(self.layoutFilterButtons)
+        self.layoutLeft.addLayout(self.layoutUserInput)
+
+        self.addLayout(self.layoutLeft)
 
     def onFilter(self):
-        if self.isDomaineSelected():
-            fileName = FilterResult().filter(self.lstRules, self.analyzerLogic.listOfPolicyFiles)
+        #if self.selectedFilterType == FilterType.DOMAIN:
+            fileName, filteredPolicyFile = FilterResult().filter(self.lstRules, self.analyzerLogic.listOfPolicyFiles)
             print(fileName)
-            self.analyzerLogic.onAnalyzeFinished()
+            self.analyzerLogic.onAnalyzeFinished(filteredPolicyFile)
 
     def onClearFilterRules(self):
         self.lstRules.clear()
@@ -90,18 +108,7 @@ class FilterUi(QVBoxLayout):
         rule = FilterRule()
         rule.exactWord = self.chbxExactWord.isChecked()
         rule.keyword = self.edtPattern.text().strip()
-        if self.isDomaineSelected():
-            rule.filterType = FilterType.DOMAIN
-
-        if self.isFilenameSelected():
-            rule.filterType = FilterType.FILE_NAME
-
-        if self.isClassTypeSelected():
-            rule.filterType = FilterType.TYPE_DEF
-
-        if self.isPermissionSelected():
-            rule.filterType = FilterType.PERMISSION
-
+        rule.filterType = FilterType(self.selectedFilterType)
         self.lstRules.append(rule)
 
         item = QListWidgetItem(rule.keyword + "  =>   Rule: " + rule.filterType.name + ", ExactWord: " +  str(rule.exactWord ))
@@ -112,27 +119,17 @@ class FilterUi(QVBoxLayout):
         self.lstFilterRules.takeItem(index)
         del self.lstRules[index]
 
-    def isClassTypeSelected(self):
-        return self.rdClassType.isChecked()
-    
-    def isDomaineSelected(self):
-        return self.rdDomain.isChecked()
-    
-    def isFilenameSelected(self):
-        return self.rdFilename.isChecked()
-    
-    def isPermissionSelected(self):
-        return self.rdPermission.isChecked()
-        
-    def setClassTypeSelected(self, state):
-        self.rdClassType.setChecked(state)
+    def onIndexChanged(self, i):
+        for filterType in FilterType:
+            if self.cmbRuleType.currentText == filterType.name:
+                self.selectedFilterType = filterType
+                break
 
-    def setDomainSelected(self, state):
-        self.rdDomain.setChecked(state)
+    def getSelectedFilterType(self):
+        return self.selectedFilterType
 
-    def setFilenameSelected(self, state):
-        self.rdFilename.setChecked(state)
-
-    def setPermissionSelected(self, state):
-        self.rdPermission.setChecked(state)
+    def setSelectedFilterType(self, filterType):
+        if type(filterType) !=  type(FilterType):
+            filterType = FilterType.DOMAIN
+        self.selectedFilterType = FilterType(filterType)
 

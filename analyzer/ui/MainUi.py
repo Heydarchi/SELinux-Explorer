@@ -35,10 +35,7 @@ class MainWindow(QMainWindow):
             self.appSetting = AppSetting.from_json(json_str) 
             self.layoutPath.lastOpenedPath = self.appSetting.lastOpenedPath
             self.toolbar.keepResult = self.appSetting.keepTheResult
-            self.layoutFilter.setClassTypeSelected(self.appSetting.filterClassType)
-            self.layoutFilter.setDomainSelected(self.appSetting.filterDomain)
-            self.layoutFilter.setFilenameSelected(self.appSetting.filterFilename)
-            self.layoutFilter.setPermissionSelected(self.appSetting.filterPermission)
+            self.layoutFilter.setSelectedFilterType(self.appSetting.selectedFilterType)
             print("AppSetting loaded!")
         else:
             self.saveSetting()
@@ -46,10 +43,8 @@ class MainWindow(QMainWindow):
     def saveSetting(self):
         self.appSetting.lastOpenedPath = self.layoutPath.lastOpenedPath
         self.appSetting.keepTheResult = self.toolbar.keepResult
-        self.appSetting.filterClassType = self.layoutFilter.isClassTypeSelected()
-        self.appSetting.filterDomain = self.layoutFilter.isDomaineSelected()
-        self.appSetting.filterFilename = self.layoutFilter.isFilenameSelected()
-        self.appSetting.filterPermission = self.layoutFilter.isPermissionSelected()
+        self.appSetting.selectedFilterType = self.layoutFilter.getSelectedFilterType()
+
 
         FileWriter().writeFile("app_setting.json", self.appSetting.to_json())
         print("AppSetting saved!")

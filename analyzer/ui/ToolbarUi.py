@@ -89,12 +89,12 @@ class ToolbarUi(QToolBar):
     def onAnalyzeSelectedPaths(self):
         paths = self.getSelectedPaths()
         self.analyzerLogic.analyzeAll(paths)
-        showMessage("Analyzer", "The selected files are analyzed!")
+        UiUtility.showMessage("Analyzer", "The selected files are analyzed!")
 
     def onAnalyzeAll(self):
         paths = self.getAllPaths()
         self.analyzerLogic.analyzeAll(paths)
-        showMessage("Analyzer", "All the files are analyzed!")
+        UiUtility.showMessage("Analyzer", "All the files are analyzed!")
 
     def onClearAnalyze(self):
         self.analyzerLogic.clear()     

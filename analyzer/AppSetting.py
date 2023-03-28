@@ -12,7 +12,7 @@ class AppSetting(JSONWizard):
     lastOpenedPath: str = ""
     listOfAddedPaths : List[str] = field(default_factory=list)
     keepTheResult: bool = False
-    filterClassType: bool = False
+    selectedFilterType: bool = False
     filterDomain: bool = False
     filterFilename: bool = False
     filterPermission: bool = False

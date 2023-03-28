@@ -25,7 +25,8 @@ class AnalyzerLogic:
         else:
             self.listOfPolicyFiles =  self.analyzer.analyze(paths)
 
-        self.onAnalyzeFinished()
+        self.onAnalyzeFinished(None)
+        self.updateAnalyzerDataResult(self.listOfPolicyFiles)
 
     def onAnalyzeSelectedPaths(self, paths):
         if self.keepResult :
@@ -33,20 +34,22 @@ class AnalyzerLogic:
         else:
             self.listOfPolicyFiles = self.analyzer.analyze(paths)
 
-        self.onAnalyzeFinished()
+        self.onAnalyzeFinished(None)
+        self.updateAnalyzerDataResult(self.listOfPolicyFiles)
 
     def clearOutput(self):
         files = SystemUtility().getListOfFiles(os.getcwd() + "/out/","*")
         for file in files :
             if os.path.isfile(file):
                 SystemUtility().deleteFiles(file)
-        self.onAnalyzeFinished()
+        self.onAnalyzeFinished(None)
+        self.updateAnalyzerDataResult(None)
 
     def clearFileFromAnalyzer(self, filePath):
         self.analyzer.clear()     
         SystemUtility().deleteFiles(generatePngFileName(filePath))    
         SystemUtility().deleteFiles(generatePumlFileName(filePath)) 
-        self.onAnalyzeFinished()
+        self.onAnalyzeFinished(None)
 
     def clear(self):
         self.listOfPolicyFiles = list()
@@ -62,7 +65,10 @@ class AnalyzerLogic:
     def setUiUpdateSignal(self, updateResult):
         self.updateResult = updateResult
 
-    def onAnalyzeFinished(self):
+    def setUiUpdateAnalyzerDataSignal(self, updateResult):
+        self.updateAnalyzerDataResult = updateResult
+
+    def onAnalyzeFinished(self, filteredPolicyFile):
         self.listOfDiagrams = SystemUtility().getListOfFiles(os.getcwd() + "/out/","*.png")
         self.updateResult()
         

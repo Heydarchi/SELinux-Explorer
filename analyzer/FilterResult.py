@@ -38,7 +38,7 @@ class FilterResult:
         drawerAdv = AdvancedDrawer()
         drawerAdv.drawUml(self.filteredPolicyFile)
 
-        return generatePngFileName(self.filteredPolicyFile.fileName)  
+        return generatePngFileName(self.filteredPolicyFile.fileName),  self.filteredPolicyFile
 
 
     def filterDomain(self, filterRule, policyFiles):

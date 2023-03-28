@@ -5,6 +5,7 @@ from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QDesktopWidget
 from AnalyzerLogic import *
+from ui.UiUtility import *
 import sys
 from PythonUtilityClasses.SystemUtility import *
 
@@ -54,11 +55,7 @@ class ResultUi(QVBoxLayout):
         self.grpLayout = QVBoxLayout()
         self.grpResult = QGroupBox("Results")
 
-        self.btnDeleteSelected = QPushButton(icon = QIcon(iconPath + "delete.png"))
-        self.btnDeleteSelected.setToolTip("Delete the selected file")
-        self.btnDeleteSelected.setMinimumSize(24,24)
-        self.btnDeleteSelected.setIconSize(QSize(24,24))
-
+        self.btnDeleteSelected =UiUtility.createButton("Delete the selected file", QIcon(iconPath + "delete.png"), 24, 24)
 
     def configSignals(self):
         self.btnDeleteSelected.clicked.connect(self.onDeleteSelectedFile)
