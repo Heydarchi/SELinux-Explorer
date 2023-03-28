@@ -20,13 +20,15 @@ class FileUi(QVBoxLayout):
 
     def initVariables(self):
         self.lastOpenedPath = ""
+        self.LIST_MINIMUM_HEIGHT = 120
+        self.LIST_MINIMUM_WIDTH = 360
 
     def initWidgets(self):
         iconPath = './ui/icons/'
 
         self.grpResult = QGroupBox("Files and Paths")
 
-        self.layoutSelectedPath = QHBoxLayout()
+        self.layoutSelectedPath = QVBoxLayout()
         self.layoutSelectedPathButton = QVBoxLayout()
 
         self.lstSelectedPath = QListWidget()
@@ -45,7 +47,8 @@ class FileUi(QVBoxLayout):
         self.layoutSelectedPathButton.addWidget(self.btnRemoveFromList)
         self.layoutSelectedPathButton.setAlignment(Qt.AlignTop)
 
-        self.lstSelectedPath.setFixedHeight(120)
+        self.lstSelectedPath.setMinimumHeight(self.LIST_MINIMUM_HEIGHT)
+        self.lstSelectedPath.setMinimumWidth(self.LIST_MINIMUM_WIDTH)
         self.layoutSelectedPath.setAlignment(Qt.AlignTop)
 
         self.layoutSelectedPath.addWidget(self.lstSelectedPath)

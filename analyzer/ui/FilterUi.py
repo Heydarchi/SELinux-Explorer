@@ -22,6 +22,8 @@ class FilterUi(QVBoxLayout):
 
     def initVariables(self):
         self.lstRules = list()
+        self.TABLE_MINIMUM_HEIGHT = 240
+        self.TABLE_MAX_WIDTH = 240        
 
     def initWidgets(self):
         self.layoutFilterOption = QHBoxLayout()

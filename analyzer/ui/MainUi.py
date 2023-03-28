@@ -7,6 +7,7 @@ from AnalyzerLogic import *
 from ui.FileUi import *
 from ui.FilterUi import *
 from ui.ResultUi import *
+from ui.AnalyzerResultUi import *
 from ui.ToolbarUi import *
 from ui.StatusbarUi import *
 from AppSetting import *
@@ -57,6 +58,7 @@ class MainWindow(QMainWindow):
         self.layoutPath = FileUi(self)
         self.layoutFilter = FilterUi(self, self.analyzerLogic)
         self.layoutResult = ResultUi(self, self.analyzerLogic)
+        self.layoutAnalyzerResult = AnalyzerResultUi(self, self.analyzerLogic)
         self.toolbar = ToolbarUi(self, self.analyzerLogic, self.appSetting)
         self.statusbar = StatusbarUi(self, self.analyzerLogic)
         self.mainLayoutLeft = QVBoxLayout()
@@ -73,10 +75,12 @@ class MainWindow(QMainWindow):
         #....................................
 
         self.mainLayoutLeft.addLayout(self.layoutPath)
-        self.mainLayoutLeft.addLayout(self.layoutFilter)
-        self.mainLayoutRight.addLayout(self.layoutResult)
+        self.mainLayoutLeft.addLayout(self.layoutResult)
         self.mainLayout.addLayout(self.mainLayoutLeft)
         self.mainLayout.addLayout(self.mainLayoutRight)
+
+        self.mainLayoutRight.addLayout(self.layoutAnalyzerResult)
+        self.mainLayoutRight.addLayout(self.layoutFilter)
 
         self.container.setLayout(self.mainLayout)
         # Set the central widget of the Window.
