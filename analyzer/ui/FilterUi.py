@@ -24,8 +24,6 @@ class FilterUi(QHBoxLayout):
 
     def initVariables(self):
         self.lstRules = list()
-        self.TABLE_MINIMUM_HEIGHT = 240
-        self.TABLE_MAX_WIDTH = 360        
         self.BTN_WIDTH = 24        
         self.BTN_HEIGHT = 24        
         self.selectedFilterType = None
@@ -109,8 +107,11 @@ class FilterUi(QHBoxLayout):
         rule.exactWord = self.chbxExactWord.isChecked()
         rule.keyword = self.edtPattern.text().strip()
         rule.filterType = FilterType(self.selectedFilterType)
-        self.lstRules.append(rule)
 
+        self.onGetFilter(rule)
+
+    def onGetFilter(self, rule):
+        self.lstRules.append(rule)
         item = QListWidgetItem(rule.keyword + "  =>   Rule: " + rule.filterType.name + ", ExactWord: " +  str(rule.exactWord ))
         self.lstFilterRules.addItem(item)
 

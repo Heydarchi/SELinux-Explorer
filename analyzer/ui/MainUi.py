@@ -100,6 +100,7 @@ class MainWindow(QMainWindow):
         self.toolbar.connectToGetSelectedPaths( self.layoutPath.getSelectedPaths)
         self.toolbar.connectToGetAllPaths( self.layoutPath.getAllPaths)
         self.toolbar.connectOnAddFileFolder( self.layoutPath.onAddFileFolder)
+        self.layoutAnalyzerResult.connectToFilterUi( self.layoutFilter.onGetFilter)
 
     def setWindowPosition(self):
         qr = self.frameGeometry()
