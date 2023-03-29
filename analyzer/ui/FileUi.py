@@ -21,7 +21,7 @@ class FileUi(QVBoxLayout):
     def initVariables(self):
         self.lastOpenedPath = ""
         self.LIST_MINIMUM_HEIGHT = 120
-        self.LIST_MINIMUM_WIDTH = 360
+        self.LIST_MINIMUM_WIDTH = 680
 
     def initWidgets(self):
         iconPath = './ui/icons/'

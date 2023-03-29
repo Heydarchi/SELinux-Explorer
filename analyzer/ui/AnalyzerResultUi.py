@@ -84,9 +84,16 @@ class AnalyzerResultUi(QVBoxLayout):
         pass
 
     def onAnalyzeFinished(self, policyFiles):
+        if policyFiles == None:
+            self.tblResult.clear()
+            self.tblResult.setRowCount(0)
+
+            return
+
         for policyFile in policyFiles:
             if policyFile == None:
-                self.tblResult.clear
+                self.tblResult.clear()
+                self.tblResult.setRowCount(0)
                 return
             
             for typeDef in policyFile.typeDef:

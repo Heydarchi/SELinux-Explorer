@@ -30,6 +30,8 @@ class FilterResult:
             self.filteredPolicyFile.fileName =  self.filteredPolicyFile.fileName + ("_EW_" if filterRule.exactWord  else "_") + filterRule.keyword
             if filterRule.filterType == FilterType.DOMAIN:
                 self.filterDomain(filterRule, policyFiles)
+            elif filterRule.filterType == FilterType.FILE_NAME:
+                self.filterFilename(filterRule, policyFiles)
             
         
         drawer = RelationDrawer()
@@ -60,8 +62,30 @@ class FilterResult:
                         self.filteredPolicyFile.rules.append(rule)
             
 
-    def filterFilename(self, fileName, policyFiles):
-        pass
+    def filterFilename(self, filterRule, policyFiles):
+            print("----filterFilename")
+            for policyFile in policyFiles:
+                for context in policyFile.contexts:
+                    if context.pathName.strip() == filterRule.keyword.strip():
+                        print(policyFile.fileName)
+                        self.filteredPolicyFile.typeDef.extend(policyFile.typeDef)
+                        self.filteredPolicyFile.contexts.extend(policyFile.contexts)
+                        self.filteredPolicyFile.seApps.extend(policyFile.seApps)
+                        self.filteredPolicyFile.rules.extend(policyFile.rules)
+                        self.filteredPolicyFile.attribute.extend(policyFile.attribute)
+                        self.filteredPolicyFile.functions.extend(policyFile.functions)
+                        break
+                for context in policyFile.contexts:
+                    if context.pathName.strip() == filterRule.keyword.strip():
+                        self.filteredPolicyFile.typeDef.extend(policyFile.typeDef)
+                        self.filteredPolicyFile.contexts.extend(policyFile.contexts)
+                        self.filteredPolicyFile.seApps.extend(policyFile.seApps)
+                        self.filteredPolicyFile.rules.extend(policyFile.rules)
+                        self.filteredPolicyFile.attribute.extend(policyFile.attribute)
+                        self.filteredPolicyFile.functions.extend(policyFile.functions)
+                        break
+
+
 
     def filterPermission(self, permission, policyFiles):
         pass
