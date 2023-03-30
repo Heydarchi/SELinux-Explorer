@@ -1,6 +1,3 @@
-[submodule "analyzer/PythonUtilityClasses"]
-	path = analyzer/PythonUtilityClasses
-	url = git@github.com:Heydarchi/PythonUtilityClasses.git
-[submodule "PythonUtilityClasses"]
-	path = submodules/PythonUtilityClasses
-	url = https://github.com/Heydarchi/PythonUtilityClasses.git
+[submodule "app/PythonUtilityClasses"]
+	path = app/PythonUtilityClasses
+	url = git@github.com-Heydarchi:Heydarchi/PythonUtilityClasses.git
