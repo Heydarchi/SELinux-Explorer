@@ -84,9 +84,9 @@ class RelationDrawer(Thread):
         #Remove redundance items
         plantUmlList = list(dict.fromkeys(plantUmlList))
         #print(plantUmlList)
-        filePath = "out/Integrated-" + datetime.today().strftime("%d-%m-%y---%H-%M-%s")+"_relation.puml"
+        '''filePath = "out/Integrated-" + datetime.today().strftime("%d-%m-%y---%H-%M-%s")+"_relation.puml"
         self.writeToFile(filePath, plantUmlList)
-        print("drawing: ", filePath)
+        print("drawing: ", filePath)'''
 
         if self.disableDrawing == False:
             self.generatePng(filePath)
