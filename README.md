@@ -1,6 +1,13 @@
 # SELinux-Explorer
 
-## !! The README file needs to be updated !!
+## !! The README file needs to be updated regarding the requirements!!
+<br/>
+
+### You might need to install some packages not mentioned to run the project
+
+
+<br/>
+<br/>
 ### A utility helping developers to explorer SELinux policies. (At present it supports Android SELinux)
 This project was started as a tool to use through the command line. But after some time I realized that it's crucial to have a GUI.
 Having a GUI helps to provide more facilities alongside the analyzer such as filtering the result to generate custom output.
@@ -53,6 +60,22 @@ sudo apt-get install graphviz
 ```
 <br/>
 
+> Install PyQt5
+```
+sudo apt-get install python3-pyqt5
+```
+
+> Install dataclass-wizard
+```
+pip install dataclass-wizard
+```
+
+> Install dataclasses
+```
+pip install dataclasses
+```
+
+
 ### 2- Clone the project & the submodule
 ```
 git clone https://github.com/Heydarchi/ClassRelExposer.git
@@ -63,37 +86,17 @@ git submodule update --init --recursive
 ```
 <br/>
 
-## **How to run in command line**
-After the packages above are installed go to the Analyzer folder and run the command below
+## **How to the GUI**
 ```
-cd analyzer
-python FileAnalyzer.py [folder/file path]
-```
-<br/>
-
-## **How to run via GUI**
-```
-cd analyzer
+cd app
 python main.py
 ```
 <br/>
-
-#### **To run sample** 
-
-```
-python FileAnalyzer.py ../samples
-```
-
->The result can be found in the **out** folder
-
-
-
 
 <br/>
 
 ### Analyzer TODO:
 - [ ] Enable multi-threading
-- [ ] Enable using the generated data for drawing new diagrams
 - [ ] Analyze only the changed files to save time
 - [ ] Refactoring the code architecture 
 
@@ -108,7 +111,6 @@ python FileAnalyzer.py ../samples
 - [ ] Make it possible to open multiple diagram
 - [ ] Add lowercase/uppercase check for filter's keyword
 - [ ] Sort result files by date
-- [ ] Open filtered diagram automatically
 - [ ] Add AND / OR for combining the filter rules
 - [ ] Making reference from path & files
 - [ ] Add autocomplete for filter edit box
