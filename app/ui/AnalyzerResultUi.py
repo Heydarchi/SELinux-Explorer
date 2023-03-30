@@ -23,14 +23,13 @@ class AnalyzerResultUi(QVBoxLayout):
     def initVariables(self):
         self.diagram = None
         self.TABLE_MINIMUM_HEIGHT = 240
-        self.TABLE_COLUMNS_NUMBER = 3
+        self.TABLE_COLUMNS_NUMBER = 2
         self.COL_TITLE_WIDTH = 320
         self.COL_TYPE_WIDTH = 140
         self.MARGIN = 20
         self.TABLE_MIN_WIDTH = self.COL_TITLE_WIDTH + self.COL_TYPE_WIDTH + self.MARGIN
         self.COL_TITLE_INDEX = 0
         self.COL_TYPE_INDEX = 1
-        self.COL_TYPE_ENUM_INDEX = 2
 
     def initWidgets(self):
         iconPath = './ui/icons/'
@@ -51,7 +50,6 @@ class AnalyzerResultUi(QVBoxLayout):
 
         self.tblResult.setColumnWidth(self.COL_TITLE_INDEX, self.COL_TITLE_WIDTH)
         self.tblResult.setColumnWidth(self.COL_TYPE_INDEX, self.COL_TYPE_WIDTH)
-        self.tblResult.setColumnHidden(self.COL_TYPE_ENUM_INDEX, True)
 
 
     def configSignals(self):
@@ -75,7 +73,7 @@ class AnalyzerResultUi(QVBoxLayout):
         rule = FilterRule()
         rule.exactWord = False
         rule.keyword = self.tblResult.item(row, self.COL_TITLE_INDEX).text() 
-        rule.filterType = FilterType(int(self.tblResult.item(row, self.COL_TYPE_ENUM_INDEX).text()))
+        rule.filterType =FilterRule.getFilterTypeFromStr(self.tblResult.item(row, self.COL_TYPE_INDEX).text())
         self.sendToFilterUi(rule)
 
     def onResultAdded(self, lstRules):
@@ -95,14 +93,13 @@ class AnalyzerResultUi(QVBoxLayout):
                 self.tblResult.clear()
                 self.tblResult.setRowCount(0)
                 return
-            
+
             for typeDef in policyFile.typeDef:
                 if typeDef.name.strip() != "":
                     index = self.tblResult.rowCount()
                     self.tblResult.insertRow(index)
                     self.tblResult.setItem(index , self.COL_TITLE_INDEX, QTableWidgetItem(typeDef.name))
                     self.tblResult.setItem(index , self.COL_TYPE_INDEX, QTableWidgetItem(FilterType.DOMAIN.name))
-                    self.tblResult.setItem(index , self.COL_TYPE_ENUM_INDEX, QTableWidgetItem(str(FilterType.DOMAIN.value)))
 
             for seApps in policyFile.seApps:
                 if seApps.domain.strip() != "":
@@ -110,7 +107,13 @@ class AnalyzerResultUi(QVBoxLayout):
                     self.tblResult.insertRow(index)
                     self.tblResult.setItem(index , self.COL_TITLE_INDEX, QTableWidgetItem(seApps.domain))
                     self.tblResult.setItem(index , self.COL_TYPE_INDEX, QTableWidgetItem(FilterType.DOMAIN.name))
-                    self.tblResult.setItem(index , self.COL_TYPE_ENUM_INDEX, QTableWidgetItem(str(FilterType.DOMAIN.value)))
+
+            for seApps in policyFile.seApps:
+                if seApps.name.strip() != "":
+                    index = self.tblResult.rowCount()
+                    self.tblResult.insertRow(index)
+                    self.tblResult.setItem(index , self.COL_TITLE_INDEX, QTableWidgetItem(seApps.name))
+                    self.tblResult.setItem(index , self.COL_TYPE_INDEX, QTableWidgetItem(FilterType.FILE_PATH.name))
 
             for context in policyFile.contexts:
                 if context.domainName.strip() != "":
@@ -118,15 +121,20 @@ class AnalyzerResultUi(QVBoxLayout):
                     self.tblResult.insertRow(index)
                     self.tblResult.setItem(index , self.COL_TITLE_INDEX, QTableWidgetItem(context.domainName))
                     self.tblResult.setItem(index , self.COL_TYPE_INDEX, QTableWidgetItem(FilterType.DOMAIN.name))
-                    self.tblResult.setItem(index , self.COL_TYPE_ENUM_INDEX, QTableWidgetItem(str(FilterType.DOMAIN.value)))
 
             for context in policyFile.contexts:
                 if context.pathName.strip() != "":
                     index = self.tblResult.rowCount()
                     self.tblResult.insertRow(index)
                     self.tblResult.setItem(index , self.COL_TITLE_INDEX, QTableWidgetItem(context.pathName))
-                    self.tblResult.setItem(index , self.COL_TYPE_INDEX, QTableWidgetItem(FilterType.FILE_NAME.name))
-                    self.tblResult.setItem(index , self.COL_TYPE_ENUM_INDEX, QTableWidgetItem(str(FilterType.FILE_NAME.value)))
+                    self.tblResult.setItem(index , self.COL_TYPE_INDEX, QTableWidgetItem(FilterType.FILE_PATH.name))
+
+        for policyFile in policyFiles:
+            if policyFile.fileName.strip() !="" :
+                index = self.tblResult.rowCount()
+                self.tblResult.insertRow(index)
+                self.tblResult.setItem(index , self.COL_TITLE_INDEX, QTableWidgetItem(policyFile.fileName))
+                self.tblResult.setItem(index , self.COL_TYPE_INDEX, QTableWidgetItem(FilterType.FILE_NAME.name))
 
 
     def onDispose(self):

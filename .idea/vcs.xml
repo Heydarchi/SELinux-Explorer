@@ -2,7 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/analyzer/PythonUtilityClasses" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/submodules/PythonUtilityClasses" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app/PythonUtilityClasses" vcs="Git" />
   </component>
 </project>

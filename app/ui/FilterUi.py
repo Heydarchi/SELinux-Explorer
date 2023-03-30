@@ -106,7 +106,8 @@ class FilterUi(QHBoxLayout):
         rule = FilterRule()
         rule.exactWord = self.chbxExactWord.isChecked()
         rule.keyword = self.edtPattern.text().strip()
-        rule.filterType = FilterType(self.selectedFilterType)
+        print("self.selectedFilterType: ", self.selectedFilterType)
+        rule.filterType = FilterRule.getFilterTypeFromStr(self.cmbRuleType.currentText())
 
         self.onGetFilter(rule)
 
@@ -121,10 +122,8 @@ class FilterUi(QHBoxLayout):
         del self.lstRules[index]
 
     def onIndexChanged(self, i):
-        for filterType in FilterType:
-            if self.cmbRuleType.currentText == filterType.name:
-                self.selectedFilterType = filterType
-                break
+        self.selectedFilterType = FilterRule.getFilterTypeFromStr(self.cmbRuleType.currentText())
+        print("self.selectedFilterType: ", self.selectedFilterType)
 
     def getSelectedFilterType(self):
         return self.selectedFilterType
