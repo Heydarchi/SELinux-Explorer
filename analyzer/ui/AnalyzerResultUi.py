@@ -3,10 +3,10 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QTableWidget,
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QDesktopWidget
-from AnalyzerLogic import *
+from logic.AnalyzerLogic import *
 import sys
 from PythonUtilityClasses.SystemUtility import *
-from FilterResult import *
+from logic.FilterResult import *
 
 
 

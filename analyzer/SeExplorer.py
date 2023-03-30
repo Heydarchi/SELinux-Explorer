@@ -1,6 +1,5 @@
-import sys, os
 import argparse
-from FileAnalyzer import *
+from analyzer.FileAnalyzer import *
 
 class SeExplorer():
     def __init__(self) -> None:

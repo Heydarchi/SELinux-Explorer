@@ -3,8 +3,8 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QG
 from PyQt5.QtWidgets import QCheckBox, QListWidget, QListWidgetItem, QRadioButton, QComboBox
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import Qt
-from AnalyzerLogic import *
-from FilterResult import *
+from logic.AnalyzerLogic import *
+from logic.FilterResult import *
 from ui.UiUtility import *
 import sys
 from PythonUtilityClasses.SystemUtility import *

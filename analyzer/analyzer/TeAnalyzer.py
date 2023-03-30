@@ -1,8 +1,8 @@
 import sys
 from pathlib import Path
-from AnalyzerUtility import *
-from AbstractAnalyzer import * 
-from PolicyEntities import *
+from analyzer.AnalyzerUtility import *
+from analyzer.AbstractAnalyzer import * 
+from model.PolicyEntities import *
 from PythonUtilityClasses import FileReader as FR
 class TeAnalyzer(AbstractAnalyzer):
     def __init__(self) -> None:

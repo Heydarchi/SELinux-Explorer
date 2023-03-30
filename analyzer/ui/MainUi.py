@@ -3,14 +3,14 @@ from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QLabel
 from PyQt5.QtWidgets import QVBoxLayout,  QWidget, QMessageBox
 from PyQt5.QtGui import *
 from PyQt5.QtCore import QSize
-from AnalyzerLogic import *
+from logic.AnalyzerLogic import *
 from ui.FileUi import *
 from ui.FilterUi import *
 from ui.ResultUi import *
 from ui.AnalyzerResultUi import *
 from ui.ToolbarUi import *
 from ui.StatusbarUi import *
-from AppSetting import *
+from logic.AppSetting import *
 from PythonUtilityClasses.FileWriter import *
 from PythonUtilityClasses.FileReader import *
 

@@ -1,5 +1,5 @@
 import os, sys
-from PolicyEntities import  *
+from model.PolicyEntities import  *
 from PythonUtilityClasses import FileWriter as FW
 from datetime import *
 from queue import Queue

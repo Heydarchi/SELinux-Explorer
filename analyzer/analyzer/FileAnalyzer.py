@@ -1,14 +1,9 @@
-import re
-import sys
-import os
-from AbstractAnalyzer import * 
-from PolicyEntities import *
 from PythonUtilityClasses import SystemUtility as SU
-from TeAnalyzer import *
-from ContextsAnalyzer import *
-from SeAppAnalyzer import *
-from RelationDrawer import *
-from AnalyzerEntities import *
+from analyzer.TeAnalyzer import *
+from analyzer.ContextsAnalyzer import *
+from analyzer.SeAppAnalyzer import *
+from drawer.RelationDrawer import *
+from analyzer.AnalyzerEntities import *
 class FileAnalyzer(AbstractAnalyzer):
     def __init__(self) -> None:
         self.listOfPolicyFiles = list()

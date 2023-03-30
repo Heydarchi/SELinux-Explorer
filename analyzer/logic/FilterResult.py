@@ -1,12 +1,7 @@
-import os, sys
-from PolicyEntities import  *
-from RelationDrawer import *
+from model.PolicyEntities import  *
+from drawer.RelationDrawer import *
 from drawer.AdvanceDrawer import *
-from dataclasses import dataclass, field
-import dataclasses
-from enum import Enum
-from typing import List
-import json
+from dataclasses import dataclass
 from dataclass_wizard import JSONWizard
 from drawer.DrawerHelper import *
 

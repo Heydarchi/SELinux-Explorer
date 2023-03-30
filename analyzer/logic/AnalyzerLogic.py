@@ -1,5 +1,5 @@
-from FileAnalyzer import  * 
-from RelationDrawer import *
+from analyzer.FileAnalyzer import  *
+from drawer.RelationDrawer import *
 from drawer.DrawerHelper import *
 
 

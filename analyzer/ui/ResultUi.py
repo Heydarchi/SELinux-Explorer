@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QListWidget, QGroupBox, QListWidgetItem
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QDesktopWidget
-from AnalyzerLogic import *
+from logic.AnalyzerLogic import *
 from ui.UiUtility import *
 import sys
 from PythonUtilityClasses.SystemUtility import *

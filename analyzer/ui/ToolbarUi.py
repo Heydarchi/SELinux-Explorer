@@ -1,10 +1,10 @@
 
 from PyQt5.QtWidgets import QAction, QToolBar, QFileDialog, QSpacerItem, QSizePolicy, QInputDialog
 from PyQt5.QtGui import QPixmap, QIcon
-from AnalyzerLogic import *
+from logic.AnalyzerLogic import *
 from PyQt5.QtCore import Qt
 from ui.UiUtility import *
-from AppSetting import *
+from logic.AppSetting import *
 import sys
 from PythonUtilityClasses.SystemUtility import *
 from PythonUtilityClasses.FileWriter import *
