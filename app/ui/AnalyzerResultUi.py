@@ -83,8 +83,8 @@ class AnalyzerResultUi(QVBoxLayout):
 
     def onAnalyzeFinished(self, policyFiles):
         if policyFiles == None:
-            self.tblResult.clear()
-            self.tblResult.setRowCount(0)
+            '''self.tblResult.clear()
+            self.tblResult.setRowCount(0)'''
 
             return
 

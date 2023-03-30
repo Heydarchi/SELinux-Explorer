@@ -28,8 +28,8 @@ class FilterResult:
         self.filteredPolicyFile = PolicyFiles()
         self.filteredPolicyFile.fileName = "domain_filtered" 
         for filterRule in lstRules :
-            print("filterRule: ", filterRule)
-            print("FilterType.PERMISSION: ", FilterType.PERMISSION, filterRule.filterType)
+            #print("filterRule: ", filterRule)
+            #print("FilterType.PERMISSION: ", FilterType.PERMISSION, filterRule.filterType)
             self.filteredPolicyFile.fileName =  self.filteredPolicyFile.fileName + ("_EW_" if filterRule.exactWord  else "_") + filterRule.keyword
             if FilterType(filterRule.filterType) == FilterType.DOMAIN:
                 self.filterDomain(filterRule, policyFiles)
@@ -53,13 +53,15 @@ class FilterResult:
 
     def removeDuplicatedItems(self):
     #Remove duplicated items from typeDef, contexts, seApps, rules, functions of filteredPolicyFile
-        print(self.filteredPolicyFile.typeDef)
+        #print(self.filteredPolicyFile.typeDef)
         self.filteredPolicyFile.typeDef = list({item.name: item for item in self.filteredPolicyFile.typeDef}.values())
         self.filteredPolicyFile.contexts = list({item.pathName: item for item in self.filteredPolicyFile.contexts}.values())
         self.filteredPolicyFile.seApps = list({item.name: item for item in self.filteredPolicyFile.seApps}.values())
 
-        print(self.filteredPolicyFile.typeDef)
-
+        # Define a lambda function to extract a hashable representation of each Rule object
+        get_hashable_rule = lambda r: (r.rule, r.source, r.target, r.classType, tuple(sorted(r.permissions)))
+            # Remove duplicates based on all fields
+        self.filteredPolicyFile.rules= list({get_hashable_rule(r): r for r in self.filteredPolicyFile.rules}.values())
 
 
 
@@ -74,7 +76,7 @@ class FilterResult:
 
 
     def filterFilename(self, filterRule, policyFiles):
-            print("----filterFilename")
+            #print("----filterFilename")
             for policyFile in policyFiles:
                 if self.checkSimilarity(filterRule, policyFile.fileName):
                     self.filteredPolicyFile.typeDef.extend(policyFile.typeDef)
@@ -88,7 +90,7 @@ class FilterResult:
 
     def filterPermission(self, filterRule, policyFiles):
         '''Filter rules having permission for each policyFile in policyFiles and put them in filteredPolicyFile'''
-        print("----filterPermission: ", filterRule)
+        #print("----filterPermission: ", filterRule)
         for plicyFile in policyFiles:
             for rule in plicyFile.rules:
                 if self.checkSimilarity(filterRule, rule.permissions):
@@ -105,18 +107,30 @@ class FilterResult:
         '''filter context having pathName or seApp havong name in policyFiles and add to self.filteredPolicyFile'''
         for policyFile in policyFiles:
             for context in policyFile.contexts:
+                print("context.pathName: ", context.pathName, filterRule)
                 if self.checkSimilarity(filterRule, context.pathName):
+                    if context.securityContext.type.strip().endswith("_exec"):
+                        domain = context.securityContext.type.strip().replace("_exec", "")
+                    else:
+                        domain = context.securityContext.type
+                    print("context.securityContext.type: ", context.securityContext.type)
                     self.filteredPolicyFile.contexts.append(context)
-                    self.filteredPolicyFile.typeDef.extend(self.filterTypedef(FilterRule(FilterType.DOMAIN, context.securityContext.type, True), policyFiles))
-                    self.filteredPolicyFile.seApps.extend(self.filterSeApp(FilterRule(FilterType.DOMAIN, context.securityContext.type, True), policyFiles))
-                    self.filteredPolicyFile.rules.extend(self.filterRule(FilterRule(FilterType.DOMAIN, context.securityContext.type, True), policyFiles))
+                    self.filteredPolicyFile.typeDef.extend(self.filterTypedef(FilterRule(FilterType.DOMAIN, domain, True), policyFiles))
+                    self.filteredPolicyFile.seApps.extend(self.filterSeApp(FilterRule(FilterType.DOMAIN, domain, True), policyFiles))
+                    self.filteredPolicyFile.rules.extend(self.filterRule(FilterRule(FilterType.DOMAIN, domain, True), policyFiles))
 
             for seApp in policyFile.seApps:
+                print("seApp.name: ", seApp.name, filterRule)
                 if self.checkSimilarity(filterRule, seApp.name):
+                    if seApp.domain.strip().endswith("_exec"):
+                        domain = seApp.domain.strip().replace("_exec", "")
+                    else:
+                        domain = seApp.domain.strip()
+                    print("domain: ", domain)
                     self.filteredPolicyFile.seApps.append(seApp)
-                    self.filteredPolicyFile.typeDef.extend(self.filterTypedef(FilterRule(FilterType.DOMAIN, seApp.domain, True), policyFiles))
-                    self.filteredPolicyFile.contexts.extend(self.filterContext(FilterRule(FilterType.DOMAIN, seApp.domain, True), policyFiles))
-                    self.filteredPolicyFile.rules.extend(self.filterRule(FilterRule(FilterType.DOMAIN, seApp.domain, True), policyFiles))
+                    self.filteredPolicyFile.typeDef.extend(self.filterTypedef(FilterRule(FilterType.DOMAIN, domain, True), policyFiles))
+                    self.filteredPolicyFile.contexts.extend(self.filterContext(FilterRule(FilterType.DOMAIN, domain, True), policyFiles))
+                    self.filteredPolicyFile.rules.extend(self.filterRule(FilterRule(FilterType.DOMAIN, domain, True), policyFiles))
 
 
     def checkSimilarity(self, filterRule, stringToCheck):
@@ -126,13 +140,13 @@ class FilterResult:
             return filterRule.keyword.strip() in stringToCheck.strip()
 
     def filterTypedef(self, filterRule, policyFiles):
-        print("---", filterRule)
+        #print("---", filterRule)
         lstTyeDef = []
         for policyFile in policyFiles:
             for typeDef in policyFile.typeDef:
                 if self.checkSimilarity(filterRule, typeDef.name):
                     lstTyeDef.append(typeDef)
-        print("---", lstTyeDef)
+        #print("---", lstTyeDef)
         return lstTyeDef
 
     def filterContext(self, filterRule, policyFiles):
