@@ -42,7 +42,7 @@ class AnalyzerResultUi(QVBoxLayout):
         self.groupBox = QGroupBox("Analyzer result")
         self.grpLayout = QVBoxLayout()
 
-        self.btnAddSelected = QPushButton(icon = QIcon(iconPath + "add.png"))
+        self.btnAddSelected = QPushButton(icon = QIcon(iconPath + "down-arrow.png"))
         self.btnAddSelected.setToolTip("Add to the filters")
         self.btnAddSelected.setMinimumSize(24,24)
         self.btnAddSelected.setIconSize(QSize(24,24))

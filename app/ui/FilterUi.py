@@ -56,6 +56,7 @@ class FilterUi(QHBoxLayout):
 
         self.cmbRuleType = QComboBox()
         self.grpLayout = QHBoxLayout()
+        self.groupBox = QGroupBox("Filter Rules")
 
         for filterType in FilterType:
             self.cmbRuleType.addItem(filterType.name)        
@@ -75,6 +76,7 @@ class FilterUi(QHBoxLayout):
         #layoutAnalyzerConfig
         self.layoutFilterEntry.addWidget(self.lblPattern)
         self.layoutFilterEntry.addWidget(self.edtPattern)
+        self.layoutFilterEntry.addWidget(self.chbxExactWord)
 
         self.layoutFilterButtons.addWidget(self.btnAddFilterRule)
         self.layoutFilterButtons.addWidget(self.btnRemoveSelected)
@@ -86,11 +88,11 @@ class FilterUi(QHBoxLayout):
 
         self.layoutLeft.addLayout(self.grpLayout)
         self.layoutLeft.addLayout(self.layoutFilterEntry)
-        self.layoutLeft.addWidget(self.chbxExactWord)
         self.layoutLeft.addLayout(self.layoutFilterButtons)
         self.layoutLeft.addLayout(self.layoutUserInput)
 
-        self.addLayout(self.layoutLeft)
+        self.groupBox.setLayout(self.layoutLeft)
+        self.addWidget(self.groupBox)
 
     def onFilter(self):
         #if self.selectedFilterType == FilterType.DOMAIN:
