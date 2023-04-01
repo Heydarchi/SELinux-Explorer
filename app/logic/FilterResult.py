@@ -8,7 +8,7 @@ from drawer.DrawerHelper import *
 class FilterType(Enum):
     DOMAIN = 1
     FILE_NAME = 2
-    TYPE_DEF = 3
+    CLASS_TYPE = 3
     PERMISSION = 4
     FILE_PATH = 5
 @dataclass
@@ -49,6 +49,8 @@ class FilterResult:
                 self.filterPermission(filterRule, policyFiles)
             elif FilterType(filterRule.filterType) == FilterType.FILE_PATH:
                 self.filterPathName(filterRule, policyFiles)
+            elif FilterType(filterRule.filterType) == FilterType.CLASS_TYPE:
+                self.filterClassType(filterRule, policyFiles)
 
         self.removeDuplicatedItems()
 
@@ -141,6 +143,35 @@ class FilterResult:
                     self.filteredPolicyFile.typeDef.extend(self.filterTypedef(FilterRule(FilterType.DOMAIN, domain, True), policyFiles))
                     self.filteredPolicyFile.contexts.extend(self.filterContext(FilterRule(FilterType.DOMAIN, domain, True), policyFiles))
                     self.filteredPolicyFile.rules.extend(self.filterRule(FilterRule(FilterType.DOMAIN, domain, True), policyFiles))
+
+    def filterClassType(self, filterRule, policyFiles):
+        '''find domain and rule with the same class type and then filter based on the found domain'''
+        for policyFile in policyFiles:
+            for typeDef in policyFile.typeDef:
+                for type in typeDef.types:
+                    if self.checkSimilarity(filterRule, type):
+                        self.filteredPolicyFile.typeDef.append(typeDef)
+                        self.filteredPolicyFile.rules.extend(self.filterRule(FilterRule(FilterType.DOMAIN, typeDef.name, True), policyFiles))
+                        self.filteredPolicyFile.contexts.extend(self.filterContext(FilterRule(FilterType.DOMAIN, typeDef.name, True), policyFiles))
+                        self.filteredPolicyFile.seApps.extend(self.filterSeApp(FilterRule(FilterType.DOMAIN, typeDef.name, True), policyFiles))
+
+            for rule in policyFile.rules:
+                if self.checkSimilarity(filterRule, rule.classType):
+                    self.filteredPolicyFile.rules.append(rule)
+                    self.filteredPolicyFile.typeDef.extend(self.filterTypedef(FilterRule(FilterType.DOMAIN, rule.source, True), policyFiles))
+                    self.filteredPolicyFile.typeDef.extend(self.filterTypedef(FilterRule(FilterType.DOMAIN, rule.target, True), policyFiles))
+                    self.filteredPolicyFile.contexts.extend(self.filterContext(FilterRule(FilterType.DOMAIN, rule.source, True), policyFiles))
+                    self.filteredPolicyFile.contexts.extend(self.filterContext(FilterRule(FilterType.DOMAIN, rule.target, True), policyFiles))
+                    self.filteredPolicyFile.seApps.extend(self.filterSeApp(FilterRule(FilterType.DOMAIN, rule.source, True), policyFiles))
+                    self.filteredPolicyFile.seApps.extend(self.filterSeApp(FilterRule(FilterType.DOMAIN, rule.target, True), policyFiles))
+
+            for seapp in policyFile.seApps:
+                for type in seapp.typeDef.types:
+                    if self.checkSimilarity(filterRule, type):
+                        self.filteredPolicyFile.typeDef.append(seapp.typeDef)
+                        self.filteredPolicyFile.rules.extend(self.filterRule(FilterRule(FilterType.DOMAIN, seapp.typeDef.name, True), policyFiles))
+                        self.filteredPolicyFile.contexts.extend(self.filterContext(FilterRule(FilterType.DOMAIN, seapp.typeDef.name, True), policyFiles))
+                        self.filteredPolicyFile.seApps.extend(self.filterSeApp(FilterRule(FilterType.DOMAIN, seapp.typeDef.name, True), policyFiles))
 
 
     def checkSimilarity(self, filterRule, stringToCheck):

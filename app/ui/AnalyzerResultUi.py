@@ -6,6 +6,7 @@ from PyQt5.QtCore import QSize
 from logic.AnalyzerLogic import *
 from PythonUtilityClasses.SystemUtility import *
 from logic.FilterResult import *
+from ui.UiUtility import *
 
 
 
@@ -83,9 +84,9 @@ class AnalyzerResultUi(QVBoxLayout):
     def onAddSelectedFilter(self):
         row = self.tblResult.currentRow()
         rule = FilterRule()
-        rule.exactWord = False
-        rule.keyword = self.tblResult.item(row, self.COL_TITLE_INDEX).text() 
-        rule.filterType =FilterRule.getFilterTypeFromStr(self.tblResult.item(row, self.COL_TYPE_INDEX).text())
+        rule.exactWord = UiUtility.askQuestion(self.mainWindow, "Exact word", "Do you want to add the exact word?")
+        rule.keyword = self.tblResult.item(row, self.COL_TITLE_INDEX).text().strip()
+        rule.filterType =FilterRule.getFilterTypeFromStr(self.tblResult.item(row, self.COL_TYPE_INDEX).text().strip())
         self.sendToFilterUi(rule)
 
     def onResultAdded(self, lstRules):
@@ -161,6 +162,26 @@ class AnalyzerResultUi(QVBoxLayout):
         permissionRules = list(set(permissionRules))
         return permissionRules
 
+
+    def collectClassType(self, policyFiles):
+        classTypeRules = []
+        for policyFile in policyFiles:
+            if policyFile == None:
+                return
+
+            for typeDef in policyFile.typeDef:
+                for type in typeDef.types:
+                    if type.strip() != "":
+                        classTypeRules.append(FilterRule(FilterType.CLASS_TYPE, type, False))
+
+            for context in policyFile.contexts:
+                for type in context.typeDef.types:
+                    if type.strip() != "":
+                        classTypeRules.append(FilterRule(FilterType.CLASS_TYPE, type, False))
+
+        classTypeRules = list(set(classTypeRules))
+        return classTypeRules
+
     def onDispose(self):
         if self.diagram != None :
             self.diagram.close()
@@ -184,6 +205,8 @@ class AnalyzerResultUi(QVBoxLayout):
             lstRules.extend(self.collectFileNameRule(self.resultPolicyFiles))
         elif self.cmbFilter.currentText() == FilterType.PERMISSION.name:
             lstRules.extend(self.collectPermissionRule(self.resultPolicyFiles))
+        elif self.cmbFilter.currentText() == FilterType.CLASS_TYPE.name:
+            lstRules.extend(self.collectClassType(self.resultPolicyFiles))
 
         self.updateTable(lstRules)
 
@@ -192,8 +215,8 @@ class AnalyzerResultUi(QVBoxLayout):
         self.clearTable()
         self.tblResult.setRowCount(len(lstRules))
         for i in range(len(lstRules)):
-            self.tblResult.setItem(i, self.COL_TITLE_INDEX, QTableWidgetItem(lstRules[i].keyword))
-            self.tblResult.setItem(i, self.COL_TYPE_INDEX, QTableWidgetItem(lstRules[i].filterType.name))
+            self.tblResult.setItem(i, self.COL_TITLE_INDEX, QTableWidgetItem(lstRules[i].keyword.strip()))
+            self.tblResult.setItem(i, self.COL_TYPE_INDEX, QTableWidgetItem(lstRules[i].filterType.name.strip()))
     def clearTable(self):
         self.tblResult.clear()
         self.tblResult.setRowCount(0)
