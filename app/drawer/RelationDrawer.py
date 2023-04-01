@@ -72,14 +72,15 @@ class RelationDrawer(Thread):
         self.drawerClass = DrawerClass()
 
         plantUmlList = list()
-        plantUmlList.append("@startuml")
+        plantUmlList.extend(DrawingTool.generateStartOfPuml())
 
         for policyFile in policyFiles:
             self.dumpPolicyFile(policyFile)
 
         plantUmlList.extend(self.drawerClass.participants)
         plantUmlList.extend(self.drawerClass.rules)
-        plantUmlList.append("@enduml")
+
+        plantUmlList.extend(DrawingTool.generateEndOfPuml())
 
         #Remove redundance items
         plantUmlList = list(dict.fromkeys(plantUmlList))

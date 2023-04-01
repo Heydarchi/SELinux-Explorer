@@ -1,16 +1,19 @@
 import os, sys
 from enum import Enum
 
+DIAGEAM_FILE_EXTENSION = ".png"
 
 def generatePumlFileName(fileName):
     return fileName.replace("/","-")+"_relation.puml"
 
-def generatePngFileName(fileName):
-    return fileName.replace("/","-")+"_relation.png"
+def generateDiagramFileName(fileName):
+    return fileName.replace("/","-")+"_relation" + DIAGEAM_FILE_EXTENSION
 
 def generatePng( filepath):
     os.system("java -jar plantuml/plantuml.jar " + filepath)
 
+def generateSvg( filepath):
+    os.system("java -jar plantuml/plantuml.jar -tsvg " + filepath)
 
 class DrawingPosition(Enum):
     RIGHT = "tight"
@@ -23,6 +26,21 @@ class DrawingStyle(Enum):
     DOMAIN = "package"
 
 class DrawingTool:
+
+    @staticmethod
+    def generateStartOfPuml():
+        lstOutput = list()
+        lstOutput.append("@startuml")
+        lstOutput.append("scale max 2560 height")
+        lstOutput.append("scale max 2048 width")
+        lstOutput.append("")
+        return lstOutput
+
+    @staticmethod
+    def generateEndOfPuml():
+        lstOutput = list()
+        lstOutput.append("@enduml")
+        return lstOutput
     @staticmethod
     def defineNoteStyle():
         lstNote = list()

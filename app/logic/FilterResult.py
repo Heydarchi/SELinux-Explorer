@@ -58,7 +58,7 @@ class FilterResult:
         drawerAdv = AdvancedDrawer()
         drawerAdv.drawUml(self.filteredPolicyFile)
 
-        return generatePngFileName(self.filteredPolicyFile.fileName),  self.filteredPolicyFile
+        return generateDiagramFileName(self.filteredPolicyFile.fileName),  self.filteredPolicyFile
 
 
     def removeDuplicatedItems(self):

@@ -24,7 +24,7 @@ class AdvancedDrawer:
         self.drawerClass = DrawerClass()
 
         plantUmlList = list()
-        plantUmlList.append("@startuml")
+        plantUmlList.extend(DrawingTool.generateStartOfPuml())
 
         self.dumpPolicyFile(policyFile)
 
@@ -32,7 +32,8 @@ class AdvancedDrawer:
         plantUmlList.extend(DrawingTool.defineNoteStyle())
         plantUmlList.extend(self.drawerClass.participants)
         plantUmlList.extend(self.drawerClass.rules)
-        plantUmlList.append("@enduml")
+
+        plantUmlList.extend(DrawingTool.generateEndOfPuml())
 
         #Remove redundance items
         #Temporary disabled since removes blindlt : plantUmlList = list(dict.fromkeys(plantUmlList))

@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QListWidget, QGroupBox, QListWidgetItem
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QDesktopWidget
+from PyQt5.QtCore import Qt
 from logic.AnalyzerLogic import *
 from ui.UiUtility import *
 import sys
@@ -13,17 +14,30 @@ from PythonUtilityClasses.SystemUtility import *
 class DiagramWindow(QWidget):
     def __init__(self, filePath):
         super().__init__()
+        self.filePath = filePath
+        self.initVariables()
+        self.initWidgets()
+        self.configLayout()
 
-        print(filePath)
-        self.im = QPixmap(filePath)
+
+    def initVariables(self):
+        self.DEFAULT_WIDTH = 1200 * 2
+        self.DEFAULT_HEIGHT = 1024 * 2
+
+    def initWidgets(self):
+        self.im = QPixmap(self.filePath)
         self.label = QLabel()
-        self.label.setPixmap(self.im)
-
         self.grid = QGridLayout()
+
+    def configLayout(self):
         self.grid.addWidget(self.label,1,1)
         self.setLayout(self.grid)
 
-        self.setGeometry(50,50,320,200)
+        self.setMaximumWidth(self.DEFAULT_WIDTH)
+        self.setMaximumHeight(self.DEFAULT_HEIGHT)
+        self.label.setPixmap(self.im)
+
+        #self.setGeometry(50,50,320,200)
         self.setWindowTitle("Diagram")
         self.setWindowPosition()
 
@@ -32,6 +46,10 @@ class DiagramWindow(QWidget):
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
+
+    def resizeEvent(self, event):
+        self.label.setPixmap(self.im.scaled(self.label.width() ,self.label.height(), Qt.KeepAspectRatio))
+
 
 class ResultUi(QVBoxLayout):
     def __init__(self, mainWindow, analyzerLogic):

@@ -47,19 +47,19 @@ class AnalyzerLogic:
 
     def clearFileFromAnalyzer(self, filePath):
         self.analyzer.clear()     
-        SystemUtility().deleteFiles(generatePngFileName(filePath))
+        SystemUtility().deleteFiles(generateDiagramFileName(filePath))
         SystemUtility().deleteFiles(generatePumlFileName(filePath))
         self.onAnalyzeFinished(None)
 
     def removeFile(self, filePath):
-        SystemUtility().deleteFiles( os.path.splitext(filePath)[0]+".png")
+        SystemUtility().deleteFiles( os.path.splitext(filePath)[0]+DIAGEAM_FILE_EXTENSION)
         SystemUtility().deleteFiles( os.path.splitext(filePath)[0]+".puml")
 
     def clear(self):
         self.listOfPolicyFiles = list()
 
     def getImagePath(self, filePath):
-        return generatePngFileName(filePath)
+        return generateDiagramFileName(filePath)
     
     def setKeepResult(self, state):
         self.keepResult = state
@@ -73,6 +73,6 @@ class AnalyzerLogic:
         self.updateAnalyzerDataResult = updateResult
 
     def onAnalyzeFinished(self, filteredPolicyFile):
-        self.listOfDiagrams = SystemUtility().getListOfFiles(os.getcwd() + "/out/","*.png")
+        self.listOfDiagrams = SystemUtility().getListOfFiles(os.getcwd() + "/out/","*"+DIAGEAM_FILE_EXTENSION)
         self.updateResult()
         
