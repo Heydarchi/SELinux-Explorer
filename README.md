@@ -44,37 +44,17 @@ Generating the PNG files is based on [PlantUml](http://www.plantuml.com) that I 
 ## Steps to utilize the project
 ### 1- To run the project locally it's needed to have python 3.x and some other packages installed on your local machine
 &ensp;
-> Install Python 3.8 or new version
+> Install Python 3.8 or new version, PythonIsPython3, graphviz and PyQt5
 ```
-sudo apt install python3.8
-```
-&ensp;
-> Install PythonIsPython3
-```
-sudo apt-get install python-is-python3 -y
+sudo apt install python3.8 python-is-python3 graphviz python3-pyqt5 -y
 ```
 &ensp;
-> Install graphviz
-```
-sudo apt-get install graphviz
-```
-<br/>
 
-> Install PyQt5
+> Install dataclass-wizard and dataclasses
 ```
-sudo apt-get install python3-pyqt5
+pip install dataclass-wizard dataclasses
 ```
-
-> Install dataclass-wizard
-```
-pip install dataclass-wizard
-```
-
-> Install dataclasses
-```
-pip install dataclasses
-```
-
+&ensp;
 
 ### 2- Clone the project & the submodule
 ```
