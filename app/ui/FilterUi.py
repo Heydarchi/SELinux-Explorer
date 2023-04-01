@@ -1,12 +1,10 @@
 
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QGroupBox, QLabel
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLineEdit, QGroupBox, QLabel
 from PyQt5.QtWidgets import QCheckBox, QListWidget, QListWidgetItem, QRadioButton, QComboBox
-from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 from logic.AnalyzerLogic import *
 from logic.FilterResult import *
 from ui.UiUtility import *
-import sys
 from PythonUtilityClasses.SystemUtility import *
 
 
@@ -49,10 +47,6 @@ class FilterUi(QHBoxLayout):
         self.lstFilterRules = QListWidget()
 
         self.chbxExactWord = QCheckBox("Exact Word")
-        self.rdDomain = QRadioButton("Domain")
-        self.rdFilename = QRadioButton("File name")
-        self.rdClassType = QRadioButton("Type def(Class type)")
-        self.rdPermission = QRadioButton("Permission")
 
         self.cmbRuleType = QComboBox()
         self.grpLayout = QHBoxLayout()

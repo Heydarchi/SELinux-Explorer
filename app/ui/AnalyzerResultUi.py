@@ -1,11 +1,9 @@
 
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QComboBox
 from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem, QGroupBox, QLabel
-from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSize
-from PyQt5.QtWidgets import QDesktopWidget
 from logic.AnalyzerLogic import *
-import sys
 from PythonUtilityClasses.SystemUtility import *
 from logic.FilterResult import *
 

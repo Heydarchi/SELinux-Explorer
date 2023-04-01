@@ -1,10 +1,9 @@
 
 from PyQt5.QtWidgets import QGroupBox, QListWidget, QListWidgetItem
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton
+from PyQt5.QtWidgets import QVBoxLayout, QPushButton
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QSize
 from logic.AnalyzerLogic import *
-import sys
 
 
 

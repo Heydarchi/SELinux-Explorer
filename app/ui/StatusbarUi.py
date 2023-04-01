@@ -1,8 +1,6 @@
 
 from PyQt5.QtWidgets import QStatusBar
-from PyQt5.QtGui import QPixmap
 from logic.AnalyzerLogic import *
-import sys
 from PythonUtilityClasses.SystemUtility import *
 
 

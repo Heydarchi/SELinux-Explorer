@@ -1,10 +1,5 @@
-import os, sys
 from model.PolicyEntities import  *
 from PythonUtilityClasses import FileWriter as FW
-from datetime import *
-from queue import Queue
-from threading import Thread
-from time import sleep
 from drawer.DrawerHelper import *
 
 class AdvancedDrawer:
@@ -25,6 +20,7 @@ class AdvancedDrawer:
 
         plantUmlList = list()
         plantUmlList.extend(DrawingTool.generateStartOfPuml())
+        plantUmlList.extend(self.generateReference())
 
         self.dumpPolicyFile(policyFile)
 
@@ -126,10 +122,11 @@ class AdvancedDrawer:
                     else:
                         src=rule.source
 
-                    if rule.rule == RuleEnum.NEVER_ALLOW :
-                        ruleList.append("" + self.insertNewParticipant(rule.source) + " -----[#red]> \"" + rule.target + "\" : " + rule.rule.label + " (" + ', '.join(rule.permissions) + ")")
-                    else:
-                        ruleList.append("" + self.insertNewParticipant(rule.source) + " -----[#green]> \"" + rule.target + "\" : " + rule.rule.label + " (" + ', '.join(rule.permissions) + ")")
+                    for permission in rule.permissions:
+                        if rule.rule == RuleEnum.NEVER_ALLOW :
+                            ruleList.append("" + self.insertNewParticipant(rule.source) + " .....[#red]> \"" + rule.target + "\" : " +  "!! " + permission + " !!")
+                        else:
+                            ruleList.append("" + self.insertNewParticipant(rule.source) + " -----[#green]> \"" + rule.target + "\" : " + permission )
 
         return ruleList
 
@@ -142,6 +139,13 @@ class AdvancedDrawer:
             return self.dictOfParticipant[name]
         else:
             return name
+
+    def generateReference(self):
+        lstNote = list()
+        lstNote.append("Sumbols")
+        lstNote.append("Green Line: Allow")
+        lstNote.append("Red Line: Never Allow")
+        return DrawingTool.generateLegend("Reference", DrawingPosition.TOP, DrawingPosition.LEFT, lstNote, DrawingColor.BLUE_LIGHT)
 
     def writeToFile(self, fileName, listOfStr):
         fw = FW.FileWriter()

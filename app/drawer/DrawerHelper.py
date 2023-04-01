@@ -1,4 +1,4 @@
-import os, sys
+import os
 from enum import Enum
 
 DIAGEAM_FILE_EXTENSION = ".png"
@@ -24,6 +24,17 @@ class DrawingPosition(Enum):
 class DrawingStyle(Enum):
     NOTE = "note"
     DOMAIN = "package"
+    LEGEND = "legend"
+
+class DrawingColor(Enum):
+    BLUE = "#blue"
+    BLUE_LIGHT = "#lightblue"
+    GREEN = "#green"
+    GREEN_LIGHT = "#lightgreen"
+    RED = "#red"
+    RED_LIGHT = "#lightred"
+    YELLOW = "#yellow"
+    ORANGE = "#orange"
 
 class DrawingTool:
 
@@ -72,6 +83,19 @@ class DrawingTool:
             for item in items:
                 lstNote.append("  - " + item)
             lstNote.append("end " + DrawingStyle.NOTE.value)
+            lstNote.append("")
+        return lstNote
+
+    @staticmethod
+    def generateLegend(title, positionVertical: DrawingPosition, positionHorizontal: DrawingPosition, items, back_color: DrawingColor):
+        items = list(dict.fromkeys(items))
+        lstNote = list()
+        if title.strip() != "" and len(items) >= 1 :
+            lstNote.append(DrawingStyle.LEGEND.value + " " + positionVertical.value +  "   " + positionHorizontal.value )
+            lstNote.append("<b>" + title + "</b>")
+            for item in items:
+                lstNote.append("  - " + item)
+            lstNote.append("end" + DrawingStyle.LEGEND.value)
             lstNote.append("")
         return lstNote
     

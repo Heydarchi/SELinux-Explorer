@@ -1,4 +1,3 @@
-import os, sys
 from model.PolicyEntities import  *
 from PythonUtilityClasses import FileWriter as FW
 from datetime import *
