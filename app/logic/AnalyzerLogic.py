@@ -47,9 +47,13 @@ class AnalyzerLogic:
 
     def clearFileFromAnalyzer(self, filePath):
         self.analyzer.clear()     
-        SystemUtility().deleteFiles(generatePngFileName(filePath))    
-        SystemUtility().deleteFiles(generatePumlFileName(filePath)) 
+        SystemUtility().deleteFiles(generatePngFileName(filePath))
+        SystemUtility().deleteFiles(generatePumlFileName(filePath))
         self.onAnalyzeFinished(None)
+
+    def removeFile(self, filePath):
+        SystemUtility().deleteFiles( os.path.splitext(filePath)[0]+".png")
+        SystemUtility().deleteFiles( os.path.splitext(filePath)[0]+".puml")
 
     def clear(self):
         self.listOfPolicyFiles = list()

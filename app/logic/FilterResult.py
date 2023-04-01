@@ -17,11 +17,21 @@ class FilterRule(JSONWizard):
     keyword : str = ""
     exactWord: bool = False
 
+    def __eq__(self, other):
+        return isinstance(other, FilterRule) and \
+               self.filterType == other.filterType and \
+               self.keyword == other.keyword and \
+               self.exactWord == other.exactWord
+
+    def __hash__(self):
+        return hash((self.filterType, self.keyword, self.exactWord))
+
     @staticmethod
     def getFilterTypeFromStr(keyword):
         for filterType in FilterType:
             if keyword == filterType.name:
                 return filterType
+
 class FilterResult:
 
     def filter(self, lstRules, policyFiles):
@@ -93,7 +103,7 @@ class FilterResult:
         #print("----filterPermission: ", filterRule)
         for plicyFile in policyFiles:
             for rule in plicyFile.rules:
-                if self.checkSimilarity(filterRule, rule.permissions):
+                if filterRule.keyword in rule.permissions:
                     #print(rule)
                     self.filteredPolicyFile.rules.append(rule)
                     self.filteredPolicyFile.typeDef.extend(self.filterTypedef(FilterRule(FilterType.DOMAIN, rule.source, True), policyFiles))

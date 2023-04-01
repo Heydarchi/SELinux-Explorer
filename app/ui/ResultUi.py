@@ -74,8 +74,12 @@ class ResultUi(QVBoxLayout):
 
     def onDeleteSelectedFile(self):
         items = self.lstResults.selectedItems()
+        if not items: return
         for item in items:
-            path = item.text()
+            filePath = item.text()
+            self.lstResults.takeItem(self.lstResults.row(item))
+            self.analyzerLogic.removeFile(filePath)
+
 
     def onResultAdded(self, filePath):
         item = QListWidgetItem(filePath)
