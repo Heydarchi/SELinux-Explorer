@@ -4,10 +4,10 @@ from enum import Enum
 DIAGEAM_FILE_EXTENSION = ".png"
 
 def generatePumlFileName(fileName):
-    return fileName.replace("/","-")+"_relation.puml"
+    return fileName.replace("/","-")+".puml"
 
 def generateDiagramFileName(fileName):
-    return fileName.replace("/","-")+"_relation" + DIAGEAM_FILE_EXTENSION
+    return fileName.replace("/","-")+"" + DIAGEAM_FILE_EXTENSION
 
 def generatePng( filepath):
     os.system("java -jar plantuml/plantuml.jar " + filepath)

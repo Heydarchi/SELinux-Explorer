@@ -40,7 +40,7 @@ class FilterResult:
         for filterRule in lstRules :
             #print("filterRule: ", filterRule)
             #print("FilterType.PERMISSION: ", FilterType.PERMISSION, filterRule.filterType)
-            self.filteredPolicyFile.fileName =  self.filteredPolicyFile.fileName + ("_EW_" if filterRule.exactWord  else "_") + filterRule.keyword
+            self.filteredPolicyFile.fileName =  self.filteredPolicyFile.fileName + ("_ew_" if filterRule.exactWord  else "_") + filterRule.keyword
             if FilterType(filterRule.filterType) == FilterType.DOMAIN:
                 self.filterDomain(filterRule, policyFiles)
             elif FilterType(filterRule.filterType) == FilterType.FILE_NAME:

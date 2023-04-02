@@ -35,7 +35,7 @@ class AdvancedDrawer:
         #Temporary disabled since removes blindlt : plantUmlList = list(dict.fromkeys(plantUmlList))
         
         #print(plantUmlList)
-        filePath = "out/Adv-" + generatePumlFileName(policyFile.fileName)
+        filePath = "out/" + generatePumlFileName(policyFile.fileName)
         self.writeToFile(filePath, plantUmlList)
         print("drawing: ", filePath)
 

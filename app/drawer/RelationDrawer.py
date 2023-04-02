@@ -58,7 +58,7 @@ class RelationDrawer(Thread):
         #Remove redundance items
         plantUmlList = list(dict.fromkeys(plantUmlList))
         #print(plantUmlList)
-        filePath = "out/" + generatePumlFileName(policyFile.fileName)
+        filePath = "out/seq_" + generatePumlFileName(policyFile.fileName)
         self.writeToFile(filePath, plantUmlList)
         print("drawing: ", filePath)
 

@@ -203,6 +203,10 @@ class AnalyzerResultUi(QVBoxLayout):
                     if type.strip() != "":
                         classTypeRules.append(FilterRule(FilterType.CLASS_TYPE, type, False))
 
+            for rule in policyFile.rules:
+                if rule.classType.strip() != "":
+                    classTypeRules.append(FilterRule(FilterType.CLASS_TYPE, rule.classType, False))
+
         classTypeRules = list(set(classTypeRules))
         return classTypeRules
 
