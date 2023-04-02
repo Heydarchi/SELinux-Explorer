@@ -79,13 +79,13 @@ class FileAnalyzer(AbstractAnalyzer):
                 self.listOfAnalyzerInfo.append(analyzerInfo)
             except Exception as e:
                 print(e)
-                print("Error in file: " + file)
         #print(self.listOfAnalyzerInfo)
         return listOfFiles
 
     def detectLang(self, fileName):
         for fileType in FileTypeEnum:
-            if fileType.label in os.path.basename(fileName):
+            #if fileType.label in os.path.basename(fileName):
+            if os.path.basename(fileName).strip().endswith(fileType.label):
                 #print(os.path.basename(fileName))
                 return fileType
 

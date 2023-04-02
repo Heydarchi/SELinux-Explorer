@@ -69,6 +69,10 @@ class TeAnalyzer(AbstractAnalyzer):
     def extractRule(self,  inputString):
             inputString = inputString.replace(' : ',':').replace(' :',':').replace(': ',':').strip()
             inputString = inputString.replace('{',' { ').replace('}',' } ').strip()
+            inputString = inputString.replace(': {',':{ ').replace('} :','}:').strip()
+            inputString = inputString.replace(':  {',':{ ').replace('}  :','}:').strip()
+
+
             #print("inputString; " + inputString)
             items = inputString.replace(";","").split()
             for ruleEnum in RuleEnum:
