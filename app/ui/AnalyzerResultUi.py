@@ -1,6 +1,6 @@
 
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QComboBox
-from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem, QGroupBox, QLabel
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QComboBox, QLineEdit
+from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem, QGroupBox, QLabel, QCheckBox
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSize
 from logic.AnalyzerLogic import *
@@ -31,18 +31,26 @@ class AnalyzerResultUi(QVBoxLayout):
         self.TABLE_MIN_WIDTH = self.COL_TITLE_WIDTH + self.COL_TYPE_WIDTH + self.MARGIN
         self.COL_TITLE_INDEX = 0
         self.COL_TYPE_INDEX = 1
+        self.lastRulesResult = list()
+        self.BTN_WIDTH = 28
+        self.BTN_HEIGHT = 28
 
     def initWidgets(self):
+        self.lblSearch = QLabel("Search")
+        self.edtSearch = QLineEdit()
+        self.chkCaseSensitive = QCheckBox("Case sensitive")
+        self.btnResetSearch = UiUtility.createButton("Reset search", ICON_PATH + "reset_green.png", self.BTN_WIDTH, self.BTN_HEIGHT)
         self.tblResult = QTableWidget()
         self.layoutButton = QHBoxLayout()
         self.layoutFilter = QHBoxLayout()
         self.groupBox = QGroupBox("Analyzer result")
         self.grpLayout = QVBoxLayout()
+        self.layoutSearch = QHBoxLayout()
 
-        self.btnAddSelected = QPushButton(icon = QIcon(ICON_PATH + "down-arrow.png"))
-        self.btnAddSelected.setToolTip("Add to the filters")
-        self.btnAddSelected.setMinimumSize(24,24)
-        self.btnAddSelected.setIconSize(QSize(24,24))
+        self.chkCaseSensitive.setChecked(False)
+
+        self.btnAddSelected = UiUtility.createButton("Add to the filters", ICON_PATH + "down-arrow.png", self.BTN_WIDTH, self.BTN_HEIGHT)
+
 
         self.cmbFilter = QComboBox()
         self.cmbFilter.addItem("ALL")
@@ -64,13 +72,21 @@ class AnalyzerResultUi(QVBoxLayout):
         self.btnAddSelected.clicked.connect(self.onAddSelectedFilter)
         self.analyzerLogic.setUiUpdateAnalyzerDataSignal(self.onAnalyzeFinished)
         self.cmbFilter.currentIndexChanged.connect(self.onFilterChanged)
+        self.edtSearch.textChanged.connect(self.onSeachTextChanged)
+        self.btnResetSearch.clicked.connect(self.onResetSearch)
 
     def configLayout(self):
+        self.layoutSearch.addWidget(self.lblSearch)
+        self.layoutSearch.addWidget(self.edtSearch)
+        self.layoutSearch.addWidget(self.chkCaseSensitive)
+        self.layoutSearch.addWidget(self.btnResetSearch)
+
         self.layoutFilter.addWidget(self.lblFilterType)
         self.layoutFilter.addWidget(self.cmbFilter)
 
         self.layoutButton.addWidget(self.btnAddSelected)
 
+        self.grpLayout.addLayout(self.layoutSearch)
         self.grpLayout.addLayout(self.layoutFilter)
         self.grpLayout.addWidget(self.tblResult)
         self.grpLayout.addLayout(self.layoutButton)
@@ -99,6 +115,16 @@ class AnalyzerResultUi(QVBoxLayout):
         self.resultPolicyFiles = policyFiles
         self.onFilterChanged()
 
+    def onSeachTextChanged(self):
+        lstRules = []
+        if self.edtSearch.text().strip() != "":
+            lstRules = self.searchResult(self.lastRulesResult, self.edtSearch.text().strip(), self.chkCaseSensitive.isChecked())
+        else:
+            lstRules = self.lastRulesResult
+        self.updateTable(lstRules)
+
+    def onResetSearch(self):
+        self.edtSearch.setText("")
 
     def collectDomainRule(self, policyFiles):
         domainRules = []
@@ -206,8 +232,12 @@ class AnalyzerResultUi(QVBoxLayout):
         elif self.cmbFilter.currentText() == FilterType.CLASS_TYPE.name:
             lstRules.extend(self.collectClassType(self.resultPolicyFiles))
 
-        self.updateTable(lstRules)
+        self.lastRulesResult = lstRules
 
+        if self.edtSearch.text().strip() != "":
+            lstRules = self.searchResult(lstRules, self.edtSearch.text().strip(), self.chkCaseSensitive.isChecked())
+
+        self.updateTable(lstRules)
 
     def updateTable(self, lstRules):
         self.clearTable()
@@ -215,6 +245,21 @@ class AnalyzerResultUi(QVBoxLayout):
         for i in range(len(lstRules)):
             self.tblResult.setItem(i, self.COL_TITLE_INDEX, QTableWidgetItem(lstRules[i].keyword.strip()))
             self.tblResult.setItem(i, self.COL_TYPE_INDEX, QTableWidgetItem(lstRules[i].filterType.name.strip()))
+
+    def searchResult(self, lstRules, keyword, caseSensitive):
+        lstSearchResult = []
+        for item in lstRules:
+            if self.isSimilar(keyword, item.keyword, caseSensitive):
+                lstSearchResult.append(item)
+
+        return lstSearchResult
+
     def clearTable(self):
         self.tblResult.clear()
         self.tblResult.setRowCount(0)
+
+    def isSimilar(self, keyword, target, caseSensitive):
+        if not caseSensitive:
+            return keyword in target
+        else:
+            return keyword.lower() == target.lower()

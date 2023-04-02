@@ -67,7 +67,10 @@ class TeAnalyzer(AbstractAnalyzer):
 
 
     def extractRule(self,  inputString):
-            items = inputString.replace(";","").replace(": ",":").strip().split()
+            inputString = inputString.replace(' : ',':').replace(' :',':').replace(': ',':').strip()
+            inputString = inputString.replace('{',' { ').replace('}',' } ').strip()
+            #print("inputString; " + inputString)
+            items = inputString.replace(";","").split()
             for ruleEnum in RuleEnum:
                 if ruleEnum.label == items[0].strip():
                     
@@ -91,7 +94,7 @@ class TeAnalyzer(AbstractAnalyzer):
 
                     for source in sources:
                         rule = Rule()
-                        rule.rule = ruleEnum                    
+                        rule.rule = ruleEnum
                         rule.source = source
                         dstItems = sec_context.split(":")
                         targets = dstItems[0].split()
@@ -100,6 +103,7 @@ class TeAnalyzer(AbstractAnalyzer):
                             rule.classType = dstItems[1]
                             rule.permissions = permissions
                         self.policyFile.rules.append(rule)
+
                     return
 
 if __name__ == "__main__" :

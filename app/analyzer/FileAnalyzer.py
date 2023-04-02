@@ -63,7 +63,8 @@ class FileAnalyzer(AbstractAnalyzer):
                 policyFile = self.invokeAnalyzerClass(fileType, filePath)
                 self.listOfPolicyFiles.append(policyFile)
             else:
-                print("Undefined file extension : " + filePath)
+                pass
+                #print("Undefined file extension : " + filePath)
 
         return self.listOfPolicyFiles    
 
@@ -72,10 +73,13 @@ class FileAnalyzer(AbstractAnalyzer):
         systemUtility = SU.SystemUtility()
         listOfFiles = systemUtility.getListOfFiles(targetPath, pattern)
         for file in listOfFiles :
-            analyzerInfo = AnalyzerInfo()
-            analyzerInfo.sourceFile = systemUtility.getFileInfo(file)
-            self.listOfAnalyzerInfo.append(analyzerInfo)
-
+            try:
+                analyzerInfo = AnalyzerInfo()
+                analyzerInfo.sourceFile = systemUtility.getFileInfo(file)
+                self.listOfAnalyzerInfo.append(analyzerInfo)
+            except Exception as e:
+                print(e)
+                print("Error in file: " + file)
         #print(self.listOfAnalyzerInfo)
         return listOfFiles
 
