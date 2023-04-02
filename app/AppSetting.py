@@ -6,12 +6,13 @@ from PythonUtilityClasses.FileWriter import *
 
 ICON_PATH = './ui/icons/'
 APP_VERSION = '0.2.0-beta'
-APP_NAME = 'Policy Analyzer'
+APP_NAME = 'SELinux Explorer'
 APP_AUTHOR = 'Mohammad Hossein Heydarchi'
-COPYRIGHT = '2023'
-LICENSE = 'MIT'
-WEBSITE = 'https://github.com/Heydarchi/SELinux-Explorer'
-
+AUTHOR_EMAIL = 'm.h.heydarchi@gmail.com'
+APP_COPYRIGHT = '2023'
+APP_LICENSE = 'MIT'
+APP_WEBSITE = 'https://github.com/Heydarchi/SELinux-Explorer'
+APP_ICON_PATH = ''
 
 @dataclass
 class AppSetting(JSONWizard):

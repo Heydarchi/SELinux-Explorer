@@ -18,7 +18,7 @@ from AppSetting import *
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("SELinux-Explorer " + APP_VERSION)
+        self.setWindowTitle( APP_NAME + " " + APP_VERSION)
         self.initVariables()
         self.initMainLayout()
         self.configSignals()
@@ -102,6 +102,7 @@ class MainWindow(QMainWindow):
 
     def disposeObjects(self):
         self.layoutResult.onDispose()
+        self.toolbar.onDispose()
 
     def closeEvent(self,event):
             result = QMessageBox().question(self,

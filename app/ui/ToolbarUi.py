@@ -4,6 +4,7 @@ from PyQt5.QtGui import QIcon
 from logic.AnalyzerLogic import *
 from PyQt5.QtCore import Qt
 from ui.UiUtility import *
+from ui.AboutUi import *
 from PythonUtilityClasses.SystemUtility import *
 from PythonUtilityClasses.FileWriter import *
 from PythonUtilityClasses.FileReader import *
@@ -32,6 +33,7 @@ class ToolbarUi(QToolBar):
         self.actMakeReference = QAction(QIcon(ICON_PATH + 'reference.png'),"Make reference from the analyzed data", self.mainWindow)
         self.actAnalyzeAll = QAction(QIcon(ICON_PATH + 'data-integration.png'),"Analyze all the files/paths", self.mainWindow)
         self.actKeepResult = QAction(QIcon(ICON_PATH + 'hosting.png'),"Don't erase the current result before Analyzing", self.mainWindow)
+        self.actAbout = QAction(QIcon(ICON_PATH + 'information.png'),"About", self.mainWindow)
 
         self.actKeepResult.setCheckable(True)
 
@@ -48,6 +50,8 @@ class ToolbarUi(QToolBar):
         self.addAction(self.actWipeAll)
         self.addSeparator()
         self.addAction(self.actKeepResult)
+        self.addSeparator()
+        self.addAction(self.actAbout)
 
     def configLayout(self):
         self.actAddFile.triggered.connect(self.onAddFile)
@@ -58,6 +62,7 @@ class ToolbarUi(QToolBar):
         self.actWipeAll.triggered.connect(self.onWipeAll)
         self.actKeepResult.triggered.connect(self.onClickedKeepResult)
         self.actMakeReference.triggered.connect(self.onMakeReference)
+        self.actAbout.triggered.connect(self.onAbout)
 
         self.setOrientation(Qt.Vertical)
 
@@ -130,3 +135,11 @@ class ToolbarUi(QToolBar):
         if ok:
             SettingClass.saveListAsJson(refName, self.analyzerLogic.listOfPolicyFiles)
             print("AppSetting saved!")
+
+    def onAbout(self):
+        self.about = AboutWindow()
+        self.about.show()
+
+    def onDispose(self):
+        if self.about != None :
+            self.about.close()
