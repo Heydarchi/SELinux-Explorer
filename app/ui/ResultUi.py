@@ -125,7 +125,6 @@ class ResultUi(QVBoxLayout):
     def onOpenMultipleFiles(self):
         listItems=self.lstResults.selectedItems()
         if len(listItems) > 0:
-            print("Multiple files: ", listItems)
             for item in listItems:
                 diagram = DiagramWindow(item.text())
                 diagram.show()

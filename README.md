@@ -88,8 +88,6 @@ python main.py
     - [ ] Search the generated files
     - [ ] Generated output for the selected items
     - [ ] Generated output for the selected Files
-- [ ] Make it possible to open multiple diagram
-- [ ] Add lowercase/uppercase check for filter's keyword
 - [ ] Sort result files by date
 - [ ] Add AND / OR for combining the filter rules
 - [ ] Making reference from path & files
