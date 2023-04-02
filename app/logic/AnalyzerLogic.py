@@ -1,7 +1,7 @@
 from analyzer.FileAnalyzer import  *
 from drawer.RelationDrawer import *
 from drawer.DrawerHelper import *
-
+from AppSetting import *
 
 class AnalyzerLogic:
     def __init__(self):
@@ -38,7 +38,7 @@ class AnalyzerLogic:
         self.updateAnalyzerDataResult(self.listOfPolicyFiles)
 
     def clearOutput(self):
-        files = SystemUtility().getListOfFiles(os.getcwd() + "/out/","*")
+        files = SystemUtility().getListOfFiles(os.getcwd() + "/" +OUT_DIR,"*")
         for file in files :
             if os.path.isfile(file):
                 SystemUtility().deleteFiles(file)
@@ -73,6 +73,6 @@ class AnalyzerLogic:
         self.updateAnalyzerDataResult = updateResult
 
     def onAnalyzeFinished(self, filteredPolicyFile):
-        self.listOfDiagrams = SystemUtility().getListOfFiles(os.getcwd() + "/out/","*"+DIAGEAM_FILE_EXTENSION)
+        self.listOfDiagrams = SystemUtility().getListOfFiles(os.getcwd() + "/" + OUT_DIR,"*"+DIAGEAM_FILE_EXTENSION)
         self.updateResult()
         

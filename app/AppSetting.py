@@ -13,6 +13,7 @@ APP_COPYRIGHT = '2023'
 APP_LICENSE = 'MIT'
 APP_WEBSITE = 'https://github.com/Heydarchi/SELinux-Explorer'
 APP_ICON_PATH = ''
+OUT_DIR = 'out/'
 
 @dataclass
 class AppSetting(JSONWizard):

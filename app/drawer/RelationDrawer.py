@@ -5,7 +5,7 @@ from queue import Queue
 from threading import Thread
 from time import sleep
 from drawer.DrawerHelper import *
-
+from AppSetting import *
 
 class RelationDrawer(Thread):
 
@@ -58,7 +58,7 @@ class RelationDrawer(Thread):
         #Remove redundance items
         plantUmlList = list(dict.fromkeys(plantUmlList))
         #print(plantUmlList)
-        filePath = "out/seq_" + generatePumlFileName(policyFile.fileName)
+        filePath = OUT_DIR + "seq_" + generatePumlFileName(policyFile.fileName)
         self.writeToFile(filePath, plantUmlList)
         print("drawing: ", filePath)
 
@@ -84,7 +84,7 @@ class RelationDrawer(Thread):
         #Remove redundance items
         plantUmlList = list(dict.fromkeys(plantUmlList))
         #print(plantUmlList)
-        filePath = "out/Integrated-" + datetime.today().strftime("%d-%m-%y---%H-%M-%s")+"_relation.puml"
+        filePath = OUT_DIR + "/Integrated-" + datetime.today().strftime("%d-%m-%y---%H-%M-%s")+"_relation.puml"
         '''self.writeToFile(filePath, plantUmlList)
         print("drawing: ", filePath)'''
 

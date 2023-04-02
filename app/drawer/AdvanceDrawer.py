@@ -1,6 +1,7 @@
 from model.PolicyEntities import  *
 from PythonUtilityClasses import FileWriter as FW
 from drawer.DrawerHelper import *
+from AppSetting import *
 
 class AdvancedDrawer:
 
@@ -35,7 +36,7 @@ class AdvancedDrawer:
         #Temporary disabled since removes blindlt : plantUmlList = list(dict.fromkeys(plantUmlList))
         
         #print(plantUmlList)
-        filePath = "out/" + generatePumlFileName(policyFile.fileName)
+        filePath = OUT_DIR + generatePumlFileName(policyFile.fileName)
         self.writeToFile(filePath, plantUmlList)
         print("drawing: ", filePath)
 
