@@ -1,6 +1,6 @@
 
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLineEdit, QGroupBox, QLabel
-from PyQt5.QtWidgets import QCheckBox, QListWidget, QListWidgetItem, QRadioButton, QComboBox
+from PyQt5.QtWidgets import QCheckBox, QTableWidgetItem, QTableWidget, QComboBox
 from PyQt5.QtGui import QIcon
 from logic.AnalyzerLogic import *
 from logic.FilterResult import *
@@ -16,6 +16,7 @@ class FilterUi(QHBoxLayout):
         self.mainWindow = mainWindow
         self.analyzerLogic = analyzerLogic
         self.initVariables()
+        self.initLayout()
         self.initWidgets()
         self.configSignals()
         self.configLayout()
@@ -25,16 +26,20 @@ class FilterUi(QHBoxLayout):
         self.BTN_WIDTH = 24        
         self.BTN_HEIGHT = 24        
         self.selectedFilterType = None
+        self.TABLE_MINIMUM_HEIGHT = 240
+        self.TABLE_COLUMNS_NUMBER = 3
+        self.COL_TITLE_WIDTH = 320
+        self.COL_TYPE_WIDTH = 140
+        self.COL_EXACT_WORD_WIDTH = 100
+        self.MARGIN = 20
+        self.TABLE_MIN_WIDTH = self.COL_TITLE_WIDTH + self.COL_TYPE_WIDTH + self.MARGIN + self.COL_EXACT_WORD_WIDTH
+        self.COL_TITLE_INDEX = 0
+        self.COL_TYPE_INDEX = 1
+        self.COL_EXACT_WORD_INDEX = 2
 
     def initWidgets(self):
         iconPath = './ui/icons/'
-
-        self.layoutUserInput = QHBoxLayout()
-        self.layoutFilterEntry = QHBoxLayout()
-        self.layoutFilterButtons = QVBoxLayout()
-
-        self.layoutLeft = QVBoxLayout()
-
+        self.tblRule = QTableWidget()
         self.lblPattern = QLabel("Pattern")
         self.lblFilterType = QLabel("Rule type")
         self.edtPattern = QLineEdit()
@@ -44,16 +49,32 @@ class FilterUi(QHBoxLayout):
         self.btnClearFilterRules =UiUtility.createButton("Clear all the filters", QIcon(iconPath + "broom.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
         self.btnRemoveSelected =UiUtility.createButton("Remove the selected filter", QIcon(iconPath + "minus.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
 
-        self.lstFilterRules = QListWidget()
 
         self.chbxExactWord = QCheckBox("Exact Word")
 
         self.cmbRuleType = QComboBox()
-        self.grpLayout = QHBoxLayout()
         self.groupBox = QGroupBox("Filter Rules")
 
         for filterType in FilterType:
-            self.cmbRuleType.addItem(filterType.name)        
+            self.cmbRuleType.addItem(filterType.name)   
+            
+        self.tblRule.setColumnCount(self.TABLE_COLUMNS_NUMBER)
+        self.tblRule.setMinimumWidth(self.TABLE_MIN_WIDTH)
+        self.tblRule.setMinimumHeight(self.TABLE_MINIMUM_HEIGHT)
+
+        self.tblRule.setColumnWidth(self.COL_TITLE_INDEX, self.COL_TITLE_WIDTH)
+        self.tblRule.setColumnWidth(self.COL_TYPE_INDEX, self.COL_TYPE_WIDTH)
+        self.tblRule.setColumnWidth(self.COL_EXACT_WORD_INDEX, self.COL_EXACT_WORD_WIDTH)
+        self.tblRule.setSelectionMode(QTableWidget.SingleSelection)
+        self.tblRule.setSelectionBehavior(QTableWidget.SelectRows)
+
+    def initLayout(self):
+        self.layoutLeft = QVBoxLayout()
+        self.layoutFilterEntry = QHBoxLayout()
+        self.layoutFilterButtons = QVBoxLayout()
+        self.layoutUserInput = QHBoxLayout()
+        self.grpLayout = QHBoxLayout()
+
 
     def configSignals(self):
         self.btnFilter.clicked.connect(self.onFilter)
@@ -77,7 +98,7 @@ class FilterUi(QHBoxLayout):
         self.layoutFilterButtons.addWidget(self.btnClearFilterRules)
         self.layoutFilterButtons.addWidget(self.btnFilter)
 
-        self.layoutUserInput.addWidget(self.lstFilterRules)
+        self.layoutUserInput.addWidget(self.tblRule)
         self.layoutUserInput.addLayout(self.layoutFilterButtons)
 
         self.layoutLeft.addLayout(self.grpLayout)
@@ -96,7 +117,8 @@ class FilterUi(QHBoxLayout):
 
     def onClearFilterRules(self):
         self.lstRules.clear()
-        self.lstFilterRules.clear()
+        self.tblRule.clear()
+        self.tblRule.setRowCount(0)
 
     def onAddFilterRule(self):
         rule = FilterRule()
@@ -109,13 +131,20 @@ class FilterUi(QHBoxLayout):
 
     def onGetFilter(self, rule):
         self.lstRules.append(rule)
-        item = QListWidgetItem(rule.keyword + "  =>   Rule: " + rule.filterType.name + ", ExactWord: " +  str(rule.exactWord ))
-        self.lstFilterRules.addItem(item)
-
+        index = self.tblRule.rowCount()
+        self.tblRule.setRowCount(index + 1)
+        self.tblRule.setItem(index, self.COL_TITLE_INDEX, QTableWidgetItem(rule.keyword.strip()))
+        self.tblRule.setItem(index, self.COL_TYPE_INDEX, QTableWidgetItem(rule.filterType.name.strip()))
+        self.tblRule.setItem(index, self.COL_EXACT_WORD_INDEX, QTableWidgetItem(str(rule.exactWord)))
     def onRemoveSelected(self):
-        index = self.lstFilterRules.currentRow()
-        self.lstFilterRules.takeItem(index)
+        row = self.tblRule.currentRow()
+        index = self.tblRule.selectedIndexes()[0].row()
+        print("index: ", index)
+        print("selectedIndex: ", self.tblRule.selectedIndexes())
+        self.tblRule.removeRow(row)
+        print("self.lstRules: ", self.lstRules)
         del self.lstRules[index]
+        print("self.lstRules: ", self.lstRules)
 
     def onIndexChanged(self, i):
         self.selectedFilterType = FilterRule.getFilterTypeFromStr(self.cmbRuleType.currentText())

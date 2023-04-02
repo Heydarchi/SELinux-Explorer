@@ -107,7 +107,9 @@ class FilterResult:
             for rule in plicyFile.rules:
                 if filterRule.keyword in rule.permissions:
                     #print(rule)
-                    self.filteredPolicyFile.rules.append(rule)
+                    tempRule = rule
+                    tempRule.permissions = [filterRule.keyword]
+                    self.filteredPolicyFile.rules.append(tempRule)
                     self.filteredPolicyFile.typeDef.extend(self.filterTypedef(FilterRule(FilterType.DOMAIN, rule.source, True), policyFiles))
                     self.filteredPolicyFile.typeDef.extend(self.filterTypedef(FilterRule(FilterType.DOMAIN, rule.target, True), policyFiles))
                     self.filteredPolicyFile.contexts.extend(self.filterContext(FilterRule(FilterType.DOMAIN, rule.source, True), policyFiles))
