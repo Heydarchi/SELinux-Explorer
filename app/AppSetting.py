@@ -4,15 +4,25 @@ from PythonUtilityClasses.SystemUtility import *
 from dataclass_wizard import JSONWizard
 from PythonUtilityClasses.FileWriter import *
 
+ICON_PATH = './ui/icons/'
+APP_VERSION = '0.2.0-beta'
+APP_NAME = 'Policy Analyzer'
+APP_AUTHOR = 'Mohammad Hossein Heydarchi'
+COPYRIGHT = '2023'
+LICENSE = 'MIT'
+WEBSITE = 'https://github.com/Heydarchi/SELinux-Explorer'
+
+
 @dataclass
 class AppSetting(JSONWizard):
     lastOpenedPath: str = ""
-    listOfAddedPaths : List[str] = field(default_factory=list)
+    listOfAddedPaths: List[str] = field(default_factory=list)
     keepTheResult: bool = False
     selectedFilterType: bool = False
     filterDomain: bool = False
     filterFilename: bool = False
     filterPermission: bool = False
+
 
 class SettingClass:
     def __init__(self) -> None:
@@ -32,19 +42,19 @@ class SettingClass:
         lstStr = list()
         for item in lstOfObjects:
             lstStr.append(item.to_json())
-        FileWriter().writeListToFile("ref/"+fileName+".json", lstStr)
-
-        
+        FileWriter().writeListToFile("ref/" + fileName + ".json", lstStr)
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     appSetting = AppSetting()
     appSetting.lastOpenedPath = "123456"
     appSetting.filterClassType = True
     print(appSetting.filterClassType)
-    print( appSetting.to_json())
+    print(appSetting.to_json())
 
-    #appS = AppSetting()
+    # appS = AppSetting()
     appS = AppSetting.from_json(appSetting.to_json())
     print(appS.lastOpenedPath)
     print(appS.filterClassType)
+
+

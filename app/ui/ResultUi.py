@@ -7,7 +7,7 @@ from PyQt5.QtCore import Qt
 from logic.AnalyzerLogic import *
 from ui.UiUtility import *
 from PythonUtilityClasses.SystemUtility import *
-
+from AppSetting import *
 
 class DiagramWindow(QWidget):
     def __init__(self, filePath):
@@ -64,14 +64,12 @@ class ResultUi(QVBoxLayout):
 
 
     def initWidgets(self):
-        iconPath = './ui/icons/'
-
         self.lstResults = QListWidget()
         self.layoutButton = QHBoxLayout()
         self.grpLayout = QVBoxLayout()
         self.grpResult = QGroupBox("Results")
 
-        self.btnDeleteSelected =UiUtility.createButton("Delete the selected file", QIcon(iconPath + "delete.png"), 24, 24)
+        self.btnDeleteSelected =UiUtility.createButton("Delete the selected file", QIcon(ICON_PATH + "delete.png"), 24, 24)
 
     def configSignals(self):
         self.btnDeleteSelected.clicked.connect(self.onDeleteSelectedFile)

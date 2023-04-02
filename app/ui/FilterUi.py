@@ -6,7 +6,7 @@ from logic.AnalyzerLogic import *
 from logic.FilterResult import *
 from ui.UiUtility import *
 from PythonUtilityClasses.SystemUtility import *
-
+from AppSetting import *
 
 
 
@@ -38,16 +38,15 @@ class FilterUi(QHBoxLayout):
         self.COL_EXACT_WORD_INDEX = 2
 
     def initWidgets(self):
-        iconPath = './ui/icons/'
         self.tblRule = QTableWidget()
         self.lblPattern = QLabel("Pattern")
         self.lblFilterType = QLabel("Rule type")
         self.edtPattern = QLineEdit()
 
-        self.btnFilter =UiUtility.createButton("Generate output", QIcon(iconPath + "filter.png"), self.BTN_WIDTH, self.BTN_HEIGHT)        
-        self.btnAddFilterRule =UiUtility.createButton("Add a new filter", QIcon(iconPath + "add.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
-        self.btnClearFilterRules =UiUtility.createButton("Clear all the filters", QIcon(iconPath + "broom.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
-        self.btnRemoveSelected =UiUtility.createButton("Remove the selected filter", QIcon(iconPath + "minus.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
+        self.btnFilter =UiUtility.createButton("Generate output", QIcon(ICON_PATH + "filter.png"), self.BTN_WIDTH, self.BTN_HEIGHT)        
+        self.btnAddFilterRule =UiUtility.createButton("Add a new filter", QIcon(ICON_PATH + "add.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
+        self.btnClearFilterRules =UiUtility.createButton("Clear all the filters", QIcon(ICON_PATH + "broom.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
+        self.btnRemoveSelected =UiUtility.createButton("Remove the selected filter", QIcon(ICON_PATH + "minus.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
 
 
         self.chbxExactWord = QCheckBox("Exact Word")

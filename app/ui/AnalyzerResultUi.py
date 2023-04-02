@@ -7,7 +7,7 @@ from logic.AnalyzerLogic import *
 from PythonUtilityClasses.SystemUtility import *
 from logic.FilterResult import *
 from ui.UiUtility import *
-
+from AppSetting import *
 
 
 class AnalyzerResultUi(QVBoxLayout):
@@ -25,7 +25,7 @@ class AnalyzerResultUi(QVBoxLayout):
         self.resultPolicyFiles = None
         self.TABLE_MINIMUM_HEIGHT = 240
         self.TABLE_COLUMNS_NUMBER = 2
-        self.COL_TITLE_WIDTH = 320
+        self.COL_TITLE_WIDTH = 420
         self.COL_TYPE_WIDTH = 140
         self.MARGIN = 20
         self.TABLE_MIN_WIDTH = self.COL_TITLE_WIDTH + self.COL_TYPE_WIDTH + self.MARGIN
@@ -33,15 +33,13 @@ class AnalyzerResultUi(QVBoxLayout):
         self.COL_TYPE_INDEX = 1
 
     def initWidgets(self):
-        iconPath = './ui/icons/'
-
         self.tblResult = QTableWidget()
         self.layoutButton = QHBoxLayout()
         self.layoutFilter = QHBoxLayout()
         self.groupBox = QGroupBox("Analyzer result")
         self.grpLayout = QVBoxLayout()
 
-        self.btnAddSelected = QPushButton(icon = QIcon(iconPath + "down-arrow.png"))
+        self.btnAddSelected = QPushButton(icon = QIcon(ICON_PATH + "down-arrow.png"))
         self.btnAddSelected.setToolTip("Add to the filters")
         self.btnAddSelected.setMinimumSize(24,24)
         self.btnAddSelected.setIconSize(QSize(24,24))

@@ -10,15 +10,15 @@ from ui.ResultUi import *
 from ui.AnalyzerResultUi import *
 from ui.ToolbarUi import *
 from ui.StatusbarUi import *
-from logic.AppSetting import *
 from PythonUtilityClasses.FileWriter import *
 from PythonUtilityClasses.FileReader import *
+from AppSetting import *
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("SELinux-Explorer")
+        self.setWindowTitle("SELinux-Explorer " + APP_VERSION)
         self.initVariables()
         self.initMainLayout()
         self.configSignals()
@@ -61,13 +61,6 @@ class MainWindow(QMainWindow):
         self.mainLayout = QHBoxLayout()
         self.container = QWidget()
 
-        #mainLayout
-        #....................................
-        #.                 .                .
-        #. Path Layout     .  Result Layout .
-        #. Analyzer Layout .                .
-        #. Left Filter     .                .
-        #....................................
 
         self.mainLayoutLeft.addLayout(self.layoutPath)
         self.mainLayoutLeft.addLayout(self.layoutResult)
@@ -87,12 +80,11 @@ class MainWindow(QMainWindow):
         self.setWindowPosition()
 
         appIcon = QIcon()
-        iconPath = './ui/icons/'
-        appIcon.addFile(iconPath + 'icon_16.png', QSize(16,16))
-        appIcon.addFile(iconPath + 'icon_24.png', QSize(24,24))
-        appIcon.addFile(iconPath + 'icon_32.png', QSize(32,32))
-        appIcon.addFile(iconPath + 'icon_64.png', QSize(64,64))
-        appIcon.addFile(iconPath + 'icon_256.png', QSize(256,256))
+        appIcon.addFile(ICON_PATH + 'icon_16.png', QSize(16,16))
+        appIcon.addFile(ICON_PATH + 'icon_24.png', QSize(24,24))
+        appIcon.addFile(ICON_PATH + 'icon_32.png', QSize(32,32))
+        appIcon.addFile(ICON_PATH + 'icon_64.png', QSize(64,64))
+        appIcon.addFile(ICON_PATH + 'icon_256.png', QSize(256,256))
         self.setWindowIcon(appIcon)
 
 

@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QVBoxLayout, QPushButton
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QSize
 from logic.AnalyzerLogic import *
-
+from AppSetting import *
 
 
 
@@ -23,15 +23,13 @@ class FileUi(QVBoxLayout):
         self.LIST_MINIMUM_WIDTH = 680
 
     def initWidgets(self):
-        iconPath = './ui/icons/'
-
         self.grpResult = QGroupBox("Files and Paths")
 
         self.layoutSelectedPath = QVBoxLayout()
         self.layoutSelectedPathButton = QVBoxLayout()
 
         self.lstSelectedPath = QListWidget()
-        self.btnRemoveFromList = QPushButton(icon = QIcon(iconPath + "delete.png"))
+        self.btnRemoveFromList = QPushButton(icon = QIcon(ICON_PATH + "delete.png"))
         self.btnRemoveFromList.setToolTip("Remove selected item from the list")
         self.btnRemoveFromList.setMinimumSize(24,24)
         self.btnRemoveFromList.setIconSize(QSize(24,24))

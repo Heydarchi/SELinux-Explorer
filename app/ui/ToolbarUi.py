@@ -4,11 +4,10 @@ from PyQt5.QtGui import QIcon
 from logic.AnalyzerLogic import *
 from PyQt5.QtCore import Qt
 from ui.UiUtility import *
-from logic.AppSetting import *
 from PythonUtilityClasses.SystemUtility import *
 from PythonUtilityClasses.FileWriter import *
 from PythonUtilityClasses.FileReader import *
-
+from AppSetting import *
 
 class ToolbarUi(QToolBar):
     def __init__(self, mainWindow, analyzerLogic, appSetting):
@@ -25,15 +24,14 @@ class ToolbarUi(QToolBar):
         self.keepResult = False
 
     def initWidgets(self):
-        iconPath = './ui/icons/'
-        self.actAddFile = QAction(QIcon(iconPath + 'add-file.png'),"Add a file to the list", self.mainWindow)
-        self.actAddPath = QAction(QIcon(iconPath + 'add-folder.png'),"Add a Path to the list", self.mainWindow)
-        self.actRemoveOutput = QAction(QIcon(iconPath + 'remove.png'),"Remove Outputs", self.mainWindow)
-        self.actClearAnalyze = QAction(QIcon(iconPath + 'reset.png'),"Clear Analyze", self.mainWindow)
-        self.actWipeAll = QAction(QIcon(iconPath + 'broom.png'),"Wipe all(output, analyze, etc.)", self.mainWindow)
-        self.actMakeReference = QAction(QIcon(iconPath + 'reference.png'),"Make reference from the analyzed data", self.mainWindow)
-        self.actAnalyzeAll = QAction(QIcon(iconPath + 'data-integration.png'),"Analyze all the files/paths", self.mainWindow)
-        self.actKeepResult = QAction(QIcon(iconPath + 'hosting.png'),"Don't erase the current result before Analyzing", self.mainWindow)
+        self.actAddFile = QAction(QIcon(ICON_PATH + 'add-file.png'),"Add a file to the list", self.mainWindow)
+        self.actAddPath = QAction(QIcon(ICON_PATH + 'add-folder.png'),"Add a Path to the list", self.mainWindow)
+        self.actRemoveOutput = QAction(QIcon(ICON_PATH + 'remove.png'),"Remove Outputs", self.mainWindow)
+        self.actClearAnalyze = QAction(QIcon(ICON_PATH + 'reset.png'),"Clear Analyze", self.mainWindow)
+        self.actWipeAll = QAction(QIcon(ICON_PATH + 'broom.png'),"Wipe all(output, analyze, etc.)", self.mainWindow)
+        self.actMakeReference = QAction(QIcon(ICON_PATH + 'reference.png'),"Make reference from the analyzed data", self.mainWindow)
+        self.actAnalyzeAll = QAction(QIcon(ICON_PATH + 'data-integration.png'),"Analyze all the files/paths", self.mainWindow)
+        self.actKeepResult = QAction(QIcon(ICON_PATH + 'hosting.png'),"Don't erase the current result before Analyzing", self.mainWindow)
 
         self.actKeepResult.setCheckable(True)
 
