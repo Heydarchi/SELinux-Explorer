@@ -32,7 +32,7 @@ class ToolbarUi(QToolBar):
         self.actClearAnalyze = QAction(QIcon(ICON_PATH + 'reset.png'),"Clear Analyze", self.mainWindow)
         self.actWipeAll = QAction(QIcon(ICON_PATH + 'broom.png'),"Wipe all(output, analyze, etc.)", self.mainWindow)
         self.actMakeReference = QAction(QIcon(ICON_PATH + 'reference.png'),"Make reference from the analyzed data", self.mainWindow)
-        self.actAnalyzeAll = QAction(QIcon(ICON_PATH + 'data-integration.png'),"Analyze all the files/paths", self.mainWindow)
+        self.actAnalyzeAll = QAction(QIcon(ICON_PATH + 'magic-wand.png'),"Analyze all the files/paths", self.mainWindow)
         self.actKeepResult = QAction(QIcon(ICON_PATH + 'hosting.png'),"Don't erase the current result before Analyzing", self.mainWindow)
         self.actAbout = QAction(QIcon(ICON_PATH + 'information.png'),"About", self.mainWindow)
 

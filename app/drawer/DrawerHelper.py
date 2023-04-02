@@ -78,7 +78,7 @@ class DrawingTool:
         items = list(dict.fromkeys(items))
         lstNote = list()
         if title.strip() != "" and len(items) >= 1 :
-            lstNote.append(DrawingStyle.NOTE.value + " " + position.value +  " of " + title)
+            lstNote.append(DrawingStyle.NOTE.value + " " + position.value +  " of [" + title +"]")
             lstNote.append("<b>" + firstLine + "</b>")
             for item in items:
                 lstNote.append("  - " + item)

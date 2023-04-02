@@ -9,6 +9,7 @@ class TeAnalyzer(AbstractAnalyzer):
         self.policyFile = None
 
     def analyze(self, filePath):
+        self.filePath = filePath
         self.policyFile = PolicyFiles(filePath, "" , FileTypeEnum.TE_FILE) 
         fileReader = FR.FileReader()
         tempLines= fileReader.readFileLines(filePath)
@@ -96,18 +97,27 @@ class TeAnalyzer(AbstractAnalyzer):
                     sec_context = items[2] if "###" not in items[2] else (lstBracketItems.pop(0) + ":" + items[2].split(":")[1])
                     permissions = [items[3]] if "###" not in items[3] != "###" else lstBracketItems.pop(0).strip().split()
 
-                    for source in sources:
-                        rule = Rule()
-                        rule.rule = ruleEnum
-                        rule.source = source
-                        dstItems = sec_context.split(":")
-                        targets = dstItems[0].split()
-                        for target in targets:
-                            rule.target = target
-                            rule.classType = dstItems[1]
-                            rule.permissions = permissions
-                        self.policyFile.rules.append(rule)
-
+                    try:
+                        for source in sources:
+                            rule = Rule()
+                            rule.rule = ruleEnum
+                            rule.source = source
+                            dstItems = sec_context.split(":")
+                            targets = dstItems[0].split()
+                            for target in targets:
+                                rule.target = target
+                                rule.classType = dstItems[1]
+                                rule.permissions = permissions
+                            self.policyFile.rules.append(rule)
+                    except Exception as e:
+                        print(e)
+                        print("Error in line: " + inputString)
+                        print("sources: " + str(sources))
+                        print("sec_context: " + str(sec_context))
+                        print("permissions: " + str(permissions))
+                        print("lstBracketItems: " + str(lstBracketItems))
+                        print("items: " + str(items))
+                        print("filePath: " + self.filePath)
                     return
 
 if __name__ == "__main__" :
