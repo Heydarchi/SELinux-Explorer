@@ -23,6 +23,7 @@ class ToolbarUi(QToolBar):
 
     def initVariables(self):
         self.keepResult = False
+        self.about = None
 
     def initWidgets(self):
         self.actAddFile = QAction(QIcon(ICON_PATH + 'add-file.png'),"Add a file to the list", self.mainWindow)

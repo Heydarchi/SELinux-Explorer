@@ -1,6 +1,6 @@
 
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QWidget, QGridLayout
-from PyQt5.QtWidgets import QListWidget, QGroupBox, QListWidgetItem
+from PyQt5.QtWidgets import QListWidget, QGroupBox, QListWidgetItem, QAbstractItemView
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QDesktopWidget
 from PyQt5.QtCore import Qt
@@ -61,7 +61,7 @@ class ResultUi(QVBoxLayout):
 
     def initVariables(self):
         self.diagram = None
-
+        self.lstDiagrams = list()
 
     def initWidgets(self):
         self.lstResults = QListWidget()
@@ -69,16 +69,25 @@ class ResultUi(QVBoxLayout):
         self.grpLayout = QVBoxLayout()
         self.grpResult = QGroupBox("Results")
 
+        self.lstResults.setSelectionMode(QAbstractItemView.ExtendedSelection)
+
         self.btnDeleteSelected =UiUtility.createButton("Delete the selected file", QIcon(ICON_PATH + "delete.png"), 24, 24)
+        self.btnOpenMultiple =UiUtility.createButton("Open selected files(Multiple", QIcon(ICON_PATH + "multiple.png"), 24, 24)
+        self.btnOpenSingle =UiUtility.createButton("Open the selected file(Single)", QIcon(ICON_PATH + "single.png"), 24, 24)
 
     def configSignals(self):
         self.btnDeleteSelected.clicked.connect(self.onDeleteSelectedFile)
-        self.lstResults.itemClicked.connect(self.onSelectedResult) 
+        self.btnOpenSingle.clicked.connect(self.onOpenSingleFile)
+        self.btnOpenMultiple.clicked.connect(self.onOpenMultipleFiles)
+
+        #self.lstResults.itemClicked.connect(self.onSelectedResult)
 
         self.analyzerLogic.setUiUpdateSignal(self.onAnalyzeFinished)
 
     def configLayout(self):
         self.layoutButton.addWidget(self.btnDeleteSelected)
+        self.layoutButton.addWidget(self.btnOpenMultiple)
+        self.layoutButton.addWidget(self.btnOpenSingle)
 
         self.grpLayout.addWidget(self.lstResults)
         self.grpLayout.addLayout(self.layoutButton)
@@ -110,6 +119,22 @@ class ResultUi(QVBoxLayout):
             self.diagram = DiagramWindow(listItems[0].text())
             self.diagram.show()
 
+    def onOpenSingleFile(self):
+        self.onSelectedResult()
+
+    def onOpenMultipleFiles(self):
+        listItems=self.lstResults.selectedItems()
+        if len(listItems) > 0:
+            print("Multiple files: ", listItems)
+            for item in listItems:
+                diagram = DiagramWindow(item.text())
+                diagram.show()
+                self.lstDiagrams.append(diagram)
+
     def onDispose(self):
         if self.diagram != None :
             self.diagram.close()
+
+        if len(self.lstDiagrams) > 0:
+            for diagram in self.lstDiagrams:
+                diagram.close()
