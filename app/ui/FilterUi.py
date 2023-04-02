@@ -23,8 +23,8 @@ class FilterUi(QHBoxLayout):
 
     def initVariables(self):
         self.lstRules = list()
-        self.BTN_WIDTH = 24        
-        self.BTN_HEIGHT = 24        
+        self.BTN_WIDTH = 28
+        self.BTN_HEIGHT = 48
         self.selectedFilterType = None
         self.TABLE_MINIMUM_HEIGHT = 240
         self.TABLE_COLUMNS_NUMBER = 3
@@ -105,8 +105,10 @@ class FilterUi(QHBoxLayout):
         self.layoutLeft.addLayout(self.layoutFilterButtons)
         self.layoutLeft.addLayout(self.layoutUserInput)
 
+        self.groupBox.setMinimumWidth(self.TABLE_MIN_WIDTH + 3 * self.BTN_WIDTH )
         self.groupBox.setLayout(self.layoutLeft)
         self.addWidget(self.groupBox)
+
 
     def onFilter(self):
         #if self.selectedFilterType == FilterType.DOMAIN:
