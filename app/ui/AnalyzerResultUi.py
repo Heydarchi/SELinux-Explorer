@@ -244,6 +244,7 @@ class AnalyzerResultUi(QVBoxLayout):
         self.updateTable(lstRules)
 
     def updateTable(self, lstRules):
+        lstRules = list(set(lstRules))
         self.clearTable()
         self.tblResult.setRowCount(len(lstRules))
         for i in range(len(lstRules)):
