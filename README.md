@@ -15,6 +15,19 @@ The tool supports the following file types:
 
 **Please note**: The tool is a work in progress and might have some issues or require performance improvements. We welcome any bug reports, suggestions, or contributions.
 
+<br/>
+
+### Screenshots of the GUI and the generated output
+#### GUI
+![GUI](./screenshots/gui.png)
+<br/>
+#### Outputs
+![GUI](./screenshots/top_view_1.png)
+<br/>
+![GUI](./screenshots/sequential_1.png)
+
+<br/>
+
 ## Dependencies
 
 To run SELinux Explorer, you need to have Python 3.x and some other packages installed on your local machine:
