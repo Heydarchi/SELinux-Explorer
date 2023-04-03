@@ -4,6 +4,8 @@ from analyzer.ContextsAnalyzer import *
 from analyzer.SeAppAnalyzer import *
 from drawer.RelationDrawer import *
 from analyzer.AnalyzerEntities import *
+from MyLogger import *
+
 class FileAnalyzer(AbstractAnalyzer):
     def __init__(self) -> None:
         self.listOfPolicyFiles = list()
@@ -78,7 +80,7 @@ class FileAnalyzer(AbstractAnalyzer):
                 analyzerInfo.sourceFile = systemUtility.getFileInfo(file)
                 self.listOfAnalyzerInfo.append(analyzerInfo)
             except Exception as e:
-                print(e)
+                MyLogger.logError(sys, e)
         #print(self.listOfAnalyzerInfo)
         return listOfFiles
 

@@ -4,6 +4,8 @@ from analyzer.AnalyzerUtility import *
 from analyzer.AbstractAnalyzer import * 
 from model.PolicyEntities import *
 from PythonUtilityClasses import FileReader as FR
+from MyLogger import MyLogger
+
 class TeAnalyzer(AbstractAnalyzer):
     def __init__(self) -> None:
         self.policyFile = None
@@ -110,14 +112,7 @@ class TeAnalyzer(AbstractAnalyzer):
                                 rule.permissions = permissions
                             self.policyFile.rules.append(rule)
                     except Exception as e:
-                        print(e)
-                        print("Error in line: " + inputString)
-                        print("sources: " + str(sources))
-                        print("sec_context: " + str(sec_context))
-                        print("permissions: " + str(permissions))
-                        print("lstBracketItems: " + str(lstBracketItems))
-                        print("items: " + str(items))
-                        print("filePath: " + self.filePath)
+                        MyLogger.logError(sys, e)
                     return
 
 if __name__ == "__main__" :
