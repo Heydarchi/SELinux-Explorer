@@ -1,94 +1,111 @@
-# SELinux-Explorer
 
-## !! The README file needs to be updated regarding the requirements!!
+# SELinux Explorer
 <br/>
 
-### You might need to install some packages not mentioned to run the project
+SELinux Explorer is a utility designed to help developers explore SELinux policies, with a focus on Android SELinux at present. The project initially started as a command-line tool but has since evolved to include a graphical user interface (GUI) for better usability and to provide additional features such as filtering, generating custom output, and reusing data.
 
+The tool supports the following file types:
+- `file_contexts`
+- `service_contexts`
+- `vndservice_contexts`
+- `hwservice_contexts`
+- `property_contexts`
+- `seapp_contexts`
+- `*.te`
 
-<br/>
-<br/>
-### A utility helping developers to explorer SELinux policies. (At present it supports Android SELinux)
-This project was started as a tool to use through the command line. But after some time I realized that it's crucial to have a GUI.
-Having a GUI helps to provide more facilities alongside the analyzer such as filtering the result to generate custom output.
-Also it leads to reusing the data rather than running the analyzer from scratch.
-<br/>
+**Please note**: The tool is a work in progress and might have some issues or require performance improvements. We welcome any bug reports, suggestions, or contributions.
 
-### Of course, it's required some improvement in sense of architecture, performance and functionality.
-<br/>
-<br/>
+## Dependencies
 
-### The supported languages are:
-- file_contexts
-- service_contexts
-- vndservice_contexts
-- hwservice_contexts
-- property_contexts
-- seapp_contexts
-- *.te
+To run SELinux Explorer, you need to have Python 3.x and some other packages installed on your local machine:
 
-<br/>
-<br/>
+- Python 3.8 or newer
+- PythonIsPython3
+- Graphviz
+- PyQt5
+- Dataclass-wizard
+- Dataclasses
 
-The code is tested for the files mentioned above. Of course, it is not completed yet and has some flaws and issues in processing and also some refactoring to improve the performance. Very welcome to report or any kind of contribution.
+## Installation
 
-Feel free to create a ticket or send me a message/report.
+1. Install Python 3.8 or a newer version, PythonIsPython3, Graphviz, and PyQt5:
 
-<br/>
-
-### PlantUml
-
-Generating the PNG files is based on [PlantUml](http://www.plantuml.com) that I put a jar version in this project.
-
-
-## Steps to utilize the project
-### 1- To run the project locally it's needed to have python 3.x and some other packages installed on your local machine
-&ensp;
-> Install Python 3.8 or new version, PythonIsPython3, graphviz and PyQt5
 ```
 sudo apt install python3.8 python-is-python3 graphviz python3-pyqt5 -y
 ```
 &ensp;
 
-> Install dataclass-wizard and dataclasses
+
+2. Install dataclass-wizard and pyqt5:
+
 ```
-pip install dataclass-wizard dataclasses
+pip install dataclass-wizard pyqt5
 ```
 &ensp;
 
-### 2- Clone the project & the submodule
+**Note: You can skip the 1st & 2nd steps and only run the command below:**
+
 ```
-git clone https://github.com/Heydarchi/ClassRelExposer.git
+./setup.sh
 ```
-Run the command below inside the cloned folder
+&ensp;
+
+3. Clone the project and its submodule:
+
+```
+git clone https://github.com/Heydarchi/SELinux-Explorer.git
+```
+&ensp;
+
+4. Inside the cloned folder, run the following command to update the submodule:
+
 ```
 git submodule update --init --recursive
 ```
 <br/>
 
-## **How to the GUI**
+## How to Run the GUI
+
+1. Change to the `app` directory:
+
 ```
 cd app
+```
+
+2. Run the main.py script:
+
+```
 python main.py
 ```
 <br/>
 
-<br/>
+## Features and TODOs
 
-### Analyzer TODO:
+### Analyzer
+
 - [ ] Enable multi-threading
 - [ ] Analyze only the changed files to save time
-- [ ] Refactoring the code architecture 
+- [ ] Refactor the code architecture
 
-### GUI TODO:
-- [ ] Show the progress of analyze
-- [ ] show the number of files and folder in the list
+### GUI
+
+- [ ] Show the progress of the analysis
+- [ ] Display the number of files and folders in the list
 - [ ] Add a new window for search
-    - [ ] Search the input file
-    - [ ] Search the generated files
-    - [ ] Generated output for the selected items
-    - [ ] Generated output for the selected Files
+- [ ] Search the input file
+- [ ] Search the generated files
+- [ ] Generate output for the selected items
+- [ ] Generate output for the selected files
 - [ ] Sort result files by date
-- [ ] Add AND / OR for combining the filter rules
-- [ ] Making reference from path & files
-- [ ] Add autocomplete for filter edit box
+- [ ] Add AND/OR for combining the filter rules
+- [ ] Create references from paths and files
+- [ ] Add autocomplete for the filter edit box
+
+## Contributing
+
+We welcome any form of contribution, from bug reports to suggestions and code improvements. Feel free to create an issue or send a message/report.
+
+## License
+
+This project is released under the [MIT License](LICENSE).
+
