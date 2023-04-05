@@ -4,6 +4,7 @@ from analyzer.AnalyzerUtility import *
 from analyzer.AbstractAnalyzer import * 
 from model.PolicyEntities import *
 from PythonUtilityClasses import FileReader as FR
+from MyLogger import MyLogger
 
 class ContextsAnalyzer(AbstractAnalyzer):
 
@@ -57,8 +58,8 @@ class ContextsAnalyzer(AbstractAnalyzer):
             #print(context)
             self.policyFile.contexts.append(context)
         except Exception as e:
-            print("Error in extractDefinition: ", inputString)
-            print(e)
+            MyLogger.logError(sys, e, inputString)
+
 
     def analyzePortContexts(self):
         pass

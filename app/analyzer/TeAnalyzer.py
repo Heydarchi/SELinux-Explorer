@@ -43,33 +43,45 @@ class TeAnalyzer(AbstractAnalyzer):
                 self.extractRule(inputString)
 
     def extractDefinition(self,  inputString):
-        types = inputString.replace(";","").replace("type ","").strip().split(",")
-        typeDef = TypeDef()
-        typeDef.name = types[0].strip()
-        typeDef.types.extend(types[1:])
-        if DOMAIN_EXECUTABLE in typeDef.name:
-            if not self.mergeExecDomain(typeDef):
+        try:
+            types = inputString.replace(";","").replace("type ","").strip().split(",")
+            typeDef = TypeDef()
+            typeDef.name = types[0].strip()
+            typeDef.types.extend(types[1:])
+            if DOMAIN_EXECUTABLE in typeDef.name:
+                if not self.mergeExecDomain(typeDef):
+                    self.policyFile.typeDef.append( typeDef )
+            else:
                 self.policyFile.typeDef.append( typeDef )
-        else:
-            self.policyFile.typeDef.append( typeDef )
+
+        except Exception as e:
+            MyLogger.logError(sys, e, inputString)
 
     def mergeExecDomain(self, typeDefExec):
-        title = typeDefExec.name.replace(DOMAIN_EXECUTABLE,"")
-        for typeDef in self.policyFile.typeDef:
-            if typeDef.name == title:
-                typeDef.types.extend(typeDefExec.types)
-                return True
-        return False
+        try:
+            title = typeDefExec.name.replace(DOMAIN_EXECUTABLE,"")
+            for typeDef in self.policyFile.typeDef:
+                if typeDef.name == title:
+                    typeDef.types.extend(typeDefExec.types)
+                    return True
+            return False
+        except Exception as e:
+            MyLogger.logError(sys, e, typeDefExec)
+            return False
 
     def extractAttribite(self,  inputString):
-        types = inputString.replace(";","").replace("typeattribute ","").strip().split(" ")
-        typeDef = TypeDef()
-        typeDef.name = types[0]
-        typeDef.types.extend(types[1:])
-        self.policyFile.attribute.append( typeDef )
+        try:
+            types = inputString.replace(";","").replace("typeattribute ","").strip().split(" ")
+            typeDef = TypeDef()
+            typeDef.name = types[0]
+            typeDef.types.extend(types[1:])
+            self.policyFile.attribute.append( typeDef )
 
+        except Exception as e:
+            MyLogger.logError(sys, e, inputString)
 
     def extractRule(self,  inputString):
+        try:
             inputString = inputString.replace(' : ',':').replace(' :',':').replace(': ',':').strip()
             inputString = inputString.replace('{',' { ').replace('}',' } ').strip()
             inputString = inputString.replace(': {',':{ ').replace('} :','}:').strip()
@@ -99,21 +111,21 @@ class TeAnalyzer(AbstractAnalyzer):
                     sec_context = items[2] if "###" not in items[2] else (lstBracketItems.pop(0) + ":" + items[2].split(":")[1])
                     permissions = [items[3]] if "###" not in items[3] != "###" else lstBracketItems.pop(0).strip().split()
 
-                    try:
-                        for source in sources:
-                            rule = Rule()
-                            rule.rule = ruleEnum
-                            rule.source = source
-                            dstItems = sec_context.split(":")
-                            targets = dstItems[0].split()
-                            for target in targets:
-                                rule.target = target
-                                rule.classType = dstItems[1]
-                                rule.permissions = permissions
-                            self.policyFile.rules.append(rule)
-                    except Exception as e:
-                        MyLogger.logError(sys, e)
+                    for source in sources:
+                        rule = Rule()
+                        rule.rule = ruleEnum
+                        rule.source = source
+                        dstItems = sec_context.split(":")
+                        targets = dstItems[0].split()
+                        for target in targets:
+                            rule.target = target
+                            rule.classType = dstItems[1]
+                            rule.permissions = permissions
+                        self.policyFile.rules.append(rule)
+
                     return
+        except Exception as e:
+            MyLogger.logError(sys, e, inputString)
 
 if __name__ == "__main__" :
     print(sys.argv)
