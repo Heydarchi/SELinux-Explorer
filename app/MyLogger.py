@@ -10,7 +10,7 @@ class MyLogger:
         exception_type, exception_object, exception_traceback = _sys.exc_info()
         filename = exception_traceback.tb_frame.f_code.co_filename
         line_number = exception_traceback.tb_lineno
-        logging.error("Error in file: " + str(filename))
+        logging.error("Error in file: " + os.path.basename(filename))
         logging.error("Error in line: " + str(line_number))
         logging.error("Error in exception: " + str(_exception))
         if _message != None:
