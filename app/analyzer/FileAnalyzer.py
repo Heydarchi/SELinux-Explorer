@@ -16,39 +16,7 @@ class FileAnalyzer(AbstractAnalyzer):
         self.listOfPolicyFiles = list()
         self.listOfAnalyzerInfo = list()
         print("The previous analyze result is cleared!")
-        
 
-    def analyzeAndDraw(self, targetPaths, pattern, disableDrawing = False, drawExisting = False):
-        listOfFiles = list()
-        for path in targetPaths:
-            listOfFiles.extend( self.gatherFileInfo(path, "*"))
-
-        if listOfFiles == None or len(listOfFiles) == 0:
-            print( "Nothing to analyze!")
-            return
-
-        #Setting up drawing
-        relationDrawer = RelationDrawer()
-        relationDrawer.start()
-        relationDrawer.setDisableDrawing(disableDrawing)
-
-        #print(listOfFiles)
-        for filePath in listOfFiles:
-            fileType = self.detectLang(filePath)
-            if fileType != FileTypeEnum.UNDEFINED :
-                print("Analyzing: " + filePath)#, fileType)
-                policyFile = self.invokeAnalyzerClass(fileType, filePath)
-                self.listOfPolicyFiles.append(policyFile)
-                relationDrawer.enqueuePolicyFile(policyFile)
-            else:
-                print("Undefined file extension : " + filePath)
-        
-        #Wait till the drawing thread is done
-        relationDrawer.letShutdownThread = True
-        relationDrawer.join()
-
-        return self.listOfPolicyFiles
-    
     def analyze(self, targetPaths):
         listOfFiles = list()
         for path in targetPaths:
@@ -105,7 +73,7 @@ class FileAnalyzer(AbstractAnalyzer):
 
 if __name__ == "__main__" :
     #print(sys.argv)
-    print("Input path/file: ", sys.argv[1])
-    print("-----------------------------------------------------")
-    fileAnalyzer = FileAnalyzer()
-    fileAnalyzer.analyzeAndDraw(sys.argv[1], None)
+    # print("Input path/file: ", sys.argv[1])
+    # print("-----------------------------------------------------")
+    # fileAnalyzer = FileAnalyzer()
+    # fileAnalyzer.analyzeAndDraw(sys.argv[1], None)
