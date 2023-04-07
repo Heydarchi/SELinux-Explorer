@@ -48,7 +48,7 @@ class TeAnalyzer(AbstractAnalyzer):
             elif "define" in inputString  :
                 self.policyFile.macros.append(self.extractMacro(inputString))
             elif "(" in inputString and ")" in inputString:
-                self.policyFile.macroCalls.append(inputString)
+                self.policyFile.macroCalls.append(self.extractMacroCall(inputString) )
             else:
                 MyLogger.logError(sys, "Unknown line", inputString)
     def extractDefinition(self,  inputString):
@@ -150,6 +150,14 @@ class TeAnalyzer(AbstractAnalyzer):
             macro.rulesString.append(line)
         print("macro: ", macro)
         return macro
+
+    def extractMacroCall(self, inputString):
+        #Convert string to PolicyMacroCall
+        macroCall = PolicyMacroCall()
+        macroCall.name = inputString.split("(")[0].strip()
+        macroCall.parameters = inputString.split("(")[1].replace(")","").strip().split(",")
+        return macroCall
+
 
 if __name__ == "__main__" :
     print(sys.argv)

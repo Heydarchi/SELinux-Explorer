@@ -72,7 +72,7 @@ class FileAnalyzer(AbstractAnalyzer):
             return
 
 if __name__ == "__main__" :
-    #print(sys.argv)
+    print(sys.argv)
     # print("Input path/file: ", sys.argv[1])
     # print("-----------------------------------------------------")
     # fileAnalyzer = FileAnalyzer()

@@ -2,6 +2,7 @@ from analyzer.FileAnalyzer import  *
 from drawer.RelationDrawer import *
 from drawer.DrawerHelper import *
 from AppSetting import *
+from model.PolicyEntities import *
 
 class AnalyzerLogic:
     def __init__(self):
@@ -14,6 +15,7 @@ class AnalyzerLogic:
         self.keepResult = False
         self.listOfPolicyFiles = list()
         self.listOfDiagrams = list()
+        self.refPolicyFile = PolicyFiles()
         self.drawer = RelationDrawer()
 
     def initAnalyzer(self):
@@ -27,6 +29,7 @@ class AnalyzerLogic:
 
         self.onAnalyzeFinished(None)
         self.updateAnalyzerDataResult(self.listOfPolicyFiles)
+        self.refPolicyFile = self.makeRefPolicyFile(self.listOfPolicyFiles)
 
     def onAnalyzeSelectedPaths(self, paths):
         if self.keepResult :
@@ -36,6 +39,32 @@ class AnalyzerLogic:
 
         self.onAnalyzeFinished(None)
         self.updateAnalyzerDataResult(self.listOfPolicyFiles)
+
+    def makeRefPolicyFile(self, policyFile):
+        refPolicyFile = PolicyFiles()
+        for policyFile in self.listOfPolicyFiles:
+            refPolicyFile.typeDef.extend(policyFile.typeDef)
+            refPolicyFile.attribute.extend(policyFile.attribute)
+            refPolicyFile.contexts.extend(policyFile.contexts)
+            refPolicyFile.seApps.extend(policyFile.seApps)
+            refPolicyFile.rules.extend(policyFile.rules)
+            refPolicyFile.macros.extend(policyFile.macros)
+            refPolicyFile.macroCalls.extend(policyFile.macroCalls)
+
+        for macoCall in refPolicyFile.macroCalls:
+            for macro in refPolicyFile.macros:
+                if macro.name == macoCall.name:
+                    rules = macro.rules
+                    for rule in rules:
+                        #Need to replace $number in source, target or classType with parameter from macro call with
+                        #the same number
+                        for i in range(0, len(macoCall.parameters)):
+                            rule.source = rule.source.replace("$"+str(i), macoCall.parameters[i])
+                            rule.target = rule.target.replace("$"+str(i), macoCall.parameters[i])
+                            rule.classType = rule.classType.replace("$"+str(i), macoCall.parameters[i])
+                        refPolicyFile.rules.append(rule)
+                        refPolicyFile.macroCalls.clear()
+        return refPolicyFile
 
     def clearOutput(self):
         files = SystemUtility().getListOfFiles(os.getcwd() + "/" +OUT_DIR,"*")

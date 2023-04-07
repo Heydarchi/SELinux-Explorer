@@ -118,6 +118,11 @@ class PolicyMacro:
     rules: List[Rule]= field(default_factory=list)
 
 @dataclass
+class PolicyMacroCall:
+    name: str = ""
+    params:  List[str] = field(default_factory=list)
+
+@dataclass
 class PolicyFiles(JSONWizard):
     fileName: str = ""
     description: str = ""
@@ -128,7 +133,7 @@ class PolicyFiles(JSONWizard):
     seApps: List[SeAppContext]= field(default_factory=list)
     rules: List[Rule]= field(default_factory=list)
     macros: List[PolicyMacro]= field(default_factory=list)
-    macroCalls: List[str]= field(default_factory=list)
+    macroCalls: List[PolicyMacroCall]= field(default_factory=list)
 
 @dataclass
 class DrawerClass(JSONWizard):

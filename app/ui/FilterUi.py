@@ -111,8 +111,8 @@ class FilterUi(QHBoxLayout):
 
 
     def onFilter(self):
-        #if self.selectedFilterType == FilterType.DOMAIN:
-            fileName, filteredPolicyFile = FilterResult().filter(self.lstRules, self.analyzerLogic.listOfPolicyFiles)
+            #fileName, filteredPolicyFile = FilterResult().filter(self.lstRules, self.analyzerLogic.listOfPolicyFiles)
+            fileName, filteredPolicyFile = FilterResult().filter(self.lstRules, [self.analyzerLogic.refPolicyFile])
             print(fileName)
             self.analyzerLogic.onAnalyzeFinished(filteredPolicyFile)
 
