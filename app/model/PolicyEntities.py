@@ -41,15 +41,9 @@ class FileTypeEnum(Enum):
         self.label = label
 
 @dataclass
-class PolicyFunction:
-    name: str
-    params: list()
-    rules: list()
-
-@dataclass
 class Controls(JSONWizard):
     className: str
-    permissions: list()
+    permissions:  List[str] = field(default_factory=list)
 
 
 class RuleEnum(Enum):
@@ -118,6 +112,12 @@ class Context(JSONWizard):
     domainName: str = ""
 
 @dataclass
+class PolicyMacro:
+    name: str = ""
+    rulesString:  List[str] = field(default_factory=list)
+    rules: List[Rule]= field(default_factory=list)
+
+@dataclass
 class PolicyFiles(JSONWizard):
     fileName: str = ""
     description: str = ""
@@ -127,7 +127,8 @@ class PolicyFiles(JSONWizard):
     contexts: List[Context]= field(default_factory=list)
     seApps: List[SeAppContext]= field(default_factory=list)
     rules: List[Rule]= field(default_factory=list)
-    functions: List[PolicyFunction]= field(default_factory=list)
+    macros: List[PolicyMacro]= field(default_factory=list)
+    macroCalls: List[str]= field(default_factory=list)
 
 @dataclass
 class DrawerClass(JSONWizard):

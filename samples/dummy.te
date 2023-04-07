@@ -3,6 +3,11 @@ type dummy, domain;
 type dummy_exec, exec_type, file_type, vendor_file_type;
 typeattribute dummy hal_automotive_socket_exemption;
 
+define(`init_hal', `
+allow usbhubfwupgrade_$1 usbhubfwupgrade:fd { use };
+allow usbhubfwupgrade_$1 usbhubfwupgrade:fifo_file { getattr write };
+')
+
 init_daemon_domain(dummy)
 
 # Basic networking permissions

@@ -64,7 +64,7 @@ class FilterResult:
 
 
     def removeDuplicatedItems(self):
-    #Remove duplicated items from typeDef, contexts, seApps, rules, functions of filteredPolicyFile
+    #Remove duplicated items from typeDef, contexts, seApps, rules, macros of filteredPolicyFile
         #print(self.filteredPolicyFile.typeDef)
         self.filteredPolicyFile.typeDef = list({item.name: item for item in self.filteredPolicyFile.typeDef}.values())
         self.filteredPolicyFile.contexts = list({item.pathName: item for item in self.filteredPolicyFile.contexts}.values())
@@ -83,7 +83,7 @@ class FilterResult:
             self.filteredPolicyFile.contexts.extend(self.filterContext(filterRule, policyFiles))
             self.filteredPolicyFile.seApps.extend(self.filterSeApp(filterRule, policyFiles))
             self.filteredPolicyFile.rules.extend(self.filterRule(filterRule, policyFiles))
-            self.filteredPolicyFile.functions.extend(self.filterFunction(filterRule, policyFiles))
+            self.filteredPolicyFile.macros.extend(self.filterFunction(filterRule, policyFiles))
             self.filteredPolicyFile.attribute.extend(self.filterAttribute(filterRule, policyFiles))
 
 
@@ -95,7 +95,7 @@ class FilterResult:
                     self.filteredPolicyFile.contexts.extend(policyFile.contexts)
                     self.filteredPolicyFile.seApps.extend(policyFile.seApps)
                     self.filteredPolicyFile.rules.extend(policyFile.rules)
-                    self.filteredPolicyFile.functions.extend(policyFile.functions)
+                    self.filteredPolicyFile.macros.extend(policyFile.macros)
                     self.filteredPolicyFile.attribute.extend(policyFile.attribute)
 
 
@@ -219,7 +219,7 @@ class FilterResult:
     def filterFunction(self, filterRule, policyFiles):
         lstFunction = []
         for policyFile in policyFiles:
-            for function in policyFile.functions:
+            for function in policyFile.macros:
                 if self.checkSimilarity(filterRule, function.name):
                     lstFunction.append(function)
         return lstFunction

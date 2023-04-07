@@ -16,16 +16,20 @@ class TeAnalyzer(AbstractAnalyzer):
         fileReader = FR.FileReader()
         tempLines= fileReader.readFileLines(filePath)
         lastLine = ""
+        macroFound= False
         for line in tempLines :
-            if "#" not in line and ";" not in line:
-                if "(" in line:
-                    lastLine = ""
-                    continue
-                lastLine = lastLine.replace("\\n","") + " " + line
-                continue
+            if macroFound:
+                if ")" in line:
+                    macroFound = False
+                    self.processLine(lastLine + " " + line)
+                else:
+                    lastLine = lastLine + " " + line
             else:
-                lastLine = ""
-            self.processLine(lastLine + " " + line)
+                if "(" in line:
+                    macroFound = True
+                    lastLine = line
+                else:
+                    self.processLine(line)
 
         return self.policyFile
 
@@ -41,7 +45,12 @@ class TeAnalyzer(AbstractAnalyzer):
                 self.extractAttribite(inputString)
             elif items[0] in ["allow", "neverallow"] :
                 self.extractRule(inputString)
-
+            elif "define" in inputString  :
+                self.policyFile.macros.append(self.extractMacro(inputString))
+            elif "(" in inputString and ")" in inputString:
+                self.policyFile.macroCalls.append(inputString)
+            else:
+                MyLogger.logError(sys, "Unknown line", inputString)
     def extractDefinition(self,  inputString):
         try:
             types = inputString.replace(";","").replace("type ","").strip().split(",")
@@ -126,6 +135,21 @@ class TeAnalyzer(AbstractAnalyzer):
                     return
         except Exception as e:
             MyLogger.logError(sys, e, inputString)
+
+
+    def extractMacro(self, inputString):
+        lstLines = inputString.splitlines()
+        macro =  PolicyMacro()
+        #It's supposed to have define in the first item
+        firstLine= lstLines.pop(0).replace("define","").replace("\'","")
+        firstLine= firstLine.replace("`","").replace("(","").replace(",","")
+        macro.name = firstLine.strip()
+        for line in lstLines:
+            if ")" in line.strip() :
+                break
+            macro.rulesString.append(line)
+        print("macro: ", macro)
+        return macro
 
 if __name__ == "__main__" :
     print(sys.argv)
