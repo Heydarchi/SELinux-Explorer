@@ -13,7 +13,6 @@ class AnalyzerLogic:
 
     def initVariables(self):
         self.keepResult = False
-        self.listOfPolicyFiles = list()
         self.listOfDiagrams = list()
         self.refPolicyFile = PolicyFiles()
         self.drawer = RelationDrawer()
@@ -23,15 +22,15 @@ class AnalyzerLogic:
 
     def analyzeAll(self, paths):
         if self.keepResult :
-            self.listOfPolicyFiles.extend(self.analyzer.analyze(paths))
+            policyFiles.extend(self.analyzer.analyze(paths))
         else:
-            self.listOfPolicyFiles =  self.analyzer.analyze(paths)
+            policyFiles =  self.analyzer.analyze(paths)
 
+        self.refPolicyFile = self.makeRefPolicyFile(policyFiles)
         self.onAnalyzeFinished(None)
-        self.updateAnalyzerDataResult(self.listOfPolicyFiles)
-        self.refPolicyFile = self.makeRefPolicyFile(self.listOfPolicyFiles)
+        self.updateAnalyzerDataResult(self.refPolicyFile)
 
-    def onAnalyzeSelectedPaths(self, paths):
+    '''def onAnalyzeSelectedPaths(self, paths):
         if self.keepResult :
             self.listOfPolicyFiles.extend(self.analyzer.analyze(paths))
         else:
@@ -39,13 +38,14 @@ class AnalyzerLogic:
 
         self.onAnalyzeFinished(None)
         self.updateAnalyzerDataResult(self.listOfPolicyFiles)
+    '''
 
-    def makeRefPolicyFile(self, policyFile):
-        if  self.listOfPolicyFiles == None or len(self.listOfPolicyFiles) == 0:
+    def makeRefPolicyFile(self, policyFiles):
+        if  policyFiles == None or len(policyFiles) == 0:
             return None
 
         refPolicyFile = PolicyFiles()
-        for policyFile in self.listOfPolicyFiles:
+        for policyFile in policyFiles:
             refPolicyFile.typeDef.extend(policyFile.typeDef)
             refPolicyFile.attribute.extend(policyFile.attribute)
             refPolicyFile.contexts.extend(policyFile.contexts)
@@ -78,7 +78,7 @@ class AnalyzerLogic:
             if os.path.isfile(file):
                 SystemUtility().deleteFiles(file)
         self.onAnalyzeFinished(None)
-        self.updateAnalyzerDataResult(None)
+        #self.updateAnalyzerDataResult(None)
 
     def clearFileFromAnalyzer(self, filePath):
         self.analyzer.clear()     
@@ -91,7 +91,7 @@ class AnalyzerLogic:
         SystemUtility().deleteFiles( os.path.splitext(filePath)[0]+".puml")
 
     def clear(self):
-        self.listOfPolicyFiles = list()
+        self.refPolicyFile = PolicyFiles()
 
     def getImagePath(self, filePath):
         return generateDiagramFileName(filePath)

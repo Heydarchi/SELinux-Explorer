@@ -112,7 +112,9 @@ class FilterUi(QHBoxLayout):
 
     def onFilter(self):
             #fileName, filteredPolicyFile = FilterResult().filter(self.lstRules, self.analyzerLogic.listOfPolicyFiles)
-            fileName, filteredPolicyFile = FilterResult().filter(self.lstRules, [self.analyzerLogic.refPolicyFile])
+            if self.lstRules == []:
+                return
+            fileName, filteredPolicyFile = FilterResult().filter(self.lstRules, self.analyzerLogic.refPolicyFile)
             print(fileName)
             self.analyzerLogic.onAnalyzeFinished(filteredPolicyFile)
 
@@ -125,6 +127,8 @@ class FilterUi(QHBoxLayout):
         rule = FilterRule()
         rule.exactWord = self.chbxExactWord.isChecked()
         rule.keyword = self.edtPattern.text().strip()
+        if rule.keyword == "":
+            return
         print("self.selectedFilterType: ", self.selectedFilterType)
         rule.filterType = FilterRule.getFilterTypeFromStr(self.cmbRuleType.currentText())
 
@@ -139,17 +143,19 @@ class FilterUi(QHBoxLayout):
         self.tblRule.setItem(index, self.COL_EXACT_WORD_INDEX, QTableWidgetItem(str(rule.exactWord)))
     def onRemoveSelected(self):
         row = self.tblRule.currentRow()
+        if row == -1:
+            return
         index = self.tblRule.selectedIndexes()[0].row()
-        print("index: ", index)
-        print("selectedIndex: ", self.tblRule.selectedIndexes())
+        #print("index: ", index)
+        #print("selectedIndex: ", self.tblRule.selectedIndexes())
         self.tblRule.removeRow(row)
-        print("self.lstRules: ", self.lstRules)
+        #print("self.lstRules: ", self.lstRules)
         del self.lstRules[index]
-        print("self.lstRules: ", self.lstRules)
+        #print("self.lstRules: ", self.lstRules)
 
     def onIndexChanged(self, i):
         self.selectedFilterType = FilterRule.getFilterTypeFromStr(self.cmbRuleType.currentText())
-        print("self.selectedFilterType: ", self.selectedFilterType)
+        #print("self.selectedFilterType: ", self.selectedFilterType)
 
     def getSelectedFilterType(self):
         return self.selectedFilterType

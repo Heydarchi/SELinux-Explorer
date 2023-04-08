@@ -18,6 +18,10 @@ class TeAnalyzer(AbstractAnalyzer):
         lastLine = ""
         macroFound= False
         for line in tempLines :
+            line = cleanLine(line)
+            if line == None:
+                continue
+
             if macroFound:
                 if ")" in line:
                     macroFound = False
@@ -38,6 +42,7 @@ class TeAnalyzer(AbstractAnalyzer):
         if inputString == None :
             return
         items = inputString.split()
+        #print("items: ", items)
         if len(items) > 0 :
             if items[0].strip() == "type" :
                 typeDef = self.extractDefinition(inputString)

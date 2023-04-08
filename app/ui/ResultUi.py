@@ -79,9 +79,6 @@ class ResultUi(QVBoxLayout):
         self.btnDeleteSelected.clicked.connect(self.onDeleteSelectedFile)
         self.btnOpenSingle.clicked.connect(self.onOpenSingleFile)
         self.btnOpenMultiple.clicked.connect(self.onOpenMultipleFiles)
-
-        #self.lstResults.itemClicked.connect(self.onSelectedResult)
-
         self.analyzerLogic.setUiUpdateSignal(self.onAnalyzeFinished)
 
     def configLayout(self):

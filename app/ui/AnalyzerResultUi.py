@@ -1,13 +1,12 @@
 
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QComboBox, QLineEdit
 from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem, QGroupBox, QLabel, QCheckBox
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QSize
 from logic.AnalyzerLogic import *
 from PythonUtilityClasses.SystemUtility import *
 from logic.FilterResult import *
 from ui.UiUtility import *
 from AppSetting import *
+from model.PolicyEntities import *
 
 
 class AnalyzerResultUi(QVBoxLayout):
@@ -22,7 +21,7 @@ class AnalyzerResultUi(QVBoxLayout):
 
     def initVariables(self):
         self.diagram = None
-        self.resultPolicyFiles = None
+        self.resultPolicyFile = None
         self.TABLE_MINIMUM_HEIGHT = 240
         self.TABLE_COLUMNS_NUMBER = 2
         self.COL_TITLE_WIDTH = 420
@@ -113,11 +112,10 @@ class AnalyzerResultUi(QVBoxLayout):
         self.tblResult.addItem(item)'''
         pass
 
-    def onAnalyzeFinished(self, policyFiles):
-        if policyFiles == None:
-            return
-        print("onAnalyzeFinished: ", len(policyFiles))
-        self.resultPolicyFiles = policyFiles
+    def onAnalyzeFinished(self, refPolicyFile):
+        if refPolicyFile == None:
+            refPolicyFile = PolicyFiles()
+        self.resultPolicyFile = refPolicyFile
         self.onFilterChanged()
 
     def onSeachTextChanged(self):
@@ -131,82 +129,84 @@ class AnalyzerResultUi(QVBoxLayout):
     def onResetSearch(self):
         self.edtSearch.setText("")
 
-    def collectDomainRule(self, policyFiles):
+    def collectDomainRule(self, policyFile):
         domainRules = []
-        for policyFile in policyFiles:
-            if policyFile == None:
-                return
+        if policyFile == None:
+            return
 
-            for typeDef in policyFile.typeDef:
-                if typeDef.name.strip() != "":
-                    domainRules.append(FilterRule(FilterType.DOMAIN, typeDef.name, False))
+        for typeDef in policyFile.typeDef:
+            if typeDef.name.strip() != "":
+                domainRules.append(FilterRule(FilterType.DOMAIN, typeDef.name, False))
 
-            for seApps in policyFile.seApps:
-                if seApps.domain.strip() != "":
-                    domainRules.append(FilterRule(FilterType.DOMAIN, seApps.domain, False))
+        for seApps in policyFile.seApps:
+            if seApps.domain.strip() != "":
+                domainRules.append(FilterRule(FilterType.DOMAIN, seApps.domain, False))
 
-            for context in policyFile.contexts:
-                if context.domainName.strip() != "":
-                    domainRules.append(FilterRule(FilterType.DOMAIN, context.domainName, False))
+        for context in policyFile.contexts:
+            if context.domainName.strip() != "":
+                domainRules.append(FilterRule(FilterType.DOMAIN, context.domainName, False))
 
+        for attribute in policyFile.attribute:
+            if attribute.name.strip() != "":
+                domainRules.append(FilterRule(FilterType.DOMAIN, attribute.name, False))
+
+        domainRules = list(set(domainRules))
         return domainRules
 
-    def collectFilePathRule(self, policyFiles):
+    def collectFilePathRule(self, policyFile):
         filePathRules = []
-        for policyFile in policyFiles:
-            if policyFile == None:
-                return
+        if policyFile == None:
+            return
 
-            for seApps in policyFile.seApps:
-                if seApps.name.strip() != "":
-                    filePathRules.append(FilterRule(FilterType.FILE_PATH, seApps.name, False))
+        for seApps in policyFile.seApps:
+            if seApps.name.strip() != "":
+                filePathRules.append(FilterRule(FilterType.FILE_PATH, seApps.name, False))
 
-            for context in policyFile.contexts:
-                if context.pathName.strip() != "":
-                    filePathRules.append(FilterRule(FilterType.FILE_PATH, context.pathName, False))
+        for context in policyFile.contexts:
+            if context.pathName.strip() != "":
+                filePathRules.append(FilterRule(FilterType.FILE_PATH, context.pathName, False))
 
+        filePathRules = list(set(filePathRules))
         return filePathRules
 
-    def collectPermissionRule(self, policyFiles):
+    def collectPermissionRule(self, policyFile):
         permissionRules = []
-        for policyFile in policyFiles:
-            if policyFile == None:
-                return
+        if policyFile == None:
+            return
 
-            for rule in policyFile.rules:
-                if len(rule.permissions) > 0:
+        for rule in policyFile.rules:
+            if len(rule.permissions) > 0:
+                for permission in rule.permissions:
+                    permissionRules.append(FilterRule(FilterType.PERMISSION, permission, False))
+
+        for macro in policyFile.macros:
+            if len(macro.rules) > 0:
+                for rule in macro.rules:
                     for permission in rule.permissions:
                         permissionRules.append(FilterRule(FilterType.PERMISSION, permission, False))
-
-            for macro in policyFile.macros:
-                if len(macro.rules) > 0:
-                    for rule in macro.rules:
-                        for permission in rule.permissions:
-                            permissionRules.append(FilterRule(FilterType.PERMISSION, permission, False))
 
         permissionRules = list(set(permissionRules))
         return permissionRules
 
 
-    def collectClassType(self, policyFiles):
+    def collectClassType(self, policyFile):
         classTypeRules = []
-        for policyFile in policyFiles:
-            if policyFile == None:
-                return
+        if policyFile == None:
+            return
 
-            for typeDef in policyFile.typeDef:
-                for type in typeDef.types:
-                    if type.strip() != "":
-                        classTypeRules.append(FilterRule(FilterType.CLASS_TYPE, type, False))
+        for typeDef in policyFile.typeDef:
+            for type in typeDef.types:
+                if type.strip() != "":
+                    classTypeRules.append(FilterRule(FilterType.CLASS_TYPE, type, False))
 
-            for context in policyFile.contexts:
-                for type in context.typeDef.types:
-                    if type.strip() != "":
-                        classTypeRules.append(FilterRule(FilterType.CLASS_TYPE, type, False))
+        for context in policyFile.contexts:
+            for type in context.typeDef.types:
+                if type.strip() != "":
+                    classTypeRules.append(FilterRule(FilterType.CLASS_TYPE, type, False))
 
-            for rule in policyFile.rules:
-                if rule.classType.strip() != "":
-                    classTypeRules.append(FilterRule(FilterType.CLASS_TYPE, rule.classType, False))
+        for rule in policyFile.rules:
+            if rule.classType.strip() != "":
+                classTypeRules.append(FilterRule(FilterType.CLASS_TYPE, rule.classType, False))
 
         classTypeRules = list(set(classTypeRules))
         return classTypeRules
@@ -220,28 +220,32 @@ class AnalyzerResultUi(QVBoxLayout):
 
     def onFilterChanged(self):
         "Filter the result table based on the selected filter type, If it's ALL, show all the results"
+        print("onFilterChanged")
         lstRules = []
         if self.cmbFilter.currentText() == "ALL":
-            lstRules.extend(self.collectDomainRule(self.resultPolicyFiles))
-            lstRules.extend(self.collectFilePathRule(self.resultPolicyFiles))
-            lstRules.extend(self.collectPermissionRule(self.resultPolicyFiles))
+            lstRules.extend(self.collectDomainRule(self.resultPolicyFile))
+            lstRules.extend(self.collectFilePathRule(self.resultPolicyFile))
+            lstRules.extend(self.collectPermissionRule(self.resultPolicyFile))
+            lstRules.extend(self.collectClassType(self.resultPolicyFile))
         elif self.cmbFilter.currentText() == FilterType.DOMAIN.name:
-            lstRules.extend(self.collectDomainRule(self.resultPolicyFiles))
+            lstRules.extend(self.collectDomainRule(self.resultPolicyFile))
         elif self.cmbFilter.currentText() == FilterType.FILE_PATH.name:
-            lstRules.extend(self.collectFilePathRule(self.resultPolicyFiles))
+            lstRules.extend(self.collectFilePathRule(self.resultPolicyFile))
         elif self.cmbFilter.currentText() == FilterType.PERMISSION.name:
-            lstRules.extend(self.collectPermissionRule(self.resultPolicyFiles))
+            lstRules.extend(self.collectPermissionRule(self.resultPolicyFile))
         elif self.cmbFilter.currentText() == FilterType.CLASS_TYPE.name:
-            lstRules.extend(self.collectClassType(self.resultPolicyFiles))
+            lstRules.extend(self.collectClassType(self.resultPolicyFile))
 
         self.lastRulesResult = lstRules
-
+        #print("Total rules: " + str(len(lstRules)))
         if self.edtSearch.text().strip() != "":
             lstRules = self.searchResult(lstRules, self.edtSearch.text().strip(), self.chkCaseSensitive.isChecked())
 
         self.updateTable(lstRules)
 
     def updateTable(self, lstRules):
+        print("updateTable")
+        #print("Total rules: " + str(lstRules))
         lstRules = list(set(lstRules))
         self.clearTable()
         self.tblResult.setRowCount(len(lstRules))

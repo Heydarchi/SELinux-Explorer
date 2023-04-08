@@ -100,17 +100,18 @@ class ToolbarUi(QToolBar):
         UiUtility.showMessage("Analyzer", "All the files are analyzed!")
 
     def onClearAnalyze(self):
-        self.analyzerLogic.clear()     
+        self.analyzerLogic.clear()
+        print("Cleared analyzer!")
 
     def onClearOutput(self):
         self.analyzerLogic.clearOutput()
-            
-    def onDeleteAllFile(self):
-        self.analyzerLogic.clearOutput()
+        print("Cleared output!")
 
     def onWipeAll(self):
         self.onClearOutput()
         self.onClearAnalyze()
+        self.analyzerLogic.onAnalyzeFinished(None)
+        print("Wiped all!")
 
     def onResultAdded(self, filePath):
         item = QListWidgetItem(filePath)
