@@ -183,6 +183,12 @@ class AnalyzerResultUi(QVBoxLayout):
                     for permission in rule.permissions:
                         permissionRules.append(FilterRule(FilterType.PERMISSION, permission, False))
 
+            for macro in policyFile.macros:
+                if len(macro.rules) > 0:
+                    for rule in macro.rules:
+                        for permission in rule.permissions:
+                            permissionRules.append(FilterRule(FilterType.PERMISSION, permission, False))
+
         permissionRules = list(set(permissionRules))
         return permissionRules
 

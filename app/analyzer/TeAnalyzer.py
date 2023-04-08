@@ -25,7 +25,7 @@ class TeAnalyzer(AbstractAnalyzer):
                 else:
                     lastLine = lastLine + " " + line
             else:
-                if "(" in line:
+                if "define" in line:
                     macroFound = True
                     lastLine = line
                 else:
@@ -40,15 +40,23 @@ class TeAnalyzer(AbstractAnalyzer):
         items = inputString.split()
         if len(items) > 0 :
             if items[0].strip() == "type" :
-                self.extractDefinition(inputString)
+                typeDef = self.extractDefinition(inputString)
+                if typeDef != None:
+                    self.policyFile.typeDef.append(typeDef)
             elif items[0].strip() == "typeattribute":
-                self.extractAttribite(inputString)
+                attribute = self.extractAttribite(inputString)
+                if attribute != None:
+                    self.policyFile.attribute.append(attribute)
             elif items[0] in ["allow", "neverallow"] :
-                self.extractRule(inputString)
+                self.policyFile.rules.extend(self.extractRule(inputString))
             elif "define" in inputString  :
-                self.policyFile.macros.append(self.extractMacro(inputString))
+                macro = self.extractMacro(inputString)
+                if macro != None:
+                    self.policyFile.macros.append(macro)
             elif "(" in inputString and ")" in inputString:
-                self.policyFile.macroCalls.append(self.extractMacroCall(inputString) )
+                macroCall = self.extractMacroCall(inputString)
+                if macroCall != None:
+                    self.policyFile.macroCalls.append(macroCall)
             else:
                 MyLogger.logError(sys, "Unknown line", inputString)
     def extractDefinition(self,  inputString):
@@ -59,12 +67,13 @@ class TeAnalyzer(AbstractAnalyzer):
             typeDef.types.extend(types[1:])
             if DOMAIN_EXECUTABLE in typeDef.name:
                 if not self.mergeExecDomain(typeDef):
-                    self.policyFile.typeDef.append( typeDef )
+                    return typeDef
             else:
-                self.policyFile.typeDef.append( typeDef )
+                return typeDef
 
         except Exception as e:
             MyLogger.logError(sys, e, inputString)
+            return None
 
     def mergeExecDomain(self, typeDefExec):
         try:
@@ -80,16 +89,18 @@ class TeAnalyzer(AbstractAnalyzer):
 
     def extractAttribite(self,  inputString):
         try:
+            attribute = Attribute()
             types = inputString.replace(";","").replace("typeattribute ","").strip().split(" ")
-            typeDef = TypeDef()
-            typeDef.name = types[0]
-            typeDef.types.extend(types[1:])
-            self.policyFile.attribute.append( typeDef )
+            attribute.name = types[0]
+            attribute.types.extend(types[1:])
+            return attribute
 
         except Exception as e:
             MyLogger.logError(sys, e, inputString)
+            return None
 
     def extractRule(self,  inputString):
+        lstRules = list()
         try:
             inputString = inputString.replace(' : ',':').replace(' :',':').replace(': ',':').strip()
             inputString = inputString.replace('{',' { ').replace('}',' } ').strip()
@@ -130,34 +141,45 @@ class TeAnalyzer(AbstractAnalyzer):
                             rule.target = target
                             rule.classType = dstItems[1]
                             rule.permissions = permissions
-                        self.policyFile.rules.append(rule)
+                        lstRules.append(rule)
 
                     return
+
         except Exception as e:
             MyLogger.logError(sys, e, inputString)
+        finally:
+            return lstRules
 
 
     def extractMacro(self, inputString):
-        lstLines = inputString.splitlines()
-        macro =  PolicyMacro()
-        #It's supposed to have define in the first item
-        firstLine= lstLines.pop(0).replace("define","").replace("\'","")
-        firstLine= firstLine.replace("`","").replace("(","").replace(",","")
-        macro.name = firstLine.strip()
-        for line in lstLines:
-            if ")" in line.strip() :
-                break
-            macro.rulesString.append(line)
-        print("macro: ", macro)
-        return macro
+        try:
+            lstLines = inputString.splitlines()
+            macro =  PolicyMacro()
+            #It's supposed to have define in the first item
+            firstLine= lstLines.pop(0).replace("define","").replace("\'","")
+            firstLine= firstLine.replace("`","").replace("(","").replace(",","")
+            macro.name = firstLine.strip()
+            for line in lstLines:
+                if ")" in line.strip() :
+                    break
+                macro.rulesString.append(line)
+                macro.rules.extend(self.extractRule(line))
+            #print("macro: ", macro)
+            return macro
+        except Exception as e:
+            MyLogger.logError(sys, e, inputString)
+            return None
 
     def extractMacroCall(self, inputString):
-        #Convert string to PolicyMacroCall
-        macroCall = PolicyMacroCall()
-        macroCall.name = inputString.split("(")[0].strip()
-        macroCall.parameters = inputString.split("(")[1].replace(")","").strip().split(",")
-        return macroCall
-
+        try:
+            #Convert string to PolicyMacroCall
+            macroCall = PolicyMacroCall()
+            macroCall.name = inputString.split("(")[0].strip()
+            macroCall.parameters = inputString.split("(")[1].replace(")","").strip().split(",")
+            return macroCall
+        except Exception as e:
+            MyLogger.logError(sys, e, inputString)
+            return None
 
 if __name__ == "__main__" :
     print(sys.argv)
