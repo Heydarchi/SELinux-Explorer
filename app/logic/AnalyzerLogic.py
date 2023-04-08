@@ -41,6 +41,9 @@ class AnalyzerLogic:
         self.updateAnalyzerDataResult(self.listOfPolicyFiles)
 
     def makeRefPolicyFile(self, policyFile):
+        if  self.listOfPolicyFiles == None or len(self.listOfPolicyFiles) == 0:
+            return None
+
         refPolicyFile = PolicyFiles()
         for policyFile in self.listOfPolicyFiles:
             refPolicyFile.typeDef.extend(policyFile.typeDef)

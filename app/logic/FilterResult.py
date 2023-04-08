@@ -7,10 +7,9 @@ from drawer.DrawerHelper import *
 
 class FilterType(Enum):
     DOMAIN = 1
-    FILE_NAME = 2
-    CLASS_TYPE = 3
-    PERMISSION = 4
-    FILE_PATH = 5
+    CLASS_TYPE = 2
+    PERMISSION = 3
+    FILE_PATH = 4
 @dataclass
 class FilterRule(JSONWizard):
     filterType: FilterType = FilterType.DOMAIN
@@ -43,8 +42,6 @@ class FilterResult:
             self.filteredPolicyFile.fileName =  self.filteredPolicyFile.fileName + ("_ew_" if filterRule.exactWord  else "_") + filterRule.keyword
             if FilterType(filterRule.filterType) == FilterType.DOMAIN:
                 self.filterDomain(filterRule, policyFiles)
-            elif FilterType(filterRule.filterType) == FilterType.FILE_NAME:
-                self.filterFilename(filterRule, policyFiles)
             elif FilterType(filterRule.filterType) == FilterType.PERMISSION:
                 self.filterPermission(filterRule, policyFiles)
             elif FilterType(filterRule.filterType) == FilterType.FILE_PATH:

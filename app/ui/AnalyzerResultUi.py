@@ -162,16 +162,6 @@ class AnalyzerResultUi(QVBoxLayout):
 
         return filePathRules
 
-    def collectFileNameRule(self, policyFiles):
-        fileNameRules = []
-        for policyFile in policyFiles:
-            if policyFile == None:
-                return
-
-            if policyFile.fileName.strip() !="" :
-                fileNameRules.append(FilterRule(FilterType.FILE_NAME, policyFile.fileName, False))
-        return fileNameRules
-
     def collectPermissionRule(self, policyFiles):
         permissionRules = []
         for policyFile in policyFiles:
@@ -230,13 +220,10 @@ class AnalyzerResultUi(QVBoxLayout):
             lstRules.extend(self.collectDomainRule(self.resultPolicyFiles))
             lstRules.extend(self.collectFilePathRule(self.resultPolicyFiles))
             lstRules.extend(self.collectPermissionRule(self.resultPolicyFiles))
-            lstRules.extend(self.collectFileNameRule(self.resultPolicyFiles))
         elif self.cmbFilter.currentText() == FilterType.DOMAIN.name:
             lstRules.extend(self.collectDomainRule(self.resultPolicyFiles))
         elif self.cmbFilter.currentText() == FilterType.FILE_PATH.name:
             lstRules.extend(self.collectFilePathRule(self.resultPolicyFiles))
-        elif self.cmbFilter.currentText() == FilterType.FILE_NAME.name:
-            lstRules.extend(self.collectFileNameRule(self.resultPolicyFiles))
         elif self.cmbFilter.currentText() == FilterType.PERMISSION.name:
             lstRules.extend(self.collectPermissionRule(self.resultPolicyFiles))
         elif self.cmbFilter.currentText() == FilterType.CLASS_TYPE.name:
