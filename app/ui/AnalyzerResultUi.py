@@ -74,6 +74,7 @@ class AnalyzerResultUi(QVBoxLayout):
         self.cmbFilter.currentIndexChanged.connect(self.onFilterChanged)
         self.edtSearch.textChanged.connect(self.onSeachTextChanged)
         self.btnResetSearch.clicked.connect(self.onResetSearch)
+        self.chkCaseSensitive.clicked.connect(self.onCaseSensitiveChanged)
 
     def configLayout(self):
         self.layoutSearch.addWidget(self.lblSearch)
@@ -94,6 +95,10 @@ class AnalyzerResultUi(QVBoxLayout):
         self.groupBox.setLayout(self.grpLayout)
 
         self.addWidget(self.groupBox)
+
+
+    def onCaseSensitiveChanged(self):
+        self.onSeachTextChanged()
 
     def onAddSelectedFilter(self):
         row = self.tblResult.currentRow()
@@ -258,6 +263,6 @@ class AnalyzerResultUi(QVBoxLayout):
 
     def isSimilar(self, keyword, target, caseSensitive):
         if not caseSensitive:
-            return keyword in target
+            return keyword.lower() in target.lower()
         else:
-            return keyword.lower() == target.lower()
+            return keyword in target
