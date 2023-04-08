@@ -113,6 +113,7 @@ class AnalyzerResultUi(QVBoxLayout):
         pass
 
     def onAnalyzeFinished(self, refPolicyFile):
+        print("onAnalyzeFinished")
         if refPolicyFile == None:
             refPolicyFile = PolicyFiles()
         self.resultPolicyFile = refPolicyFile
@@ -220,7 +221,7 @@ class AnalyzerResultUi(QVBoxLayout):
 
     def onFilterChanged(self):
         "Filter the result table based on the selected filter type, If it's ALL, show all the results"
-        print("onFilterChanged")
+        #print("onFilterChanged")
         lstRules = []
         if self.cmbFilter.currentText() == "ALL":
             lstRules.extend(self.collectDomainRule(self.resultPolicyFile))
@@ -244,7 +245,7 @@ class AnalyzerResultUi(QVBoxLayout):
         self.updateTable(lstRules)
 
     def updateTable(self, lstRules):
-        print("updateTable")
+        #print("updateTable")
         #print("Total rules: " + str(lstRules))
         lstRules = list(set(lstRules))
         self.clearTable()

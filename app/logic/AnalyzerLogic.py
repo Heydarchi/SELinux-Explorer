@@ -78,7 +78,7 @@ class AnalyzerLogic:
             if os.path.isfile(file):
                 SystemUtility().deleteFiles(file)
         self.onAnalyzeFinished(None)
-        #self.updateAnalyzerDataResult(None)
+        self.updateAnalyzerDataResult(None)
 
     def clearFileFromAnalyzer(self, filePath):
         self.analyzer.clear()     
