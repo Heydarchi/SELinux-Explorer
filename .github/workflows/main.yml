@@ -16,11 +16,18 @@ jobs:
       with:
         python-version: 3.x
 
+    - name: Cache pip dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
     - name: Install dependencies
       run: |
-        pip install codespell
-        pip install pytest
-        pip install dataclass_wizard
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
     - name: Run codespell
       run: codespell --ignore-words=config/codespell_ignore.txt **/*
