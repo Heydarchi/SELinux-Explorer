@@ -18,4 +18,4 @@ jobs:
       run: pip install codespell
 
     - name: Run codespell
-      run: codespell --ignore-words=codespell_ignore.txt **/*
+      run: codespell --ignore-words=config/codespell_ignore.txt **/*
