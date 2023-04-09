@@ -1,6 +1,7 @@
 
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QComboBox, QLineEdit
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QGroupBox, QLabel, QCheckBox
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QComboBox
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QGroupBox, QLabel, QCheckBox, QLineEdit
 from logic.AnalyzerLogic import *
 from PythonUtilityClasses.SystemUtility import *
 from logic.FilterResult import *
@@ -27,7 +28,8 @@ class AnalyzerResultUi(QVBoxLayout):
         self.COL_TITLE_WIDTH = 420
         self.COL_TYPE_WIDTH = 140
         self.MARGIN = 20
-        self.TABLE_MIN_WIDTH = self.COL_TITLE_WIDTH + self.COL_TYPE_WIDTH + self.MARGIN
+        self.TABLE_MIN_WIDTH = self.COL_TITLE_WIDTH + \
+                               self.COL_TYPE_WIDTH + self.MARGIN
         self.COL_TITLE_INDEX = 0
         self.COL_TYPE_INDEX = 1
         self.lastRulesResult = list()
@@ -111,7 +113,8 @@ class AnalyzerResultUi(QVBoxLayout):
         row = self.tblResult.currentRow()
         rule = FilterRule()
         rule.exactWord = UiUtility.askQuestion(
-            self.mainWindow, "Exact word", "Do you want to add the exact word?")
+            self.mainWindow, "Exact word",
+            "Do you want to add the exact word?")
         rule.keyword = self.tblResult.item(
             row, self.COL_TITLE_INDEX).text().strip()
         rule.filterType = FilterRule.getFilterTypeFromStr(
@@ -277,7 +280,8 @@ class AnalyzerResultUi(QVBoxLayout):
         self.sendToFilterUi = onAddFilterEvent
 
     def onFilterChanged(self):
-        "Filter the result table based on the selected filter type, If it's ALL, show all the results"
+        '''Filter the result table based on the selected filter type,
+        If it's ALL, show all the results'''
         # print("onFilterChanged")
         lstRules = []
         if self.cmbFilter.currentText() == "ALL":

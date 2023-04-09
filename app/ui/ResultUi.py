@@ -1,6 +1,7 @@
 
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QWidget, QGridLayout
-from PyQt5.QtWidgets import QListWidget, QGroupBox, QListWidgetItem, QAbstractItemView
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel
+from PyQt5.QtWidgets import QListWidget, QWidget, QGridLayout
+from PyQt5.QtWidgets import QGroupBox, QListWidgetItem, QAbstractItemView
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QDesktopWidget
 from PyQt5.QtCore import Qt

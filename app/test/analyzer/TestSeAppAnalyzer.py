@@ -5,7 +5,9 @@ class TestSeAppAnalyzer(unittest.TestCase):
         # Test the extractDefinition function
         seAppAnalyzer = SeAppAnalyzer()
         seAppAnalyzer.extract_definition(
-            "user=app0 name=app1 domain=app2 type=app3 levelFrom=app4 level=app5 seinfo=app6 isPrivApp=True isSystemServer=False isEphemeralApp=True fromRunAs=app7 minTargetSdkVersion=21")
+            "user=app0 name=app1 domain=app2 type=app3 levelFrom=app4 "
+            "level=app5 seinfo=app6 isPrivApp=True isSystemServer=False "
+            "isEphemeralApp=True fromRunAs=app7 minTargetSdkVersion=21")
         self.assertEqual(seAppAnalyzer.policyFile.seApps[0].user, "app0")
         self.assertEqual(seAppAnalyzer.policyFile.seApps[0].name, "app1")
         self.assertEqual(seAppAnalyzer.policyFile.seApps[0].domain, "app2")

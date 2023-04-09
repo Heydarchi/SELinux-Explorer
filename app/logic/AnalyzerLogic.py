@@ -61,8 +61,9 @@ class AnalyzerLogic:
                 if macro.name == macoCall.name:
                     rules = macro.rules
                     for rule in rules:
-                        # Need to replace $number in source, target or classType with parameter from macro call with
-                        # the same number
+                        '''Need to replace $number in source, target or 
+                        classType with parameter from macro call with
+                         the same number'''
                         for i in range(0, len(macoCall.parameters)):
                             rule.source = rule.source.replace(
                                 "$" + str(i + 1), macoCall.parameters[i])

@@ -19,7 +19,6 @@ class MyLogger:
         logging.error("Error in exception: " + str(_exception))
         if _message is not None:
             logging.error("_message: " + str(_message))
-        # logging.error("exception type: ", str(exception_type)+", exception object: " + str(exception_object) + ", exception traceback: " + str(exception_traceback))
 
     @staticmethod
     def logInfo(_message):

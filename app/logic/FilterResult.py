@@ -149,7 +149,8 @@ class FilterResult:
                         policyFile))
 
     def filter_pathname(self, filterRule, policyFile):
-        '''filter context having pathName or se_app havong name in policyFile and add to self.filteredPolicyFile'''
+        '''filter context having pathName or se_app havong name
+        in policyFile and add to self.filteredPolicyFile'''
         for context in policyFile.contexts:
             print("context.pathName: ", context.pathName, filterRule)
             if self.check_similarity(filterRule, context.pathName):
@@ -185,7 +186,8 @@ class FilterResult:
                     FilterRule(FilterType.DOMAIN, domain, True), policyFile))
 
     def filter_classyype(self, filterRule, policyFile):
-        '''find domain and rule with the same class type and then filter based on the found domain'''
+        '''find domain and rule with the same class type
+        and then filter based on the found domain'''
         for type_def in policyFile.typeDef:
             for type in type_def.types:
                 if self.check_similarity(filterRule, type):

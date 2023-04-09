@@ -44,7 +44,8 @@ class MainWindow(QMainWindow):
     def saveSetting(self):
         self.appSetting.lastOpenedPath = self.layoutPath.lastOpenedPath
         self.appSetting.keepTheResult = self.toolbar.keepResult
-        self.appSetting.selectedFilterType = self.layoutFilter.getSelectedFilterType()
+        self.appSetting.selectedFilterType = \
+            self.layoutFilter.getSelectedFilterType()
 
         FileWriter.write_file("app_setting.json", self.appSetting.to_json())
         print("AppSetting saved!")

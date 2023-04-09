@@ -1,6 +1,7 @@
 
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLineEdit, QGroupBox, QLabel
-from PyQt5.QtWidgets import QCheckBox, QTableWidgetItem, QTableWidget, QComboBox
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLineEdit
+from PyQt5.QtWidgets import QCheckBox, QTableWidgetItem, QLabel
+from PyQt5.QtWidgets import  QTableWidget, QComboBox, QGroupBox
 from PyQt5.QtGui import QIcon
 from logic.AnalyzerLogic import *
 from logic.FilterResult import *
@@ -118,8 +119,7 @@ class FilterUi(QHBoxLayout):
         self.addWidget(self.groupBox)
 
     def onFilter(self):
-        # fileName, filteredPolicyFile = FilterResult().filter(self.lstRules, self.analyzerLogic.listOfPolicyFiles)
-        if self.lstRules == []:
+        if not self.lstRules:
             return
         fileName, filteredPolicyFile = FilterResult().filter(
             self.lstRules, self.analyzerLogic.refPolicyFile)

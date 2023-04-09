@@ -127,7 +127,6 @@ class RelationDrawer(Thread):
     def drawContext(self, contexts: List[Context]):
         contextList = list()
         for context in contexts:
-            # contextList.append("\"" + context.pathName + "\" -----> \"" + context.securityContext.type + "\"" )
             contextList.append(
                 "participant " +
                 self.insertNewParticipant(
@@ -142,7 +141,6 @@ class RelationDrawer(Thread):
     def drawSeApp(self, seAppContexts: List[SeAppContext]):
         seAppList = list()
         for seAppContext in seAppContexts:
-            # seAppList.append("\"" + seAppContext.user + "\" -----> \"" + seAppContext.domain + "\"" )
             seAppList.append(
                 "participant " +
                 self.insertNewParticipant(
