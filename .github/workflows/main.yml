@@ -18,6 +18,7 @@ jobs:
       run: |
         pip install codespell
         pip install pytest
+        pip install dataclass_wizard
 
     - name: Run codespell
       run: codespell --ignore-words=config/codespell_ignore.txt **/*
