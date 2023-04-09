@@ -1,4 +1,3 @@
-
 from PyQt5.QtWidgets import QGroupBox, QListWidget, QListWidgetItem
 from PyQt5.QtWidgets import QVBoxLayout, QPushButton
 from PyQt5.QtGui import QIcon
@@ -28,8 +27,7 @@ class FileUi(QVBoxLayout):
         self.layout_selected_path_button = QVBoxLayout()
 
         self.lst_selected_path = QListWidget()
-        self.btn_remove_from_list = QPushButton(
-            icon=QIcon(ICON_PATH + "delete.png"))
+        self.btn_remove_from_list = QPushButton(icon=QIcon(ICON_PATH + "delete.png"))
         self.btn_remove_from_list.setToolTip("Remove selected item from the list")
         self.btn_remove_from_list.setMinimumSize(24, 24)
         self.btn_remove_from_list.setIconSize(QSize(24, 24))
@@ -38,7 +36,6 @@ class FileUi(QVBoxLayout):
         self.btn_remove_from_list.clicked.connect(self.remove_from_the_list)
 
     def _config_layout(self):
-
         # layout_selected_path
         self.layout_selected_path_button.addWidget(self.btn_remove_from_list)
         self.layout_selected_path_button.setAlignment(Qt.AlignTop)

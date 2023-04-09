@@ -21,10 +21,12 @@ class FilterRule(JSONWizard):
     exact_word: bool = False
 
     def __eq__(self, other):
-        return isinstance(other, FilterRule) and \
-            self.filter_type == other.filter_type and \
-            self.keyword == other.keyword and \
-            self.exact_word == other.exact_word
+        return (
+            isinstance(other, FilterRule)
+            and self.filter_type == other.filter_type
+            and self.keyword == other.keyword
+            and self.exact_word == other.exact_word
+        )
 
     def __hash__(self):
         return hash((self.filter_type, self.keyword, self.exact_word))
@@ -37,16 +39,16 @@ class FilterRule(JSONWizard):
 
 
 class FilterResult:
-
     def filter(self, lst_rules, policy_file):
-
         self.filtered_policy_file = PolicyFile()
         self.filtered_policy_file.file_name = "domain_filtered"
 
         for filter_rule in lst_rules:
-            self.filtered_policy_file.file_name = \
-                self.filtered_policy_file.file_name + \
-                ("_ew_" if filter_rule.exact_word else "_") + filter_rule.keyword
+            self.filtered_policy_file.file_name = (
+                self.filtered_policy_file.file_name
+                + ("_ew_" if filter_rule.exact_word else "_")
+                + filter_rule.keyword
+            )
 
             if FilterType(filter_rule.filter_type) == FilterType.DOMAIN:
                 self.filter_domain(filter_rule, policy_file)
@@ -65,49 +67,63 @@ class FilterResult:
         drawer_adv = AdvancedDrawer()
         drawer_adv.draw_uml(self.filtered_policy_file)
 
-        return generate_diagram_file_name(
-            self.filtered_policy_file.file_name), self.filtered_policy_file
+        return (
+            generate_diagram_file_name(self.filtered_policy_file.file_name),
+            self.filtered_policy_file,
+        )
 
     def remove_duplicated_Items(self):
-        ''' Remove duplicated items from type_def,
+        """Remove duplicated items from type_def,
         contexts,se_apps, rules, macros of
-        filtered_policy_file'''
+        filtered_policy_file"""
         # print(self.filtered_policy_file.type_def)
         self.filtered_policy_file.type_def = list(
-            {item.name: item for item in self.filtered_policy_file.type_def}.values())
+            {item.name: item for item in self.filtered_policy_file.type_def}.values()
+        )
         self.filtered_policy_file.contexts = list(
-            {item.path_name: item for item in self.filtered_policy_file.contexts}.values())
+            {
+                item.path_name: item for item in self.filtered_policy_file.contexts
+            }.values()
+        )
         self.filtered_policy_file.se_apps = list(
-            {item.name: item for item in self.filtered_policy_file.se_apps}.values())
+            {item.name: item for item in self.filtered_policy_file.se_apps}.values()
+        )
 
         # Define a lambda function to extract a hashable representation of each
         # Rule object
-        def get_hashable_rule(r): return (
-            r.rule,
-            r.source,
-            r.target,
-            r.class_type,
-            tuple(
-                sorted(
-                    r.permissions)))
+        def get_hashable_rule(r):
+            return (
+                r.rule,
+                r.source,
+                r.target,
+                r.class_type,
+                tuple(sorted(r.permissions)),
+            )
+
         # Remove duplicates based on all fields
         self.filtered_policy_file.rules = list(
-            {get_hashable_rule(r): r for r in self.filtered_policy_file.rules}.values())
+            {get_hashable_rule(r): r for r in self.filtered_policy_file.rules}.values()
+        )
 
     def filter_domain(self, filter_rule, policy_file):
-
         self.filtered_policy_file.type_def.extend(
-            self.filter_typedef(filter_rule, policy_file))
+            self.filter_typedef(filter_rule, policy_file)
+        )
         self.filtered_policy_file.contexts.extend(
-            self.filter_context(filter_rule, policy_file))
+            self.filter_context(filter_rule, policy_file)
+        )
         self.filtered_policy_file.se_apps.extend(
-            self.filter_se_app(filter_rule, policy_file))
+            self.filter_se_app(filter_rule, policy_file)
+        )
         self.filtered_policy_file.rules.extend(
-            self.filter_rule(filter_rule, policy_file))
+            self.filter_rule(filter_rule, policy_file)
+        )
         self.filtered_policy_file.macros.extend(
-            self.filter_function(filter_rule, policy_file))
+            self.filter_function(filter_rule, policy_file)
+        )
         self.filtered_policy_file.attribute.extend(
-            self.filter_attribute(filter_rule, policy_file))
+            self.filter_attribute(filter_rule, policy_file)
+        )
 
     def filter_filename(self, filter_rule, policy_file):
         # print("----filter_filename")
@@ -120,7 +136,7 @@ class FilterResult:
             self.filtered_policy_file.attribute.extend(policy_file.attribute)
 
     def filter_permission(self, filter_rule, policy_file):
-        '''Filter rules having permission in the policy_file and put them in filtered_policy_file'''
+        """Filter rules having permission in the policy_file and put them in filtered_policy_file"""
         # print("----filter_permission: ", filter_rule)
         for rule in policy_file.rules:
             if filter_rule.keyword in rule.permissions:
@@ -128,32 +144,40 @@ class FilterResult:
                 temp_rule = rule
                 temp_rule.permissions = [filter_rule.keyword]
                 self.filtered_policy_file.rules.append(temp_rule)
-                self.filtered_policy_file.type_def.extend(self.filter_typedef(
-                    FilterRule(FilterType.DOMAIN, rule.source, True), policy_file))
-                self.filtered_policy_file.type_def.extend(self.filter_typedef(
-                    FilterRule(FilterType.DOMAIN, rule.target, True), policy_file))
-                self.filtered_policy_file.contexts.extend(self.filter_context(
-                    FilterRule(FilterType.DOMAIN, rule.source, True), policy_file))
-                self.filtered_policy_file.contexts.extend(self.filter_context(
-                    FilterRule(FilterType.DOMAIN, rule.target, True), policy_file))
+                self.filtered_policy_file.type_def.extend(
+                    self.filter_typedef(
+                        FilterRule(FilterType.DOMAIN, rule.source, True), policy_file
+                    )
+                )
+                self.filtered_policy_file.type_def.extend(
+                    self.filter_typedef(
+                        FilterRule(FilterType.DOMAIN, rule.target, True), policy_file
+                    )
+                )
+                self.filtered_policy_file.contexts.extend(
+                    self.filter_context(
+                        FilterRule(FilterType.DOMAIN, rule.source, True), policy_file
+                    )
+                )
+                self.filtered_policy_file.contexts.extend(
+                    self.filter_context(
+                        FilterRule(FilterType.DOMAIN, rule.target, True), policy_file
+                    )
+                )
                 self.filtered_policy_file.se_apps.extend(
                     self.filter_se_app(
-                        FilterRule(
-                            FilterType.DOMAIN,
-                            rule.source,
-                            True),
-                        policy_file))
+                        FilterRule(FilterType.DOMAIN, rule.source, True), policy_file
+                    )
+                )
                 self.filtered_policy_file.se_apps.extend(
                     self.filter_se_app(
-                        FilterRule(
-                            FilterType.DOMAIN,
-                            rule.target,
-                            True),
-                        policy_file))
+                        FilterRule(FilterType.DOMAIN, rule.target, True), policy_file
+                    )
+                )
 
     def filter_pathname(self, filter_rule, policy_file):
-        '''filter context having path_name or se_apps havong name
-        in policy_file and add to self.filtered_policy_file'''
+        """filter context having path_name or se_apps havong name
+        in policy_file and add to self.filtered_policy_file"""
         for context in policy_file.contexts:
             print("context.path_name: ", context.path_name, filter_rule)
             if self.check_similarity(filter_rule, context.path_name):
@@ -161,16 +185,23 @@ class FilterResult:
                     domain = context.security_context.type.strip().replace("_exec", "")
                 else:
                     domain = context.security_context.type
-                print(
-                    "context.security_context.type: ",
-                    context.security_context.type)
+                print("context.security_context.type: ", context.security_context.type)
                 self.filtered_policy_file.contexts.append(context)
-                self.filtered_policy_file.type_def.extend(self.filter_typedef(
-                    FilterRule(FilterType.DOMAIN, domain, True), policy_file))
-                self.filtered_policy_file.se_apps.extend(self.filter_se_app(
-                    FilterRule(FilterType.DOMAIN, domain, True), policy_file))
-                self.filtered_policy_file.rules.extend(self.filter_rule(
-                    FilterRule(FilterType.DOMAIN, domain, True), policy_file))
+                self.filtered_policy_file.type_def.extend(
+                    self.filter_typedef(
+                        FilterRule(FilterType.DOMAIN, domain, True), policy_file
+                    )
+                )
+                self.filtered_policy_file.se_apps.extend(
+                    self.filter_se_app(
+                        FilterRule(FilterType.DOMAIN, domain, True), policy_file
+                    )
+                )
+                self.filtered_policy_file.rules.extend(
+                    self.filter_rule(
+                        FilterRule(FilterType.DOMAIN, domain, True), policy_file
+                    )
+                )
 
         for se_app in policy_file.se_apps:
             print("se_apps.name: ", se_app.name, filter_rule)
@@ -181,62 +212,81 @@ class FilterResult:
                     domain = se_app.domain.strip()
                 print("domain: ", domain)
                 self.filtered_policy_file.se_apps.append(se_app)
-                self.filtered_policy_file.type_def.extend(self.filter_typedef(
-                    FilterRule(FilterType.DOMAIN, domain, True), policy_file))
-                self.filtered_policy_file.contexts.extend(self.filter_context(
-                    FilterRule(FilterType.DOMAIN, domain, True), policy_file))
-                self.filtered_policy_file.rules.extend(self.filter_rule(
-                    FilterRule(FilterType.DOMAIN, domain, True), policy_file))
+                self.filtered_policy_file.type_def.extend(
+                    self.filter_typedef(
+                        FilterRule(FilterType.DOMAIN, domain, True), policy_file
+                    )
+                )
+                self.filtered_policy_file.contexts.extend(
+                    self.filter_context(
+                        FilterRule(FilterType.DOMAIN, domain, True), policy_file
+                    )
+                )
+                self.filtered_policy_file.rules.extend(
+                    self.filter_rule(
+                        FilterRule(FilterType.DOMAIN, domain, True), policy_file
+                    )
+                )
 
     def filter_classyype(self, filter_rule, policy_file):
-        '''find domain and rule with the same class type
-        and then filter based on the found domain'''
+        """find domain and rule with the same class type
+        and then filter based on the found domain"""
         for type_def in policy_file.type_def:
             for type in type_def.types:
                 if self.check_similarity(filter_rule, type):
                     self.filtered_policy_file.type_def.append(type_def)
                     self.filtered_policy_file.rules.extend(
                         self.filter_rule(
-                            FilterRule(
-                                FilterType.DOMAIN,
-                                type_def.name,
-                                True),
-                            policy_file))
-                    self.filtered_policy_file.contexts.extend(self.filter_context(
-                        FilterRule(FilterType.DOMAIN, type_def.name, True), policy_file))
+                            FilterRule(FilterType.DOMAIN, type_def.name, True),
+                            policy_file,
+                        )
+                    )
+                    self.filtered_policy_file.contexts.extend(
+                        self.filter_context(
+                            FilterRule(FilterType.DOMAIN, type_def.name, True),
+                            policy_file,
+                        )
+                    )
                     self.filtered_policy_file.se_apps.extend(
                         self.filter_se_app(
-                            FilterRule(
-                                FilterType.DOMAIN,
-                                type_def.name,
-                                True),
-                            policy_file))
+                            FilterRule(FilterType.DOMAIN, type_def.name, True),
+                            policy_file,
+                        )
+                    )
 
         for rule in policy_file.rules:
             if self.check_similarity(filter_rule, rule.class_type):
                 self.filtered_policy_file.rules.append(rule)
-                self.filtered_policy_file.type_def.extend(self.filter_typedef(
-                    FilterRule(FilterType.DOMAIN, rule.source, True), policy_file))
-                self.filtered_policy_file.type_def.extend(self.filter_typedef(
-                    FilterRule(FilterType.DOMAIN, rule.target, True), policy_file))
-                self.filtered_policy_file.contexts.extend(self.filter_context(
-                    FilterRule(FilterType.DOMAIN, rule.source, True), policy_file))
-                self.filtered_policy_file.contexts.extend(self.filter_context(
-                    FilterRule(FilterType.DOMAIN, rule.target, True), policy_file))
+                self.filtered_policy_file.type_def.extend(
+                    self.filter_typedef(
+                        FilterRule(FilterType.DOMAIN, rule.source, True), policy_file
+                    )
+                )
+                self.filtered_policy_file.type_def.extend(
+                    self.filter_typedef(
+                        FilterRule(FilterType.DOMAIN, rule.target, True), policy_file
+                    )
+                )
+                self.filtered_policy_file.contexts.extend(
+                    self.filter_context(
+                        FilterRule(FilterType.DOMAIN, rule.source, True), policy_file
+                    )
+                )
+                self.filtered_policy_file.contexts.extend(
+                    self.filter_context(
+                        FilterRule(FilterType.DOMAIN, rule.target, True), policy_file
+                    )
+                )
                 self.filtered_policy_file.se_apps.extend(
                     self.filter_se_app(
-                        FilterRule(
-                            FilterType.DOMAIN,
-                            rule.source,
-                            True),
-                        policy_file))
+                        FilterRule(FilterType.DOMAIN, rule.source, True), policy_file
+                    )
+                )
                 self.filtered_policy_file.se_apps.extend(
                     self.filter_se_app(
-                        FilterRule(
-                            FilterType.DOMAIN,
-                            rule.target,
-                            True),
-                        policy_file))
+                        FilterRule(FilterType.DOMAIN, rule.target, True), policy_file
+                    )
+                )
 
         for se_app in policy_file.se_apps:
             for type in se_app.type_def.types:
@@ -244,25 +294,22 @@ class FilterResult:
                     self.filtered_policy_file.type_def.append(se_app.type_def)
                     self.filtered_policy_file.rules.extend(
                         self.filter_rule(
-                            FilterRule(
-                                FilterType.DOMAIN,
-                                se_app.type_def.name,
-                                True),
-                            policy_file))
+                            FilterRule(FilterType.DOMAIN, se_app.type_def.name, True),
+                            policy_file,
+                        )
+                    )
                     self.filtered_policy_file.contexts.extend(
                         self.filter_context(
-                            FilterRule(
-                                FilterType.DOMAIN,
-                                se_app.type_def.name,
-                                True),
-                            policy_file))
+                            FilterRule(FilterType.DOMAIN, se_app.type_def.name, True),
+                            policy_file,
+                        )
+                    )
                     self.filtered_policy_file.se_apps.extend(
                         self.filter_se_app(
-                            FilterRule(
-                                FilterType.DOMAIN,
-                                se_app.type_def.name,
-                                True),
-                            policy_file))
+                            FilterRule(FilterType.DOMAIN, se_app.type_def.name, True),
+                            policy_file,
+                        )
+                    )
 
     def check_similarity(self, filter_rule, string_to_check):
         if filter_rule.exact_word:
@@ -294,11 +341,9 @@ class FilterResult:
     def filter_rule(self, filter_rule, policy_file):
         lst_rule = []
         for rule in policy_file.rules:
-            if self.check_similarity(
-                    filter_rule,
-                    rule.source) or self.check_similarity(
-                    filter_rule,
-                    rule.target):
+            if self.check_similarity(filter_rule, rule.source) or self.check_similarity(
+                filter_rule, rule.target
+            ):
                 lst_rule.append(rule)
         return lst_rule
 

@@ -7,26 +7,24 @@ from MyLogger import MyLogger
 
 
 class ContextsAnalyzer(AbstractAnalyzer):
-
     def __init__(self) -> None:
         self.policy_file = None
 
     def analyze(self, file_path):
         if "file_contexts" in file_path:
-            self.policy_file = PolicyFile(
-                file_path, "", FileTypeEnum.FILE_CONTEXTS)
+            self.policy_file = PolicyFile(file_path, "", FileTypeEnum.FILE_CONTEXTS)
         elif "vndservice_contexts" in file_path:
             self.policy_file = PolicyFile(
-                file_path, "", FileTypeEnum.VNDSERVICE_CONTEXTS)
+                file_path, "", FileTypeEnum.VNDSERVICE_CONTEXTS
+            )
         elif "hwservice_contexts" in file_path:
             self.policy_file = PolicyFile(
-                file_path, "", FileTypeEnum.HWSERVICE_CONTEXTS)
+                file_path, "", FileTypeEnum.HWSERVICE_CONTEXTS
+            )
         elif "service_contexts" in file_path:
-            self.policy_file = PolicyFile(
-                file_path, "", FileTypeEnum.SERVICE_CONTEXTS)
+            self.policy_file = PolicyFile(file_path, "", FileTypeEnum.SERVICE_CONTEXTS)
         elif "property_contexts" in file_path:
-            self.policy_file = PolicyFile(
-                file_path, "", FileTypeEnum.PROPERTY_CONTEXTS)
+            self.policy_file = PolicyFile(file_path, "", FileTypeEnum.PROPERTY_CONTEXTS)
         else:
             return
 

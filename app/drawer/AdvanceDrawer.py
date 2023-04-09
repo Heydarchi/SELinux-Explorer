@@ -7,8 +7,8 @@ from AppSetting import OUT_DIR
 from typing import List
 from drawer.AbstractDrawer import *
 
-class AdvancedDrawer(AbstractDrawer):
 
+class AdvancedDrawer(AbstractDrawer):
     def draw_uml(self, policy_file):
         self.dict_of_participant = {}
         self.drawer_class = DrawerClass()
@@ -39,10 +39,9 @@ class AdvancedDrawer(AbstractDrawer):
         # print(policy_file)
 
     def dump_policy_file(self, policy_file: PolicyFile):
-
         policy_file = self.correlate_data(policy_file)
 
-        return  super().dump_policy_file(policy_file)
+        return super().dump_policy_file(policy_file)
 
     def correlate_data(self, policy_file: PolicyFile):
         for se_app in policy_file.se_apps:
@@ -61,11 +60,16 @@ class AdvancedDrawer(AbstractDrawer):
 
         for j in range(len(policy_file.contexts)):
             for i in reversed(range(len(policy_file.type_def))):
-                if policy_file.contexts[j].security_context.type.replace(
-                        DOMAIN_EXECUTABLE, "") == policy_file.type_def[i].name:
+                if (
+                    policy_file.contexts[j].security_context.type.replace(
+                        DOMAIN_EXECUTABLE, ""
+                    )
+                    == policy_file.type_def[i].name
+                ):
                     policy_file.contexts[j].domain_name = policy_file.type_def[i].name
                     policy_file.contexts[j].type_def.types.extend(
-                        policy_file.type_def[i].types)
+                        policy_file.type_def[i].types
+                    )
                     del policy_file.type_def[i]
                     break
         return policy_file
@@ -79,29 +83,26 @@ class AdvancedDrawer(AbstractDrawer):
             lst_note.extend(type_def.types)
             type_def_list.extend(
                 DrawingTool.generate_note(
-                    type_def.name,
-                    DrawingPosition.TOP,
-                    lst_note,
-                    "Types"))
+                    type_def.name, DrawingPosition.TOP, lst_note, "Types"
+                )
+            )
         return type_def_list
 
     def draw_context(self, contexts: List[Context]):
         context_list = []
         for context in contexts:
             context_list.extend(
-                DrawingTool.generate_other_label(
-                    context.domain_name,
-                    context.path_name))
+                DrawingTool.generate_other_label(context.domain_name, context.path_name)
+            )
 
             lst_note = []
             # lst_note.append("Path: " + context.path_name)
             lst_note.extend(context.type_def.types)
             context_list.extend(
                 DrawingTool.generate_note(
-                    context.domain_name,
-                    DrawingPosition.TOP,
-                    lst_note,
-                    "Types"))
+                    context.domain_name, DrawingPosition.TOP, lst_note, "Types"
+                )
+            )
         return context_list
 
     def draw_se_app(self, se_apps: List[SeAppContext]):
@@ -115,10 +116,9 @@ class AdvancedDrawer(AbstractDrawer):
             lst_note.extend(se_app_context.attribute.attributes)
             se_app_list.extend(
                 DrawingTool.generate_note(
-                    se_app_context.domain,
-                    DrawingPosition.TOP,
-                    lst_note,
-                    "Types"))
+                    se_app_context.domain, DrawingPosition.TOP, lst_note, "Types"
+                )
+            )
         return se_app_list
 
     def draw_rule(self, rules: List[Rule]):
@@ -127,28 +127,26 @@ class AdvancedDrawer(AbstractDrawer):
             for permission in rule.permissions:
                 if rule.rule == RuleEnum.NEVER_ALLOW:
                     rule_list.append(
-                        "" +
-                        self.insert_new_participant(
-                            rule.source) +
-                        " .....[#red]> \"" +
-                        rule.target +
-                        "\" : " +
-                        "!! " +
-                        permission +
-                        " !!")
+                        ""
+                        + self.insert_new_participant(rule.source)
+                        + ' .....[#red]> "'
+                        + rule.target
+                        + '" : '
+                        + "!! "
+                        + permission
+                        + " !!"
+                    )
                 else:
                     rule_list.append(
-                        "" +
-                        self.insert_new_participant(
-                            rule.source) +
-                        " -----[#green]> \"" +
-                        rule.target +
-                        "\" : " +
-                        permission)
+                        ""
+                        + self.insert_new_participant(rule.source)
+                        + ' -----[#green]> "'
+                        + rule.target
+                        + '" : '
+                        + permission
+                    )
 
         return rule_list
-
-
 
     def generate_reference(self):
         lst_note = []
@@ -160,7 +158,8 @@ class AdvancedDrawer(AbstractDrawer):
             DrawingPosition.TOP,
             DrawingPosition.LEFT,
             lst_note,
-            DrawingColor.BLUE_LIGHT)
+            DrawingColor.BLUE_LIGHT,
+        )
 
     def write_to_file(self, file_name, list_of_str):
         file_writer = FW.FileWriter

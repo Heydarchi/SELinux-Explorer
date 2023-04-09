@@ -4,7 +4,6 @@ from PyQt5.QtCore import QSize
 
 
 class UiUtility:
-
     @staticmethod
     def show_message(title, message, icon_type=QMessageBox.Information):
         msg = QMessageBox()
@@ -17,11 +16,8 @@ class UiUtility:
     @staticmethod
     def ask_question(handle, title, message):
         reply = QMessageBox.question(
-            handle,
-            title,
-            message,
-            QMessageBox.Yes | QMessageBox.No,
-            QMessageBox.No)
+            handle, title, message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No
+        )
         return True if reply == QMessageBox.Yes else False
 
     @staticmethod

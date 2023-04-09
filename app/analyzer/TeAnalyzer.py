@@ -67,9 +67,9 @@ class TeAnalyzer(AbstractAnalyzer):
 
     def extract_definition(self, input_string):
         try:
-            types = input_string.replace(
-                ";", "").replace(
-                "type ", "").strip().split(",")
+            types = (
+                input_string.replace(";", "").replace("type ", "").strip().split(",")
+            )
             type_def = TypeDef()
             type_def.name = types[0].strip()
             type_def.types.extend(types[1:])
@@ -98,8 +98,12 @@ class TeAnalyzer(AbstractAnalyzer):
     def extract_attribite(self, input_string):
         try:
             attribute = Attribute()
-            types = input_string.replace(";", "").replace(
-                "typeattribute ", "").strip().split(" ")
+            types = (
+                input_string.replace(";", "")
+                .replace("typeattribute ", "")
+                .strip()
+                .split(" ")
+            )
             attribute.name = types[0]
             attribute.types.extend(types[1:])
             return attribute
@@ -111,48 +115,57 @@ class TeAnalyzer(AbstractAnalyzer):
     def extract_rule(self, input_string):
         lst_rules = []
         try:
-            input_string = input_string.replace(
-                ' : ',
-                ':').replace(
-                ' :',
-                ':').replace(
-                ': ',
-                ':').strip()
-            input_string = input_string.replace(
-                '{', ' { ').replace('}', ' } ').strip()
-            input_string = input_string.replace(
-                ': {', ':{ ').replace('} :', '}:').strip()
-            input_string = input_string.replace(
-                ':  {', ':{ ').replace('}  :', '}:').strip()
+            input_string = (
+                input_string.replace(" : ", ":")
+                .replace(" :", ":")
+                .replace(": ", ":")
+                .strip()
+            )
+            input_string = input_string.replace("{", " { ").replace("}", " } ").strip()
+            input_string = (
+                input_string.replace(": {", ":{ ").replace("} :", "}:").strip()
+            )
+            input_string = (
+                input_string.replace(":  {", ":{ ").replace("}  :", "}:").strip()
+            )
 
             # print("inputString; " + inputString)
             items = input_string.replace(";", "").split()
             for rule_enum in RuleEnum:
                 if rule_enum.label == items[0].strip():
-
                     count_brackets = input_string.count("}")
                     lst_bracket_items = []
                     if count_brackets > 0:
                         offset = 0
-                        while '{' in input_string[offset:]:
+                        while "{" in input_string[offset:]:
                             # print (inputString[offset:])
-                            start = input_string.find('{', offset)
-                            end = input_string.find('}', start)
-                            bracket_string = input_string[start + 1: end]
-                            input_string = input_string[:start] + \
-                                "###" + input_string[end + 1:]
+                            start = input_string.find("{", offset)
+                            end = input_string.find("}", start)
+                            bracket_string = input_string[start + 1 : end]
+                            input_string = (
+                                input_string[:start] + "###" + input_string[end + 1 :]
+                            )
                             lst_bracket_items.append(bracket_string)
                             offset = start
 
-                    items = input_string.replace(
-                        ";", "").replace(
-                        ": ", ":").strip().split()
-                    sources = [items[1]] if "###" not in items[1] else lst_bracket_items.pop(
-                        0).strip().split()
-                    sec_context = items[2] if "###" not in items[2] else (
-                            lst_bracket_items.pop(0) + ":" + items[2].split(":")[1])
-                    permissions = [items[3]] if "###" not in items[3] != "###" else lst_bracket_items.pop(
-                        0).strip().split()
+                    items = (
+                        input_string.replace(";", "").replace(": ", ":").strip().split()
+                    )
+                    sources = (
+                        [items[1]]
+                        if "###" not in items[1]
+                        else lst_bracket_items.pop(0).strip().split()
+                    )
+                    sec_context = (
+                        items[2]
+                        if "###" not in items[2]
+                        else (lst_bracket_items.pop(0) + ":" + items[2].split(":")[1])
+                    )
+                    permissions = (
+                        [items[3]]
+                        if "###" not in items[3] != "###"
+                        else lst_bracket_items.pop(0).strip().split()
+                    )
 
                     for source in sources:
                         rule = Rule()
@@ -178,14 +191,8 @@ class TeAnalyzer(AbstractAnalyzer):
             lst_lines = input_string.splitlines()
             macro = PolicyMacro()
             # It's supposed to have define in the first item
-            first_line = lst_lines.pop(0).replace("define", "").replace("\'", "")
-            first_line = first_line.replace(
-                "`",
-                "").replace(
-                "(",
-                "").replace(
-                ",",
-                "")
+            first_line = lst_lines.pop(0).replace("define", "").replace("'", "")
+            first_line = first_line.replace("`", "").replace("(", "").replace(",", "")
             macro.name = first_line.strip()
             for line in lst_lines:
                 if ")" in line.strip():
@@ -203,8 +210,9 @@ class TeAnalyzer(AbstractAnalyzer):
             # Convert string to PolicyMacroCall
             macro_call = PolicyMacroCall()
             macro_call.name = input_string.split("(")[0].strip()
-            macro_call.parameters = input_string.split(
-                "(")[1].replace(")", "").strip().split(",")
+            macro_call.parameters = (
+                input_string.split("(")[1].replace(")", "").strip().split(",")
+            )
             return macro_call
         except Exception as err:
             MyLogger.log_error(sys, err, input_string)

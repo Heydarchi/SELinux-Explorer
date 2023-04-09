@@ -2,13 +2,11 @@ import logging
 import os
 
 logging.basicConfig(
-    filename='app.log',
-    filemode='w',
-    format='%(name)s - %(levelname)s - %(message)s')
+    filename="app.log", filemode="w", format="%(name)s - %(levelname)s - %(message)s"
+)
 
 
 class MyLogger:
-
     @staticmethod
     def log_error(_sys, _exception, _message=None):
         exception_type, exception_object, exception_traceback = _sys.exc_info()

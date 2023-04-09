@@ -21,11 +21,8 @@ class AboutWindow(QWidget):
         self.lbl_app_author_email = QLabel(AUTHOR_EMAIL)
         self.lbl_app_license = QLabel("License: " + APP_LICENSE)
         self.lbl_app_website = QLabel(
-            "<a href=\"" +
-            APP_WEBSITE +
-            "\">" +
-            APP_WEBSITE +
-            "</a>")
+            '<a href="' + APP_WEBSITE + '">' + APP_WEBSITE + "</a>"
+        )
 
         self.btn_ok = QPushButton("OK")
 
@@ -34,10 +31,8 @@ class AboutWindow(QWidget):
         self.lbl_app_name.setStyleSheet("font-size: 20px; font-weight: bold;")
         self.lbl_app_version.setStyleSheet("font-size: 15px; font-weight: bold;")
         self.lbl_app_author.setStyleSheet("font-size: 15px; font-weight: normal")
-        self.lbl_app_author_email.setStyleSheet(
-            "font-size: 15px; font-weight: normal;")
-        self.lbl_app_website.setStyleSheet(
-            "font-size: 15px; font-weight: normal;")
+        self.lbl_app_author_email.setStyleSheet("font-size: 15px; font-weight: normal;")
+        self.lbl_app_website.setStyleSheet("font-size: 15px; font-weight: normal;")
         self.lbl_app_license.setStyleSheet("font-size: 15px; font-weight: bold;")
 
         self.lbl_app_website.setOpenExternalLinks(True)

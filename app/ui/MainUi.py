@@ -1,4 +1,3 @@
-
 from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QLabel
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QMessageBox
 from PyQt5.QtGui import *
@@ -36,7 +35,8 @@ class MainWindow(QMainWindow):
             self.layout_path.last_opened_path = self.app_setting.last_opened_path
             self.toolbar.keep_result = self.app_setting.keep_the_result
             self.layout_filter.set_selected_filter_type(
-                self.app_setting.selected_filter_type)
+                self.app_setting.selected_filter_type
+            )
             print("AppSetting loaded!")
         else:
             self.save_setting()
@@ -44,8 +44,9 @@ class MainWindow(QMainWindow):
     def save_setting(self):
         self.app_setting.last_opened_path = self.layout_path.last_opened_path
         self.app_setting.keep_the_result = self.toolbar.keep_result
-        self.app_setting.selected_filter_type = \
+        self.app_setting.selected_filter_type = (
             self.layout_filter.get_selected_filter_type()
+        )
 
         FileWriter.write_file("app_setting.json", self.app_setting.to_json())
         print("AppSetting saved!")
@@ -80,20 +81,20 @@ class MainWindow(QMainWindow):
         self._set_window_position()
 
         app_icon = QIcon()
-        app_icon.addFile(ICON_PATH + 'icon_16.png', QSize(16, 16))
-        app_icon.addFile(ICON_PATH + 'icon_24.png', QSize(24, 24))
-        app_icon.addFile(ICON_PATH + 'icon_32.png', QSize(32, 32))
-        app_icon.addFile(ICON_PATH + 'icon_64.png', QSize(64, 64))
-        app_icon.addFile(ICON_PATH + 'icon_256.png', QSize(256, 256))
+        app_icon.addFile(ICON_PATH + "icon_16.png", QSize(16, 16))
+        app_icon.addFile(ICON_PATH + "icon_24.png", QSize(24, 24))
+        app_icon.addFile(ICON_PATH + "icon_32.png", QSize(32, 32))
+        app_icon.addFile(ICON_PATH + "icon_64.png", QSize(64, 64))
+        app_icon.addFile(ICON_PATH + "icon_256.png", QSize(256, 256))
         self.setWindowIcon(app_icon)
 
     def _config_signals(self):
-        self.toolbar.connect_to_get_selected_paths(
-            self.layout_path.get_selected_paths)
+        self.toolbar.connect_to_get_selected_paths(self.layout_path.get_selected_paths)
         self.toolbar.connect_to_get_all_paths(self.layout_path.get_all_paths)
         self.toolbar.connect_on_add_file_folder(self.layout_path.on_add_file_folder)
         self.layout_analyzer_result.connect_to_filter_ui(
-            self.layout_filter.on_get_filter)
+            self.layout_filter.on_get_filter
+        )
 
     def _set_window_position(self):
         qr = self.frameGeometry()
@@ -106,10 +107,12 @@ class MainWindow(QMainWindow):
         self.toolbar.on_dispose()
 
     def closeEvent(self, event):
-        result = QMessageBox().question(self,
-                                        "Confirm Exit...",
-                                        "Are you sure you want to exit ?",
-                                        QMessageBox.Yes | QMessageBox.No)
+        result = QMessageBox().question(
+            self,
+            "Confirm Exit...",
+            "Are you sure you want to exit ?",
+            QMessageBox.Yes | QMessageBox.No,
+        )
         event.ignore()
 
         if result == QMessageBox.Yes:

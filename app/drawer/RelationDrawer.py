@@ -7,8 +7,8 @@ from AppSetting import OUT_DIR
 from drawer.AbstractDrawer import *
 from typing import List
 
-class RelationDrawer(AbstractDrawer):
 
+class RelationDrawer(AbstractDrawer):
     def draw_uml(self, policy_file: PolicyFile):
         self.dict_of_participant = {}
         self.drawer_class = DrawerClass()
@@ -48,10 +48,14 @@ class RelationDrawer(AbstractDrawer):
         # Remove redundance items
         plant_uml_list = list(dict.fromkeys(plant_uml_list))
         # print(plant_uml_list)
-        file_path = OUT_DIR + "/Integrated-" + \
-            datetime.today().strftime("%d-%m-%y---%H-%M-%s") + "_relation.puml"
-        '''self.writeToFile(file_path, plant_uml_list)
-        print("drawing: ", file_path)'''
+        file_path = (
+            OUT_DIR
+            + "/Integrated-"
+            + datetime.today().strftime("%d-%m-%y---%H-%M-%s")
+            + "_relation.puml"
+        )
+        """self.writeToFile(file_path, plant_uml_list)
+        print("drawing: ", file_path)"""
 
         self.generate_png(file_path)
         # print(policy_file)
@@ -61,43 +65,42 @@ class RelationDrawer(AbstractDrawer):
         for type_def in type_defs:
             # type_def.append("\"" + type_def.name + "\" -----> \"" + type_def.types + "\"" )
             type_def_list.append(
-                "participant " +
-                self.insert_new_participant(
-                    type_def.name) +
-                " [\n=" +
-                type_def.name +
-                "\n ----- \n\"\"" +
-                ', '.join(
-                    type_def.types) +
-                "\"\"\n]")
+                "participant "
+                + self.insert_new_participant(type_def.name)
+                + " [\n="
+                + type_def.name
+                + '\n ----- \n""'
+                + ", ".join(type_def.types)
+                + '""\n]'
+            )
         return type_def_list
 
     def draw_context(self, contexts: List[Context]):
         context_list = []
         for context in contexts:
             context_list.append(
-                "participant " +
-                self.insert_new_participant(
-                    context.security_context.type) +
-                " [\n=" +
-                context.security_context.type +
-                "\n ----- \n\"\"" +
-                context.path_name +
-                "\"\"\n]")
+                "participant "
+                + self.insert_new_participant(context.security_context.type)
+                + " [\n="
+                + context.security_context.type
+                + '\n ----- \n""'
+                + context.path_name
+                + '""\n]'
+            )
         return context_list
 
     def draw_se_app(self, se_apps: List[SeAppContext]):
         se_app_list = []
         for se_app_context in se_apps:
             se_app_list.append(
-                "participant " +
-                self.insert_new_participant(
-                    se_app_context.domain) +
-                " [\n=" +
-                se_app_context.domain +
-                "\n ----- \n\"\"" +
-                se_app_context.user +
-                "\"\"\n]")
+                "participant "
+                + self.insert_new_participant(se_app_context.domain)
+                + " [\n="
+                + se_app_context.domain
+                + '\n ----- \n""'
+                + se_app_context.user
+                + '""\n]'
+            )
         return se_app_list
 
     def draw_rule(self, rules: List[Rule]):
@@ -105,30 +108,28 @@ class RelationDrawer(AbstractDrawer):
         for rule in rules:
             if rule.rule == RuleEnum.NEVER_ALLOW:
                 rule_list.append(
-                    "" +
-                    self.insert_new_participant(
-                        rule.source) +
-                    " -----[#red]>x \"" +
-                    rule.target +
-                    "\" : " +
-                    rule.rule.label +
-                    " (" +
-                    ', '.join(
-                        rule.permissions) +
-                    ")")
+                    ""
+                    + self.insert_new_participant(rule.source)
+                    + ' -----[#red]>x "'
+                    + rule.target
+                    + '" : '
+                    + rule.rule.label
+                    + " ("
+                    + ", ".join(rule.permissions)
+                    + ")"
+                )
             else:
                 rule_list.append(
-                    "" +
-                    self.insert_new_participant(
-                        rule.source) +
-                    " -----[#green]> \"" +
-                    rule.target +
-                    "\" : " +
-                    rule.rule.label +
-                    " (" +
-                    ', '.join(
-                        rule.permissions) +
-                    ")")
+                    ""
+                    + self.insert_new_participant(rule.source)
+                    + ' -----[#green]> "'
+                    + rule.target
+                    + '" : '
+                    + rule.rule.label
+                    + " ("
+                    + ", ".join(rule.permissions)
+                    + ")"
+                )
 
         return rule_list
 

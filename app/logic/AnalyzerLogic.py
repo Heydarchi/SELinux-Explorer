@@ -4,6 +4,7 @@ from drawer.DrawerHelper import *
 from AppSetting import *
 from model.PolicyEntities import *
 
+
 class AnalyzerLogic:
     def __init__(self):
         super().__init__()
@@ -29,7 +30,6 @@ class AnalyzerLogic:
         self.on_analyze_finished(None)
         self.update_analyzer_data_result(self.ref_policy_file)
 
-
     def make_ref_policy_file(self, policy_files):
         if policy_files is None or len(policy_files) == 0:
             return None
@@ -51,16 +51,19 @@ class AnalyzerLogic:
                 if macro.name == maco_call.name:
                     rules = macro.rules
                     for rule in rules:
-                        '''Need to replace $number in source, target or 
+                        """Need to replace $number in source, target or
                         class_type with parameter from macro call with
-                         the same number'''
+                         the same number"""
                         for i in range(0, len(maco_call.parameters)):
                             rule.source = rule.source.replace(
-                                "$" + str(i + 1), maco_call.parameters[i])
+                                "$" + str(i + 1), maco_call.parameters[i]
+                            )
                             rule.target = rule.target.replace(
-                                "$" + str(i + 1), maco_call.parameters[i])
+                                "$" + str(i + 1), maco_call.parameters[i]
+                            )
                             rule.class_type = rule.class_type.replace(
-                                "$" + str(i), maco_call.parameters[i])
+                                "$" + str(i), maco_call.parameters[i]
+                            )
                         # print("rule: ", rule)
                         ref_policy_file.rules.append(rule)
                         ref_policy_file.macro_calls.clear()
@@ -82,8 +85,8 @@ class AnalyzerLogic:
 
     def remove_file(self, file_path):
         SystemUtility().delete_files(
-            os.path.splitext(file_path)[0] +
-            DIAGEAM_FILE_EXTENSION)
+            os.path.splitext(file_path)[0] + DIAGEAM_FILE_EXTENSION
+        )
         SystemUtility().delete_files(os.path.splitext(file_path)[0] + ".puml")
 
     def clear(self):
@@ -104,5 +107,6 @@ class AnalyzerLogic:
 
     def on_analyze_finished(self, filtered_policy_file):
         self.list_of_diagrams = SystemUtility().get_list_of_files(
-            os.getcwd() + "/" + OUT_DIR, "*" + DIAGEAM_FILE_EXTENSION)
+            os.getcwd() + "/" + OUT_DIR, "*" + DIAGEAM_FILE_EXTENSION
+        )
         self.update_result()

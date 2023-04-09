@@ -45,7 +45,6 @@ class DrawingColor(Enum):
 
 
 class DrawingTool:
-
     @staticmethod
     def generate_start_of_puml():
         lst_output = []
@@ -86,8 +85,9 @@ class DrawingTool:
         items = list(dict.fromkeys(items))
         lst_note = []
         if title.strip() != "" and len(items) >= 1:
-            lst_note.append(DrawingStyle.NOTE.value + " " +
-                           position.value + " of [" + title + "]")
+            lst_note.append(
+                DrawingStyle.NOTE.value + " " + position.value + " of [" + title + "]"
+            )
             lst_note.append("<b>" + first_line + "</b>")
             for item in items:
                 lst_note.append("  - " + item)
@@ -97,20 +97,22 @@ class DrawingTool:
 
     @staticmethod
     def generate_legend(
-            title,
-            position_vertical: DrawingPosition,
-            position_horizontal: DrawingPosition,
-            items,
-            back_color: DrawingColor):
+        title,
+        position_vertical: DrawingPosition,
+        position_horizontal: DrawingPosition,
+        items,
+        back_color: DrawingColor,
+    ):
         items = list(dict.fromkeys(items))
         lst_note = []
         if title.strip() != "" and len(items) >= 1:
             lst_note.append(
-                DrawingStyle.LEGEND.value +
-                " " +
-                position_vertical.value +
-                "   " +
-                position_horizontal.value)
+                DrawingStyle.LEGEND.value
+                + " "
+                + position_vertical.value
+                + "   "
+                + position_horizontal.value
+            )
             lst_note.append("<b>" + title + "</b>")
             for item in items:
                 lst_note.append("  - " + item)
@@ -122,11 +124,7 @@ class DrawingTool:
     def generate_domain(title, description=None):
         lst_domain = []
         if title.strip() != "":
-            lst_domain.append(
-                DrawingStyle.DOMAIN.value +
-                " \"*" +
-                title +
-                "*\" {")
+            lst_domain.append(DrawingStyle.DOMAIN.value + ' "*' + title + '*" {')
             lst_domain.append("[" + title + "]")
             lst_domain.append("}")
             lst_domain.append("")
@@ -137,10 +135,8 @@ class DrawingTool:
         lst_domain = []
         if title.strip() != "":
             lst_domain.append(
-                DrawingStyle.DOMAIN.value +
-                " \"" +
-                description +
-                "\" #FFA07A{")
+                DrawingStyle.DOMAIN.value + ' "' + description + '" #FFA07A{'
+            )
             lst_domain.append("[" + title + "]")
             lst_domain.append("}")
             lst_domain.append("")

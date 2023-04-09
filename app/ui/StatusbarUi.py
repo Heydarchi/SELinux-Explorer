@@ -1,4 +1,3 @@
-
 from PyQt5.QtWidgets import QStatusBar
 from logic.AnalyzerLogic import *
 from PythonUtilityClasses.SystemUtility import *

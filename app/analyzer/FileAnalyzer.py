@@ -40,7 +40,6 @@ class FileAnalyzer(AbstractAnalyzer):
         return self.list_of_policy_files
 
     def gather_file_info(self, target_path, pattern):
-
         system_utility = SU.SystemUtility()
         list_of_files = system_utility.get_list_of_files(target_path, pattern)
         for file in list_of_files:
@@ -67,11 +66,13 @@ class FileAnalyzer(AbstractAnalyzer):
             return TeAnalyzer().analyze(file_path)
         elif file_type == FileTypeEnum.SEAPP_CONTEXTS:
             return SeAppAnalyzer().analyze(file_path)
-        elif file_type in [FileTypeEnum.FILE_CONTEXTS,
-                           FileTypeEnum.SERVICE_CONTEXTS,
-                           FileTypeEnum.HWSERVICE_CONTEXTS,
-                           FileTypeEnum.VNDSERVICE_CONTEXTS,
-                           FileTypeEnum.PROPERTY_CONTEXTS]:
+        elif file_type in [
+            FileTypeEnum.FILE_CONTEXTS,
+            FileTypeEnum.SERVICE_CONTEXTS,
+            FileTypeEnum.HWSERVICE_CONTEXTS,
+            FileTypeEnum.VNDSERVICE_CONTEXTS,
+            FileTypeEnum.PROPERTY_CONTEXTS,
+        ]:
             return ContextsAnalyzer().analyze(file_path)
         else:
             return

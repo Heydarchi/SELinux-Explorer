@@ -1,4 +1,3 @@
-
 from PyQt5.QtWidgets import QAction, QToolBar, QFileDialog, QInputDialog
 from PyQt5.QtGui import QIcon
 from logic.AnalyzerLogic import *
@@ -29,57 +28,44 @@ class ToolbarUi(QToolBar):
 
     def _init_widgets(self):
         self.act_add_file = QAction(
-            QIcon(
-                ICON_PATH +
-                'add-file.png'),
+            QIcon(ICON_PATH + "add-file.png"),
             "Add a file to the list",
-            self.main_window)
+            self.main_window,
+        )
         self.act_add_path = QAction(
-            QIcon(
-                ICON_PATH +
-                'add-folder.png'),
+            QIcon(ICON_PATH + "add-folder.png"),
             "Add a Path to the list",
-            self.main_window)
+            self.main_window,
+        )
         self.act_remove_output = QAction(
-            QIcon(
-                ICON_PATH +
-                'remove.png'),
-            "Remove Outputs",
-            self.main_window)
+            QIcon(ICON_PATH + "remove.png"), "Remove Outputs", self.main_window
+        )
         self.act_clear_analyze = QAction(
-            QIcon(
-                ICON_PATH +
-                'reset.png'),
-            "Clear Analyze",
-            self.main_window)
+            QIcon(ICON_PATH + "reset.png"), "Clear Analyze", self.main_window
+        )
         self.act_wipe_all = QAction(
-            QIcon(
-                ICON_PATH + 'broom.png'),
+            QIcon(ICON_PATH + "broom.png"),
             "Wipe all(output, analyze, etc.)",
-            self.main_window)
+            self.main_window,
+        )
         self.act_make_reference = QAction(
-            QIcon(
-                ICON_PATH +
-                'reference.png'),
+            QIcon(ICON_PATH + "reference.png"),
             "Make reference from the analyzed data",
-            self.main_window)
+            self.main_window,
+        )
         self.act_analyze_all = QAction(
-            QIcon(
-                ICON_PATH +
-                'magic-wand.png'),
+            QIcon(ICON_PATH + "magic-wand.png"),
             "Analyze all the files/paths",
-            self.main_window)
+            self.main_window,
+        )
         self.act_keep_result = QAction(
-            QIcon(
-                ICON_PATH + 'hosting.png'),
+            QIcon(ICON_PATH + "hosting.png"),
             "Don't erase the current result before Analyzing",
-            self.main_window)
+            self.main_window,
+        )
         self.act_about = QAction(
-            QIcon(
-                ICON_PATH +
-                'information.png'),
-            "About",
-            self.main_window)
+            QIcon(ICON_PATH + "information.png"), "About", self.main_window
+        )
 
         self.act_keep_result.setCheckable(True)
 
@@ -129,10 +115,13 @@ class ToolbarUi(QToolBar):
     def on_add_path(self):
         self.add_path_to_list(
             QFileDialog(
-                directory=self.app_setting.last_opened_path).getExistingDirectory(
+                directory=self.app_setting.last_opened_path
+            ).getExistingDirectory(
                 self.main_window,
-                'Hey! Select a Folder',
-                options=QFileDialog.ShowDirsOnly))
+                "Hey! Select a Folder",
+                options=QFileDialog.ShowDirsOnly,
+            )
+        )
 
     def add_path_to_list(self, path):
         self.app_setting.last_opened_path = path
@@ -183,10 +172,12 @@ class ToolbarUi(QToolBar):
 
     def on_make_reference(self):
         ref_name, confirm = QInputDialog.getText(
-            self, 'Text Input Dialog', 'Enter your name:')
+            self, "Text Input Dialog", "Enter your name:"
+        )
         if confirm:
             SettingClass.save_list_as_json(
-                ref_name, self.analyzer_logic.list_of_policy_files)
+                ref_name, self.analyzer_logic.list_of_policy_files
+            )
             print("AppSetting saved!")
 
     def on_about(self):

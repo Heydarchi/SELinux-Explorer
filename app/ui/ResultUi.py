@@ -1,4 +1,3 @@
-
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel
 from PyQt5.QtWidgets import QListWidget, QWidget, QGridLayout
 from PyQt5.QtWidgets import QGroupBox, QListWidgetItem, QAbstractItemView
@@ -48,10 +47,8 @@ class DiagramWindow(QWidget):
 
     def resizeEvent(self, event):
         self.label.setPixmap(
-            self.im.scaled(
-                self.label.width(),
-                self.label.height(),
-                Qt.KeepAspectRatio))
+            self.im.scaled(self.label.width(), self.label.height(), Qt.KeepAspectRatio)
+        )
 
 
 class ResultUi(QVBoxLayout):
@@ -77,14 +74,14 @@ class ResultUi(QVBoxLayout):
         self.lst_results.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
         self.btn_delete_selected = UiUtility.create_button(
-            "Delete the selected file", QIcon(
-                ICON_PATH + "delete.png"), 24, 24)
+            "Delete the selected file", QIcon(ICON_PATH + "delete.png"), 24, 24
+        )
         self.btn_open_multiple = UiUtility.create_button(
-            "Open selected files(Multiple", QIcon(
-                ICON_PATH + "multiple.png"), 24, 24)
+            "Open selected files(Multiple", QIcon(ICON_PATH + "multiple.png"), 24, 24
+        )
         self.btn_open_single = UiUtility.create_button(
-            "Open the selected file(Single)", QIcon(
-                ICON_PATH + "single.png"), 24, 24)
+            "Open the selected file(Single)", QIcon(ICON_PATH + "single.png"), 24, 24
+        )
 
     def _config_signals(self):
         self.btn_delete_selected.clicked.connect(self._on_delete_selected_file)

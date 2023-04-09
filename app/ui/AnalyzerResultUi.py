@@ -1,4 +1,3 @@
-
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QComboBox
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 from PyQt5.QtWidgets import QGroupBox, QLabel, QCheckBox, QLineEdit
@@ -29,8 +28,7 @@ class AnalyzerResultUi(QVBoxLayout):
         self.COL_TITLE_WIDTH = 420
         self.COL_TYPE_WIDTH = 140
         self.MARGIN = 20
-        self.TABLE_MIN_WIDTH = self.COL_TITLE_WIDTH + \
-                               self.COL_TYPE_WIDTH + self.MARGIN
+        self.TABLE_MIN_WIDTH = self.COL_TITLE_WIDTH + self.COL_TYPE_WIDTH + self.MARGIN
         self.COL_TITLE_INDEX = 0
         self.COL_TYPE_INDEX = 1
         self.BTN_WIDTH = 28
@@ -44,7 +42,8 @@ class AnalyzerResultUi(QVBoxLayout):
             "Reset search",
             ICON_PATH + "reset_green.png",
             self.BTN_WIDTH,
-            self.BTN_HEIGHT)
+            self.BTN_HEIGHT,
+        )
         self.tbl_result = QTableWidget()
         self.layout_button = QHBoxLayout()
         self.layout_filter = QHBoxLayout()
@@ -58,7 +57,8 @@ class AnalyzerResultUi(QVBoxLayout):
             "Add to the filters",
             ICON_PATH + "down-arrow.png",
             self.BTN_WIDTH,
-            self.BTN_HEIGHT)
+            self.BTN_HEIGHT,
+        )
 
         self.cmb_filter = QComboBox()
         self.cmb_filter.addItem("ALL")
@@ -71,16 +71,14 @@ class AnalyzerResultUi(QVBoxLayout):
         self.tbl_result.setMinimumWidth(self.TABLE_MIN_WIDTH)
         self.tbl_result.setMinimumHeight(self.TABLE_MINIMUM_HEIGHT)
 
-        self.tbl_result.setColumnWidth(
-            self.COL_TITLE_INDEX, self.COL_TITLE_WIDTH)
+        self.tbl_result.setColumnWidth(self.COL_TITLE_INDEX, self.COL_TITLE_WIDTH)
         self.tbl_result.setColumnWidth(self.COL_TYPE_INDEX, self.COL_TYPE_WIDTH)
         self.tbl_result.setSelectionMode(QTableWidget.SingleSelection)
         self.tbl_result.setSelectionBehavior(QTableWidget.SelectRows)
 
     def _config_signals(self):
         self.btn_add_selected.clicked.connect(self.on_add_selected_filter)
-        self.analyzer_logic.set_ui_update_analyzer_data_signal(
-            self.on_analyze_finished)
+        self.analyzer_logic.set_ui_update_analyzer_data_signal(self.on_analyze_finished)
         self.cmb_filter.currentIndexChanged.connect(self.on_filter_changed)
         self.edt_search.textChanged.connect(self._on_seach_text_changed)
         self.btn_reset_search.clicked.connect(self.on_reset_search)
@@ -113,14 +111,13 @@ class AnalyzerResultUi(QVBoxLayout):
         row = self.tbl_result.currentRow()
         rule = FilterRule()
         rule.exact_word = UiUtility.ask_question(
-            self.main_window, "Exact word",
-            "Do you want to add the exact word?")
-        rule.keyword = self.tbl_result.item(
-            row, self.COL_TITLE_INDEX).text().strip()
+            self.main_window, "Exact word", "Do you want to add the exact word?"
+        )
+        rule.keyword = self.tbl_result.item(row, self.COL_TITLE_INDEX).text().strip()
         rule.filter_type = FilterRule.get_filter_type_from_str(
-            self.tbl_result.item(row, self.COL_TYPE_INDEX).text().strip())
+            self.tbl_result.item(row, self.COL_TYPE_INDEX).text().strip()
+        )
         self.send_to_filter_ui(rule)
-
 
     def on_analyze_finished(self, ref_policy_file):
         print("onAnalyzeFinished")
@@ -135,7 +132,8 @@ class AnalyzerResultUi(QVBoxLayout):
             lst_rules = self.search_result(
                 self.last_rules_result,
                 self.edt_search.text().strip(),
-                self.chk_case_sensitive.isChecked())
+                self.chk_case_sensitive.isChecked(),
+            )
         else:
             lst_rules = self.last_rules_result
         self.update_table(lst_rules)
@@ -150,35 +148,25 @@ class AnalyzerResultUi(QVBoxLayout):
 
         for type_def in policy_file.type_def:
             if type_def.name.strip() != "":
-                domain_rules.append(
-                    FilterRule(
-                        FilterType.DOMAIN,
-                        type_def.name,
-                        False))
+                domain_rules.append(FilterRule(FilterType.DOMAIN, type_def.name, False))
 
         for se_apps in policy_file.se_apps:
             if se_apps.domain.strip() != "":
                 domain_rules.append(
-                    FilterRule(
-                        FilterType.DOMAIN,
-                        se_apps.domain,
-                        False))
+                    FilterRule(FilterType.DOMAIN, se_apps.domain, False)
+                )
 
         for context in policy_file.contexts:
             if context.domain_name.strip() != "":
                 domain_rules.append(
-                    FilterRule(
-                        FilterType.DOMAIN,
-                        context.domain_name,
-                        False))
+                    FilterRule(FilterType.DOMAIN, context.domain_name, False)
+                )
 
         for attribute in policy_file.attribute:
             if attribute.name.strip() != "":
                 domain_rules.append(
-                    FilterRule(
-                        FilterType.DOMAIN,
-                        attribute.name,
-                        False))
+                    FilterRule(FilterType.DOMAIN, attribute.name, False)
+                )
 
         domain_rules = list(set(domain_rules))
         return domain_rules
@@ -191,18 +179,14 @@ class AnalyzerResultUi(QVBoxLayout):
         for se_apps in policy_file.se_apps:
             if se_apps.name.strip() != "":
                 file_path_rules.append(
-                    FilterRule(
-                        FilterType.FILE_PATH,
-                        se_apps.name,
-                        False))
+                    FilterRule(FilterType.FILE_PATH, se_apps.name, False)
+                )
 
         for context in policy_file.contexts:
             if context.path_name.strip() != "":
                 file_path_rules.append(
-                    FilterRule(
-                        FilterType.FILE_PATH,
-                        context.path_name,
-                        False))
+                    FilterRule(FilterType.FILE_PATH, context.path_name, False)
+                )
 
         file_path_rules = list(set(file_path_rules))
         return file_path_rules
@@ -216,20 +200,16 @@ class AnalyzerResultUi(QVBoxLayout):
             if len(rule.permissions) > 0:
                 for permission in rule.permissions:
                     permission_rules.append(
-                        FilterRule(
-                            FilterType.PERMISSION,
-                            permission,
-                            False))
+                        FilterRule(FilterType.PERMISSION, permission, False)
+                    )
 
         for macro in policy_file.macros:
             if len(macro.rules) > 0:
                 for rule in macro.rules:
                     for permission in rule.permissions:
                         permission_rules.append(
-                            FilterRule(
-                                FilterType.PERMISSION,
-                                permission,
-                                False))
+                            FilterRule(FilterType.PERMISSION, permission, False)
+                        )
 
         permission_rules = list(set(permission_rules))
         return permission_rules
@@ -243,27 +223,21 @@ class AnalyzerResultUi(QVBoxLayout):
             for _type in type_def.types:
                 if _type.strip() != "":
                     class_type_rules.append(
-                        FilterRule(
-                            FilterType.CLASS_TYPE,
-                            _type,
-                            False))
+                        FilterRule(FilterType.CLASS_TYPE, _type, False)
+                    )
 
         for context in policy_file.contexts:
             for _type in context.type_def.types:
                 if _type.strip() != "":
                     class_type_rules.append(
-                        FilterRule(
-                            FilterType.CLASS_TYPE,
-                            _type,
-                            False))
+                        FilterRule(FilterType.CLASS_TYPE, _type, False)
+                    )
 
         for rule in policy_file.rules:
             if rule.class_type.strip() != "":
                 class_type_rules.append(
-                    FilterRule(
-                        FilterType.CLASS_TYPE,
-                        rule.class_type,
-                        False))
+                    FilterRule(FilterType.CLASS_TYPE, rule.class_type, False)
+                )
 
         class_type_rules = list(set(class_type_rules))
         return class_type_rules
@@ -276,8 +250,8 @@ class AnalyzerResultUi(QVBoxLayout):
         self.send_to_filter_ui = on_add_filter_event
 
     def on_filter_changed(self):
-        '''Filter the result table based on the selected filter type,
-        If it's ALL, show all the results'''
+        """Filter the result table based on the selected filter type,
+        If it's ALL, show all the results"""
         # print("onFilterChanged")
         lst_rules = []
         if self.cmb_filter.currentText() == "ALL":
@@ -300,7 +274,8 @@ class AnalyzerResultUi(QVBoxLayout):
             lst_rules = self.search_result(
                 lst_rules,
                 self.edt_search.text().strip(),
-                self.chk_case_sensitive.isChecked())
+                self.chk_case_sensitive.isChecked(),
+            )
 
         self.update_table(lst_rules)
 
@@ -312,11 +287,13 @@ class AnalyzerResultUi(QVBoxLayout):
         self.tbl_result.setRowCount(len(lst_rules))
         for i in range(len(lst_rules)):
             self.tbl_result.setItem(
-                i, self.COL_TITLE_INDEX, QTableWidgetItem(
-                    lst_rules[i].keyword.strip()))
+                i, self.COL_TITLE_INDEX, QTableWidgetItem(lst_rules[i].keyword.strip())
+            )
             self.tbl_result.setItem(
-                i, self.COL_TYPE_INDEX, QTableWidgetItem(
-                    lst_rules[i].filter_type.name.strip()))
+                i,
+                self.COL_TYPE_INDEX,
+                QTableWidgetItem(lst_rules[i].filter_type.name.strip()),
+            )
 
     def search_result(self, lst_rules, keyword, case_sensitive):
         lst_search_result = []

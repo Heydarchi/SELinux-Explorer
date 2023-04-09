@@ -9,13 +9,17 @@ class TestAnalyzerUtility(unittest.TestCase):
         # Test the clean_line function
         self.assertEqual(
             clean_line("allow domain1 domain2:file { read write }"),
-            "allow domain1 domain2:file { read write }")
+            "allow domain1 domain2:file { read write }",
+        )
         self.assertEqual(
             clean_line(" allow domain1 domain2:file { read write }; "),
-            "allow domain1 domain2:file { read write };")
+            "allow domain1 domain2:file { read write };",
+        )
         self.assertEqual(
             clean_line(" allow domain1 domain2:file { read write }; #comment "),
-            "allow domain1 domain2:file { read write }; #")
+            "allow domain1 domain2:file { read write }; #",
+        )
         self.assertEqual(
             clean_line("allow domain1 domain2:file { read write };"),
-            "allow domain1 domain2:file { read write };")
+            "allow domain1 domain2:file { read write };",
+        )

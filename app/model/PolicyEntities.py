@@ -63,6 +63,7 @@ class RuleEnum(Enum):
         self.rank = rank
         self.label = label
 
+
 # allow source target:class permissions
 
 
@@ -73,6 +74,7 @@ class Rule(JSONWizard):
     target: str = ""
     class_type: str = ""
     permissions: List[str] = field(default_factory=list)
+
 
 # user:role:type:sensitivity[:categories]
 
@@ -115,6 +117,7 @@ class SeAppContext(JSONWizard):
     level_from: str = ""
     type_def: TypeDef = field(default_factory=TypeDef)
     attribute: Attribute = field(default_factory=Attribute)
+
 
 # pathname_regexp [file_type] security_context
 
