@@ -14,8 +14,10 @@ jobs:
       with:
         python-version: 3.x
 
-    - name: Install codespell
-      run: pip install codespell
+    - name: Install dependencies
+      run: |
+        pip install codespell
+        pip install pytest
 
     - name: Run codespell
       run: codespell --ignore-words=config/codespell_ignore.txt **/*
