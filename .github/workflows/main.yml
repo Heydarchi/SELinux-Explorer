@@ -1,0 +1,17 @@
+jobs:
+  spell_check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.x
+
+    - name: Install codespell
+      run: pip install codespell
+
+    - name: Run codespell
+      run: codespell --ignore-words=app/config/codespell_ignore.txt **/*.py
