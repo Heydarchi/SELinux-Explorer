@@ -25,7 +25,7 @@ class SeAppAnalyzer(AbstractAnalyzer):
         input_string = clean_line(input_string)
         if input_string is None:
             return
-        self.extract_definition(input_string)
+        self.policy_file.se_apps.append(self.extract_definition(input_string))
 
     def extract_definition(self, input_string):
         try:
@@ -64,10 +64,11 @@ class SeAppAnalyzer(AbstractAnalyzer):
                 elif "level" in split[0]:
                     se_app.level = split[1]
 
-            self.policy_file.se_apps.append(se_app)
+            return se_app
 
         except Exception as err:
             MyLogger.log_error(sys, err, input_string)
+            return None
 
 
 if __name__ == "__main__":
