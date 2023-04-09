@@ -1,3 +1,5 @@
+import sys
+
 from PythonUtilityClasses import SystemUtility as SU
 from analyzer.TeAnalyzer import *
 from analyzer.ContextsAnalyzer import *
@@ -6,11 +8,11 @@ from drawer.RelationDrawer import *
 from analyzer.AnalyzerEntities import *
 from MyLogger import *
 
+
 class FileAnalyzer(AbstractAnalyzer):
     def __init__(self) -> None:
         self.listOfPolicyFiles = list()
         self.listOfAnalyzerInfo = list()
-
 
     def clear(self):
         self.listOfPolicyFiles = list()
@@ -18,49 +20,49 @@ class FileAnalyzer(AbstractAnalyzer):
         print("The previous analyze result is cleared!")
 
     def analyze(self, targetPaths):
-        listOfFiles = list()
+        list_of_files = list()
         for path in targetPaths:
-            listOfFiles.extend( self.gatherFileInfo(path, "*"))
+            list_of_files.extend(self.gatherFileInfo(path, "*"))
 
-        if listOfFiles == None or len(listOfFiles) == 0:
-            print( "Nothing to analyze!")
+        if list_of_files is None or len(list_of_files) == 0:
+            print("Nothing to analyze!")
             return
 
-        for filePath in listOfFiles:
-            fileType = self.detectLang(filePath)
-            if fileType != FileTypeEnum.UNDEFINED :
-                print("Analyzing: " + filePath)
-                policyFile = self.invokeAnalyzerClass(fileType, filePath)
-                self.listOfPolicyFiles.append(policyFile)
+        for file_path in list_of_files:
+            file_type = self.detectLang(file_path)
+            if file_type != FileTypeEnum.UNDEFINED:
+                print("Analyzing: " + file_path)
+                policy_file = self.invokeAnalyzerClass(file_type, file_path)
+                self.listOfPolicyFiles.append(policy_file)
             else:
                 pass
-                #print("Undefined file extension : " + filePath)
+                # print("Undefined file extension : " + file_path)
 
-        return self.listOfPolicyFiles    
+        return self.listOfPolicyFiles
 
     def gatherFileInfo(self, targetPath, pattern):
-        
-        systemUtility = SU.SystemUtility()
-        listOfFiles = systemUtility.getListOfFiles(targetPath, pattern)
-        for file in listOfFiles :
+
+        system_utility = SU.SystemUtility()
+        list_of_files = system_utility.getListOfFiles(targetPath, pattern)
+        for file in list_of_files:
             try:
                 analyzerInfo = AnalyzerInfo()
-                analyzerInfo.sourceFile = systemUtility.getFileInfo(file)
+                analyzerInfo.sourceFile = system_utility.getFileInfo(file)
                 self.listOfAnalyzerInfo.append(analyzerInfo)
             except Exception as e:
                 MyLogger.logError(sys, e)
-        #print(self.listOfAnalyzerInfo)
-        return listOfFiles
+        # print(self.listOfAnalyzerInfo)
+        return list_of_files
 
     def detectLang(self, fileName):
         for fileType in FileTypeEnum:
-            #if fileType.label in os.path.basename(fileName):
+            # if fileType.label in os.path.basename(fileName):
             if os.path.basename(fileName).strip().endswith(fileType.label):
-                #print(os.path.basename(fileName))
+                # print(os.path.basename(fileName))
                 return fileType
 
         return FileTypeEnum.UNDEFINED
-        
+
     def invokeAnalyzerClass(self, fileType, filePath):
         if fileType == FileTypeEnum.TE_FILE:
             return TeAnalyzer().analyze(filePath)
@@ -71,7 +73,8 @@ class FileAnalyzer(AbstractAnalyzer):
         else:
             return
 
-if __name__ == "__main__" :
+
+if __name__ == "__main__":
     print(sys.argv)
     # print("Input path/file: ", sys.argv[1])
     # print("-----------------------------------------------------")

@@ -4,7 +4,6 @@ from logic.AnalyzerLogic import *
 from PythonUtilityClasses.SystemUtility import *
 
 
-
 class StatusbarUi(QStatusBar):
     def __init__(self, mainWindow, analyzerLogic):
         super().__init__()
@@ -17,7 +16,6 @@ class StatusbarUi(QStatusBar):
 
     def initVariables(self):
         pass
-
 
     def initWidgets(self):
         pass
@@ -32,7 +30,7 @@ class StatusbarUi(QStatusBar):
         items = self.lstResults.selectedItems()
         for item in items:
             path = item.text()
-    
+
     def onDeleteAllFile(self):
         self.analyzerLogic.clearOutput()
 
@@ -46,8 +44,7 @@ class StatusbarUi(QStatusBar):
             self.lstResults.addItem(QListWidgetItem(file))
 
     def onSelectedResult(self):
-        listItems=self.lstResults.selectedItems()
+        listItems = self.lstResults.selectedItems()
         if len(listItems) > 0:
             self.diagram = DiagramWindow(listItems[0].text())
             self.diagram.show()
-

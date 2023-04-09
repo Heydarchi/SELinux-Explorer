@@ -1,6 +1,6 @@
 
 from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QLabel
-from PyQt5.QtWidgets import QVBoxLayout,  QWidget, QMessageBox
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QMessageBox
 from PyQt5.QtGui import *
 from PyQt5.QtCore import QSize
 from logic.AnalyzerLogic import *
@@ -18,7 +18,7 @@ from AppSetting import *
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle( APP_NAME + " " + APP_VERSION)
+        self.setWindowTitle(APP_NAME + " " + APP_VERSION)
         self.initVariables()
         self.initMainLayout()
         self.configSignals()
@@ -32,10 +32,11 @@ class MainWindow(QMainWindow):
     def loadSetting(self):
         if os.path.isfile("app_setting.json"):
             json_str = FileReader().readFile("app_setting.json")
-            self.appSetting = AppSetting.from_json(json_str) 
+            self.appSetting = AppSetting.from_json(json_str)
             self.layoutPath.lastOpenedPath = self.appSetting.lastOpenedPath
             self.toolbar.keepResult = self.appSetting.keepTheResult
-            self.layoutFilter.setSelectedFilterType(self.appSetting.selectedFilterType)
+            self.layoutFilter.setSelectedFilterType(
+                self.appSetting.selectedFilterType)
             print("AppSetting loaded!")
         else:
             self.saveSetting()
@@ -45,8 +46,7 @@ class MainWindow(QMainWindow):
         self.appSetting.keepTheResult = self.toolbar.keepResult
         self.appSetting.selectedFilterType = self.layoutFilter.getSelectedFilterType()
 
-
-        FileWriter().writeFile("app_setting.json", self.appSetting.to_json())
+        FileWriter.writeFile("app_setting.json", self.appSetting.to_json())
         print("AppSetting saved!")
 
     def initMainLayout(self):
@@ -60,7 +60,6 @@ class MainWindow(QMainWindow):
         self.mainLayoutRight = QVBoxLayout()
         self.mainLayout = QHBoxLayout()
         self.container = QWidget()
-
 
         self.mainLayoutLeft.addLayout(self.layoutPath)
         self.mainLayoutLeft.addLayout(self.layoutResult)
@@ -80,19 +79,20 @@ class MainWindow(QMainWindow):
         self.setWindowPosition()
 
         appIcon = QIcon()
-        appIcon.addFile(ICON_PATH + 'icon_16.png', QSize(16,16))
-        appIcon.addFile(ICON_PATH + 'icon_24.png', QSize(24,24))
-        appIcon.addFile(ICON_PATH + 'icon_32.png', QSize(32,32))
-        appIcon.addFile(ICON_PATH + 'icon_64.png', QSize(64,64))
-        appIcon.addFile(ICON_PATH + 'icon_256.png', QSize(256,256))
+        appIcon.addFile(ICON_PATH + 'icon_16.png', QSize(16, 16))
+        appIcon.addFile(ICON_PATH + 'icon_24.png', QSize(24, 24))
+        appIcon.addFile(ICON_PATH + 'icon_32.png', QSize(32, 32))
+        appIcon.addFile(ICON_PATH + 'icon_64.png', QSize(64, 64))
+        appIcon.addFile(ICON_PATH + 'icon_256.png', QSize(256, 256))
         self.setWindowIcon(appIcon)
 
-
     def configSignals(self):
-        self.toolbar.connectToGetSelectedPaths( self.layoutPath.getSelectedPaths)
-        self.toolbar.connectToGetAllPaths( self.layoutPath.getAllPaths)
-        self.toolbar.connectOnAddFileFolder( self.layoutPath.onAddFileFolder)
-        self.layoutAnalyzerResult.connectToFilterUi( self.layoutFilter.onGetFilter)
+        self.toolbar.connectToGetSelectedPaths(
+            self.layoutPath.getSelectedPaths)
+        self.toolbar.connectToGetAllPaths(self.layoutPath.getAllPaths)
+        self.toolbar.connectOnAddFileFolder(self.layoutPath.onAddFileFolder)
+        self.layoutAnalyzerResult.connectToFilterUi(
+            self.layoutFilter.onGetFilter)
 
     def setWindowPosition(self):
         qr = self.frameGeometry()
@@ -104,15 +104,14 @@ class MainWindow(QMainWindow):
         self.layoutResult.onDispose()
         self.toolbar.onDispose()
 
-    def closeEvent(self,event):
-            result = QMessageBox().question(self,
-                        "Confirm Exit...",
-                        "Are you sure you want to exit ?",
-                        QMessageBox.Yes| QMessageBox.No)
-            event.ignore()
+    def closeEvent(self, event):
+        result = QMessageBox().question(self,
+                                        "Confirm Exit...",
+                                        "Are you sure you want to exit ?",
+                                        QMessageBox.Yes | QMessageBox.No)
+        event.ignore()
 
-            if result == QMessageBox.Yes:
-                self.saveSetting()
-                self.disposeObjects()
-                event.accept()
-
+        if result == QMessageBox.Yes:
+            self.saveSetting()
+            self.disposeObjects()
+            event.accept()

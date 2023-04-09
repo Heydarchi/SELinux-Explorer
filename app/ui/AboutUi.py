@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QDesktopWidget
 from PyQt5.QtCore import Qt
 from AppSetting import *
 
+
 class AboutWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -19,7 +20,12 @@ class AboutWindow(QWidget):
         self.lblAppAuthor = QLabel(APP_AUTHOR)
         self.lblAppAuthorEmail = QLabel(AUTHOR_EMAIL)
         self.lblAppLicense = QLabel("License: " + APP_LICENSE)
-        self.lblAppWebsite = QLabel("<a href=\"" + APP_WEBSITE + "\">" + APP_WEBSITE + "</a>")
+        self.lblAppWebsite = QLabel(
+            "<a href=\"" +
+            APP_WEBSITE +
+            "\">" +
+            APP_WEBSITE +
+            "</a>")
 
         self.btnOk = QPushButton("OK")
 
@@ -28,8 +34,10 @@ class AboutWindow(QWidget):
         self.lblAppName.setStyleSheet("font-size: 20px; font-weight: bold;")
         self.lblAppVersion.setStyleSheet("font-size: 15px; font-weight: bold;")
         self.lblAppAuthor.setStyleSheet("font-size: 15px; font-weight: normal")
-        self.lblAppAuthorEmail.setStyleSheet("font-size: 15px; font-weight: normal;")
-        self.lblAppWebsite.setStyleSheet("font-size: 15px; font-weight: normal;")
+        self.lblAppAuthorEmail.setStyleSheet(
+            "font-size: 15px; font-weight: normal;")
+        self.lblAppWebsite.setStyleSheet(
+            "font-size: 15px; font-weight: normal;")
         self.lblAppLicense.setStyleSheet("font-size: 15px; font-weight: bold;")
 
         self.lblAppWebsite.setOpenExternalLinks(True)
@@ -50,8 +58,6 @@ class AboutWindow(QWidget):
         self.groupBox = QGroupBox("About")
 
         self.hbox = QHBoxLayout()
-
-
 
     def configLayout(self):
         self.vbox.addWidget(self.lblAppIcon)

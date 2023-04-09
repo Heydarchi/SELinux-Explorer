@@ -1,15 +1,15 @@
-from analyzer.FileAnalyzer import  *
+from analyzer.FileAnalyzer import *
 from drawer.RelationDrawer import *
 from drawer.DrawerHelper import *
 from AppSetting import *
 from model.PolicyEntities import *
+
 
 class AnalyzerLogic:
     def __init__(self):
         super().__init__()
         self.initVariables()
         self.initAnalyzer()
-
 
     def initVariables(self):
         self.keepResult = False
@@ -21,10 +21,10 @@ class AnalyzerLogic:
         self.analyzer = FileAnalyzer()
 
     def analyzeAll(self, paths):
-        if self.keepResult :
+        if self.keepResult:
             policyFiles.extend(self.analyzer.analyze(paths))
         else:
-            policyFiles =  self.analyzer.analyze(paths)
+            policyFiles = self.analyzer.analyze(paths)
 
         self.refPolicyFile = self.makeRefPolicyFile(policyFiles)
         self.onAnalyzeFinished(None)
@@ -41,7 +41,7 @@ class AnalyzerLogic:
     '''
 
     def makeRefPolicyFile(self, policyFiles):
-        if  policyFiles == None or len(policyFiles) == 0:
+        if policyFiles is None or len(policyFiles) == 0:
             return None
 
         refPolicyFile = PolicyFiles()
@@ -55,51 +55,55 @@ class AnalyzerLogic:
             refPolicyFile.macroCalls.extend(policyFile.macroCalls)
 
         for macoCall in refPolicyFile.macroCalls:
-            #print("macroCall.name: ", macoCall.name)
+            # print("macroCall.name: ", macoCall.name)
             for macro in refPolicyFile.macros:
-                #print("macro.name: ", macro.name)
+                # print("macro.name: ", macro.name)
                 if macro.name == macoCall.name:
                     rules = macro.rules
                     for rule in rules:
-                        #Need to replace $number in source, target or classType with parameter from macro call with
-                        #the same number
+                        # Need to replace $number in source, target or classType with parameter from macro call with
+                        # the same number
                         for i in range(0, len(macoCall.parameters)):
-                            rule.source = rule.source.replace("$"+str(i+1), macoCall.parameters[i])
-                            rule.target = rule.target.replace("$"+str(i+1), macoCall.parameters[i])
-                            rule.classType = rule.classType.replace("$"+str(i), macoCall.parameters[i])
-                        #print("rule: ", rule)
+                            rule.source = rule.source.replace(
+                                "$" + str(i + 1), macoCall.parameters[i])
+                            rule.target = rule.target.replace(
+                                "$" + str(i + 1), macoCall.parameters[i])
+                            rule.classType = rule.classType.replace(
+                                "$" + str(i), macoCall.parameters[i])
+                        # print("rule: ", rule)
                         refPolicyFile.rules.append(rule)
                         refPolicyFile.macroCalls.clear()
         return refPolicyFile
 
     def clearOutput(self):
-        files = SystemUtility().getListOfFiles(os.getcwd() + "/" +OUT_DIR,"*")
-        for file in files :
+        files = SystemUtility().getListOfFiles(os.getcwd() + "/" + OUT_DIR, "*")
+        for file in files:
             if os.path.isfile(file):
                 SystemUtility().deleteFiles(file)
         self.onAnalyzeFinished(None)
         self.updateAnalyzerDataResult(None)
 
     def clearFileFromAnalyzer(self, filePath):
-        self.analyzer.clear()     
-        SystemUtility().deleteFiles(generateDiagramFileName(filePath))
-        SystemUtility().deleteFiles(generatePumlFileName(filePath))
+        self.analyzer.clear()
+        SystemUtility().deleteFiles(generate_diagram_file_name(filePath))
+        SystemUtility().deleteFiles(generate_puml_file_name(filePath))
         self.onAnalyzeFinished(None)
 
     def removeFile(self, filePath):
-        SystemUtility().deleteFiles( os.path.splitext(filePath)[0]+DIAGEAM_FILE_EXTENSION)
-        SystemUtility().deleteFiles( os.path.splitext(filePath)[0]+".puml")
+        SystemUtility().deleteFiles(
+            os.path.splitext(filePath)[0] +
+            DIAGEAM_FILE_EXTENSION)
+        SystemUtility().deleteFiles(os.path.splitext(filePath)[0] + ".puml")
 
     def clear(self):
         self.refPolicyFile = PolicyFiles()
 
     def getImagePath(self, filePath):
-        return generateDiagramFileName(filePath)
-    
+        return generate_diagram_file_name(filePath)
+
     def setKeepResult(self, state):
         self.keepResult = state
         print("self.keepResult:", self.keepResult)
-
 
     def setUiUpdateSignal(self, updateResult):
         self.updateResult = updateResult
@@ -108,6 +112,6 @@ class AnalyzerLogic:
         self.updateAnalyzerDataResult = updateResult
 
     def onAnalyzeFinished(self, filteredPolicyFile):
-        self.listOfDiagrams = SystemUtility().getListOfFiles(os.getcwd() + "/" + OUT_DIR,"*"+DIAGEAM_FILE_EXTENSION)
+        self.listOfDiagrams = SystemUtility().getListOfFiles(
+            os.getcwd() + "/" + OUT_DIR, "*" + DIAGEAM_FILE_EXTENSION)
         self.updateResult()
-        

@@ -1,21 +1,25 @@
 import logging
 import os
 
-logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    filename='app.log',
+    filemode='w',
+    format='%(name)s - %(levelname)s - %(message)s')
+
 
 class MyLogger:
 
     @staticmethod
-    def logError(_sys, _exception, _message = None):
+    def logError(_sys, _exception, _message=None):
         exception_type, exception_object, exception_traceback = _sys.exc_info()
         filename = exception_traceback.tb_frame.f_code.co_filename
         line_number = exception_traceback.tb_lineno
         logging.error("Error in file: " + os.path.basename(filename))
         logging.error("Error in line: " + str(line_number))
         logging.error("Error in exception: " + str(_exception))
-        if _message != None:
+        if _message is not None:
             logging.error("_message: " + str(_message))
-        #logging.error("exception type: ", str(exception_type)+", exception object: " + str(exception_object) + ", exception traceback: " + str(exception_traceback))
+        # logging.error("exception type: ", str(exception_type)+", exception object: " + str(exception_object) + ", exception traceback: " + str(exception_traceback))
 
     @staticmethod
     def logInfo(_message):
@@ -28,4 +32,3 @@ class MyLogger:
     @staticmethod
     def logDebug(_message):
         logging.debug(_message)
-

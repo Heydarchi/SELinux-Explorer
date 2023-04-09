@@ -10,6 +10,7 @@ from PythonUtilityClasses.FileWriter import *
 from PythonUtilityClasses.FileReader import *
 from AppSetting import *
 
+
 class ToolbarUi(QToolBar):
     def __init__(self, mainWindow, analyzerLogic, appSetting):
         super().__init__()
@@ -26,15 +27,58 @@ class ToolbarUi(QToolBar):
         self.about = None
 
     def initWidgets(self):
-        self.actAddFile = QAction(QIcon(ICON_PATH + 'add-file.png'),"Add a file to the list", self.mainWindow)
-        self.actAddPath = QAction(QIcon(ICON_PATH + 'add-folder.png'),"Add a Path to the list", self.mainWindow)
-        self.actRemoveOutput = QAction(QIcon(ICON_PATH + 'remove.png'),"Remove Outputs", self.mainWindow)
-        self.actClearAnalyze = QAction(QIcon(ICON_PATH + 'reset.png'),"Clear Analyze", self.mainWindow)
-        self.actWipeAll = QAction(QIcon(ICON_PATH + 'broom.png'),"Wipe all(output, analyze, etc.)", self.mainWindow)
-        self.actMakeReference = QAction(QIcon(ICON_PATH + 'reference.png'),"Make reference from the analyzed data", self.mainWindow)
-        self.actAnalyzeAll = QAction(QIcon(ICON_PATH + 'magic-wand.png'),"Analyze all the files/paths", self.mainWindow)
-        self.actKeepResult = QAction(QIcon(ICON_PATH + 'hosting.png'),"Don't erase the current result before Analyzing", self.mainWindow)
-        self.actAbout = QAction(QIcon(ICON_PATH + 'information.png'),"About", self.mainWindow)
+        self.actAddFile = QAction(
+            QIcon(
+                ICON_PATH +
+                'add-file.png'),
+            "Add a file to the list",
+            self.mainWindow)
+        self.actAddPath = QAction(
+            QIcon(
+                ICON_PATH +
+                'add-folder.png'),
+            "Add a Path to the list",
+            self.mainWindow)
+        self.actRemoveOutput = QAction(
+            QIcon(
+                ICON_PATH +
+                'remove.png'),
+            "Remove Outputs",
+            self.mainWindow)
+        self.actClearAnalyze = QAction(
+            QIcon(
+                ICON_PATH +
+                'reset.png'),
+            "Clear Analyze",
+            self.mainWindow)
+        self.actWipeAll = QAction(
+            QIcon(
+                ICON_PATH + 'broom.png'),
+            "Wipe all(output, analyze, etc.)",
+            self.mainWindow)
+        self.actMakeReference = QAction(
+            QIcon(
+                ICON_PATH +
+                'reference.png'),
+            "Make reference from the analyzed data",
+            self.mainWindow)
+        self.actAnalyzeAll = QAction(
+            QIcon(
+                ICON_PATH +
+                'magic-wand.png'),
+            "Analyze all the files/paths",
+            self.mainWindow)
+        self.actKeepResult = QAction(
+            QIcon(
+                ICON_PATH + 'hosting.png'),
+            "Don't erase the current result before Analyzing",
+            self.mainWindow)
+        self.actAbout = QAction(
+            QIcon(
+                ICON_PATH +
+                'information.png'),
+            "About",
+            self.mainWindow)
 
         self.actKeepResult.setCheckable(True)
 
@@ -67,7 +111,6 @@ class ToolbarUi(QToolBar):
 
         self.setOrientation(Qt.Vertical)
 
-
     def connectOnAddFileFolder(self, onAddFileFolder):
         self.addFileFolder = onAddFileFolder
 
@@ -75,15 +118,20 @@ class ToolbarUi(QToolBar):
         self.getSelectedPaths = getSelectedPath
 
     def connectToGetAllPaths(self, getAllPaths):
-        self.getAllPaths = getAllPaths        
+        self.getAllPaths = getAllPaths
 
     def onAddFile(self):
-        dlg = QFileDialog(directory = self.appSetting.lastOpenedPath)
+        dlg = QFileDialog(directory=self.appSetting.lastOpenedPath)
         if dlg.exec_():
             self.addPathToList(dlg.selectedFiles()[0])
 
     def onAddPath(self):
-        self.addPathToList( QFileDialog(directory = self.appSetting.lastOpenedPath).getExistingDirectory(self.mainWindow, 'Hey! Select a Folder', options=QFileDialog.ShowDirsOnly))
+        self.addPathToList(
+            QFileDialog(
+                directory=self.appSetting.lastOpenedPath).getExistingDirectory(
+                self.mainWindow,
+                'Hey! Select a Folder',
+                options=QFileDialog.ShowDirsOnly))
 
     def addPathToList(self, path):
         self.appSetting.lastOpenedPath = path
@@ -123,19 +171,21 @@ class ToolbarUi(QToolBar):
             self.lstResults.addItem(QListWidgetItem(file))
 
     def onSelectedResult(self):
-        listItems=self.lstResults.selectedItems()
+        listItems = self.lstResults.selectedItems()
         if len(listItems) > 0:
             self.diagram = DiagramWindow(listItems[0].text())
             self.diagram.show()
 
     def onClickedKeepResult(self):
         self.keepResult = self.sender().isChecked()
-        self.analyzerLogic.setKeepResult( self.sender().isChecked())
+        self.analyzerLogic.setKeepResult(self.sender().isChecked())
 
     def onMakeReference(self):
-        refName, ok = QInputDialog.getText(self, 'Text Input Dialog', 'Enter your name:')
+        refName, ok = QInputDialog.getText(
+            self, 'Text Input Dialog', 'Enter your name:')
         if ok:
-            SettingClass.saveListAsJson(refName, self.analyzerLogic.listOfPolicyFiles)
+            SettingClass.saveListAsJson(
+                refName, self.analyzerLogic.listOfPolicyFiles)
             print("AppSetting saved!")
 
     def onAbout(self):
@@ -143,5 +193,5 @@ class ToolbarUi(QToolBar):
         self.about.show()
 
     def onDispose(self):
-        if self.about != None :
+        if self.about is not None:
             self.about.close()

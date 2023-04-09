@@ -4,7 +4,6 @@ from typing import List
 from PythonUtilityClasses.SystemUtility import *
 
 
-
 @dataclass
 class AnalyzerInfo:
     sourceFile: FileInfo = FileInfo()

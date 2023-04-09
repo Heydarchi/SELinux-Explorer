@@ -9,6 +9,7 @@ from ui.UiUtility import *
 from PythonUtilityClasses.SystemUtility import *
 from AppSetting import *
 
+
 class DiagramWindow(QWidget):
     def __init__(self, filePath):
         super().__init__()
@@ -16,7 +17,6 @@ class DiagramWindow(QWidget):
         self.initVariables()
         self.initWidgets()
         self.configLayout()
-
 
     def initVariables(self):
         self.DEFAULT_WIDTH = 1200 * 2
@@ -28,14 +28,14 @@ class DiagramWindow(QWidget):
         self.grid = QGridLayout()
 
     def configLayout(self):
-        self.grid.addWidget(self.label,1,1)
+        self.grid.addWidget(self.label, 1, 1)
         self.setLayout(self.grid)
 
         self.setMaximumWidth(self.DEFAULT_WIDTH)
         self.setMaximumHeight(self.DEFAULT_HEIGHT)
         self.label.setPixmap(self.im)
 
-        #self.setGeometry(50,50,320,200)
+        # self.setGeometry(50,50,320,200)
         self.setWindowTitle("Diagram")
         self.setWindowPosition()
 
@@ -46,7 +46,11 @@ class DiagramWindow(QWidget):
         self.move(qr.topLeft())
 
     def resizeEvent(self, event):
-        self.label.setPixmap(self.im.scaled(self.label.width() ,self.label.height(), Qt.KeepAspectRatio))
+        self.label.setPixmap(
+            self.im.scaled(
+                self.label.width(),
+                self.label.height(),
+                Qt.KeepAspectRatio))
 
 
 class ResultUi(QVBoxLayout):
@@ -71,9 +75,15 @@ class ResultUi(QVBoxLayout):
 
         self.lstResults.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
-        self.btnDeleteSelected =UiUtility.createButton("Delete the selected file", QIcon(ICON_PATH + "delete.png"), 24, 24)
-        self.btnOpenMultiple =UiUtility.createButton("Open selected files(Multiple", QIcon(ICON_PATH + "multiple.png"), 24, 24)
-        self.btnOpenSingle =UiUtility.createButton("Open the selected file(Single)", QIcon(ICON_PATH + "single.png"), 24, 24)
+        self.btnDeleteSelected = UiUtility.createButton(
+            "Delete the selected file", QIcon(
+                ICON_PATH + "delete.png"), 24, 24)
+        self.btnOpenMultiple = UiUtility.createButton(
+            "Open selected files(Multiple", QIcon(
+                ICON_PATH + "multiple.png"), 24, 24)
+        self.btnOpenSingle = UiUtility.createButton(
+            "Open the selected file(Single)", QIcon(
+                ICON_PATH + "single.png"), 24, 24)
 
     def configSignals(self):
         self.btnDeleteSelected.clicked.connect(self.onDeleteSelectedFile)
@@ -94,12 +104,12 @@ class ResultUi(QVBoxLayout):
 
     def onDeleteSelectedFile(self):
         items = self.lstResults.selectedItems()
-        if not items: return
+        if not items:
+            return
         for item in items:
             filePath = item.text()
             self.lstResults.takeItem(self.lstResults.row(item))
             self.analyzerLogic.removeFile(filePath)
-
 
     def onResultAdded(self, filePath):
         item = QListWidgetItem(filePath)
@@ -111,7 +121,7 @@ class ResultUi(QVBoxLayout):
             self.lstResults.addItem(QListWidgetItem(file))
 
     def onSelectedResult(self):
-        listItems=self.lstResults.selectedItems()
+        listItems = self.lstResults.selectedItems()
         if len(listItems) > 0:
             self.diagram = DiagramWindow(listItems[0].text())
             self.diagram.show()
@@ -120,7 +130,7 @@ class ResultUi(QVBoxLayout):
         self.onSelectedResult()
 
     def onOpenMultipleFiles(self):
-        listItems=self.lstResults.selectedItems()
+        listItems = self.lstResults.selectedItems()
         if len(listItems) > 0:
             for item in listItems:
                 diagram = DiagramWindow(item.text())
@@ -128,7 +138,7 @@ class ResultUi(QVBoxLayout):
                 self.lstDiagrams.append(diagram)
 
     def onDispose(self):
-        if self.diagram != None :
+        if self.diagram is not None:
             self.diagram.close()
 
         if len(self.lstDiagrams) > 0:

@@ -15,6 +15,7 @@ APP_WEBSITE = 'https://github.com/Heydarchi/SELinux-Explorer'
 APP_ICON_PATH = ''
 OUT_DIR = 'out/'
 
+
 @dataclass
 class AppSetting(JSONWizard):
     lastOpenedPath: str = ""
@@ -40,11 +41,11 @@ class SettingClass:
             os.makedirs(self.refDir)
 
     @staticmethod
-    def saveListAsJson(fileName, lstOfObjects):
-        lstStr = list()
-        for item in lstOfObjects:
-            lstStr.append(item.to_json())
-        FileWriter().writeListToFile("ref/" + fileName + ".json", lstStr)
+    def saveListAsJson(file_name, lst_of_objects):
+        lst_str = list()
+        for item in lst_of_objects:
+            lst_str.append(item.to_json())
+        FileWriter.writeListToFile("ref/" + file_name + ".json", lst_str)
 
 
 if __name__ == "__main__":
@@ -58,5 +59,3 @@ if __name__ == "__main__":
     appS = AppSetting.from_json(appSetting.to_json())
     print(appS.lastOpenedPath)
     print(appS.filterClassType)
-
-

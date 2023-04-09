@@ -1,6 +1,6 @@
 
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QComboBox, QLineEdit
-from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem, QGroupBox, QLabel, QCheckBox
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QGroupBox, QLabel, QCheckBox
 from logic.AnalyzerLogic import *
 from PythonUtilityClasses.SystemUtility import *
 from logic.FilterResult import *
@@ -38,7 +38,11 @@ class AnalyzerResultUi(QVBoxLayout):
         self.lblSearch = QLabel("Search")
         self.edtSearch = QLineEdit()
         self.chkCaseSensitive = QCheckBox("Case sensitive")
-        self.btnResetSearch = UiUtility.createButton("Reset search", ICON_PATH + "reset_green.png", self.BTN_WIDTH, self.BTN_HEIGHT)
+        self.btnResetSearch = UiUtility.createButton(
+            "Reset search",
+            ICON_PATH + "reset_green.png",
+            self.BTN_WIDTH,
+            self.BTN_HEIGHT)
         self.tblResult = QTableWidget()
         self.layoutButton = QHBoxLayout()
         self.layoutFilter = QHBoxLayout()
@@ -48,8 +52,11 @@ class AnalyzerResultUi(QVBoxLayout):
 
         self.chkCaseSensitive.setChecked(False)
 
-        self.btnAddSelected = UiUtility.createButton("Add to the filters", ICON_PATH + "down-arrow.png", self.BTN_WIDTH, self.BTN_HEIGHT)
-
+        self.btnAddSelected = UiUtility.createButton(
+            "Add to the filters",
+            ICON_PATH + "down-arrow.png",
+            self.BTN_WIDTH,
+            self.BTN_HEIGHT)
 
         self.cmbFilter = QComboBox()
         self.cmbFilter.addItem("ALL")
@@ -62,14 +69,16 @@ class AnalyzerResultUi(QVBoxLayout):
         self.tblResult.setMinimumWidth(self.TABLE_MIN_WIDTH)
         self.tblResult.setMinimumHeight(self.TABLE_MINIMUM_HEIGHT)
 
-        self.tblResult.setColumnWidth(self.COL_TITLE_INDEX, self.COL_TITLE_WIDTH)
+        self.tblResult.setColumnWidth(
+            self.COL_TITLE_INDEX, self.COL_TITLE_WIDTH)
         self.tblResult.setColumnWidth(self.COL_TYPE_INDEX, self.COL_TYPE_WIDTH)
         self.tblResult.setSelectionMode(QTableWidget.SingleSelection)
         self.tblResult.setSelectionBehavior(QTableWidget.SelectRows)
 
     def configSignals(self):
         self.btnAddSelected.clicked.connect(self.onAddSelectedFilter)
-        self.analyzerLogic.setUiUpdateAnalyzerDataSignal(self.onAnalyzeFinished)
+        self.analyzerLogic.setUiUpdateAnalyzerDataSignal(
+            self.onAnalyzeFinished)
         self.cmbFilter.currentIndexChanged.connect(self.onFilterChanged)
         self.edtSearch.textChanged.connect(self.onSeachTextChanged)
         self.btnResetSearch.clicked.connect(self.onResetSearch)
@@ -95,16 +104,18 @@ class AnalyzerResultUi(QVBoxLayout):
 
         self.addWidget(self.groupBox)
 
-
     def onCaseSensitiveChanged(self):
         self.onSeachTextChanged()
 
     def onAddSelectedFilter(self):
         row = self.tblResult.currentRow()
         rule = FilterRule()
-        rule.exactWord = UiUtility.askQuestion(self.mainWindow, "Exact word", "Do you want to add the exact word?")
-        rule.keyword = self.tblResult.item(row, self.COL_TITLE_INDEX).text().strip()
-        rule.filterType =FilterRule.getFilterTypeFromStr(self.tblResult.item(row, self.COL_TYPE_INDEX).text().strip())
+        rule.exactWord = UiUtility.askQuestion(
+            self.mainWindow, "Exact word", "Do you want to add the exact word?")
+        rule.keyword = self.tblResult.item(
+            row, self.COL_TITLE_INDEX).text().strip()
+        rule.filterType = FilterRule.getFilterTypeFromStr(
+            self.tblResult.item(row, self.COL_TYPE_INDEX).text().strip())
         self.sendToFilterUi(rule)
 
     def onResultAdded(self, lstRules):
@@ -114,7 +125,7 @@ class AnalyzerResultUi(QVBoxLayout):
 
     def onAnalyzeFinished(self, refPolicyFile):
         print("onAnalyzeFinished")
-        if refPolicyFile == None:
+        if refPolicyFile is None:
             refPolicyFile = PolicyFiles()
         self.resultPolicyFile = refPolicyFile
         self.onFilterChanged()
@@ -122,7 +133,10 @@ class AnalyzerResultUi(QVBoxLayout):
     def onSeachTextChanged(self):
         lstRules = []
         if self.edtSearch.text().strip() != "":
-            lstRules = self.searchResult(self.lastRulesResult, self.edtSearch.text().strip(), self.chkCaseSensitive.isChecked())
+            lstRules = self.searchResult(
+                self.lastRulesResult,
+                self.edtSearch.text().strip(),
+                self.chkCaseSensitive.isChecked())
         else:
             lstRules = self.lastRulesResult
         self.updateTable(lstRules)
@@ -132,88 +146,131 @@ class AnalyzerResultUi(QVBoxLayout):
 
     def collectDomainRule(self, policyFile):
         domainRules = []
-        if policyFile == None:
+        if policyFile is None:
             return
 
         for typeDef in policyFile.typeDef:
             if typeDef.name.strip() != "":
-                domainRules.append(FilterRule(FilterType.DOMAIN, typeDef.name, False))
+                domainRules.append(
+                    FilterRule(
+                        FilterType.DOMAIN,
+                        typeDef.name,
+                        False))
 
         for seApps in policyFile.seApps:
             if seApps.domain.strip() != "":
-                domainRules.append(FilterRule(FilterType.DOMAIN, seApps.domain, False))
+                domainRules.append(
+                    FilterRule(
+                        FilterType.DOMAIN,
+                        seApps.domain,
+                        False))
 
         for context in policyFile.contexts:
             if context.domainName.strip() != "":
-                domainRules.append(FilterRule(FilterType.DOMAIN, context.domainName, False))
+                domainRules.append(
+                    FilterRule(
+                        FilterType.DOMAIN,
+                        context.domainName,
+                        False))
 
         for attribute in policyFile.attribute:
             if attribute.name.strip() != "":
-                domainRules.append(FilterRule(FilterType.DOMAIN, attribute.name, False))
+                domainRules.append(
+                    FilterRule(
+                        FilterType.DOMAIN,
+                        attribute.name,
+                        False))
 
         domainRules = list(set(domainRules))
         return domainRules
 
     def collectFilePathRule(self, policyFile):
         filePathRules = []
-        if policyFile == None:
+        if policyFile is None:
             return
 
         for seApps in policyFile.seApps:
             if seApps.name.strip() != "":
-                filePathRules.append(FilterRule(FilterType.FILE_PATH, seApps.name, False))
+                filePathRules.append(
+                    FilterRule(
+                        FilterType.FILE_PATH,
+                        seApps.name,
+                        False))
 
         for context in policyFile.contexts:
             if context.pathName.strip() != "":
-                filePathRules.append(FilterRule(FilterType.FILE_PATH, context.pathName, False))
+                filePathRules.append(
+                    FilterRule(
+                        FilterType.FILE_PATH,
+                        context.pathName,
+                        False))
 
         filePathRules = list(set(filePathRules))
         return filePathRules
 
     def collectPermissionRule(self, policyFile):
         permissionRules = []
-        if policyFile == None:
+        if policyFile is None:
             return
 
         for rule in policyFile.rules:
             if len(rule.permissions) > 0:
                 for permission in rule.permissions:
-                    permissionRules.append(FilterRule(FilterType.PERMISSION, permission, False))
+                    permissionRules.append(
+                        FilterRule(
+                            FilterType.PERMISSION,
+                            permission,
+                            False))
 
         for macro in policyFile.macros:
             if len(macro.rules) > 0:
                 for rule in macro.rules:
                     for permission in rule.permissions:
-                        permissionRules.append(FilterRule(FilterType.PERMISSION, permission, False))
+                        permissionRules.append(
+                            FilterRule(
+                                FilterType.PERMISSION,
+                                permission,
+                                False))
 
         permissionRules = list(set(permissionRules))
         return permissionRules
 
-
     def collectClassType(self, policyFile):
         classTypeRules = []
-        if policyFile == None:
+        if policyFile is None:
             return
 
         for typeDef in policyFile.typeDef:
             for type in typeDef.types:
                 if type.strip() != "":
-                    classTypeRules.append(FilterRule(FilterType.CLASS_TYPE, type, False))
+                    classTypeRules.append(
+                        FilterRule(
+                            FilterType.CLASS_TYPE,
+                            type,
+                            False))
 
         for context in policyFile.contexts:
             for type in context.typeDef.types:
                 if type.strip() != "":
-                    classTypeRules.append(FilterRule(FilterType.CLASS_TYPE, type, False))
+                    classTypeRules.append(
+                        FilterRule(
+                            FilterType.CLASS_TYPE,
+                            type,
+                            False))
 
         for rule in policyFile.rules:
             if rule.classType.strip() != "":
-                classTypeRules.append(FilterRule(FilterType.CLASS_TYPE, rule.classType, False))
+                classTypeRules.append(
+                    FilterRule(
+                        FilterType.CLASS_TYPE,
+                        rule.classType,
+                        False))
 
         classTypeRules = list(set(classTypeRules))
         return classTypeRules
 
     def onDispose(self):
-        if self.diagram != None :
+        if self.diagram is not None:
             self.diagram.close()
 
     def connectToFilterUi(self, onAddFilterEvent):
@@ -221,7 +278,7 @@ class AnalyzerResultUi(QVBoxLayout):
 
     def onFilterChanged(self):
         "Filter the result table based on the selected filter type, If it's ALL, show all the results"
-        #print("onFilterChanged")
+        # print("onFilterChanged")
         lstRules = []
         if self.cmbFilter.currentText() == "ALL":
             lstRules.extend(self.collectDomainRule(self.resultPolicyFile))
@@ -238,21 +295,28 @@ class AnalyzerResultUi(QVBoxLayout):
             lstRules.extend(self.collectClassType(self.resultPolicyFile))
 
         self.lastRulesResult = lstRules
-        #print("Total rules: " + str(len(lstRules)))
+        # print("Total rules: " + str(len(lstRules)))
         if self.edtSearch.text().strip() != "":
-            lstRules = self.searchResult(lstRules, self.edtSearch.text().strip(), self.chkCaseSensitive.isChecked())
+            lstRules = self.searchResult(
+                lstRules,
+                self.edtSearch.text().strip(),
+                self.chkCaseSensitive.isChecked())
 
         self.updateTable(lstRules)
 
     def updateTable(self, lstRules):
-        #print("updateTable")
-        #print("Total rules: " + str(lstRules))
+        # print("updateTable")
+        # print("Total rules: " + str(lstRules))
         lstRules = list(set(lstRules))
         self.clearTable()
         self.tblResult.setRowCount(len(lstRules))
         for i in range(len(lstRules)):
-            self.tblResult.setItem(i, self.COL_TITLE_INDEX, QTableWidgetItem(lstRules[i].keyword.strip()))
-            self.tblResult.setItem(i, self.COL_TYPE_INDEX, QTableWidgetItem(lstRules[i].filterType.name.strip()))
+            self.tblResult.setItem(
+                i, self.COL_TITLE_INDEX, QTableWidgetItem(
+                    lstRules[i].keyword.strip()))
+            self.tblResult.setItem(
+                i, self.COL_TYPE_INDEX, QTableWidgetItem(
+                    lstRules[i].filterType.name.strip()))
 
     def searchResult(self, lstRules, keyword, caseSensitive):
         lstSearchResult = []

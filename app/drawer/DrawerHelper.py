@@ -3,17 +3,22 @@ from enum import Enum
 
 DIAGEAM_FILE_EXTENSION = ".png"
 
-def generatePumlFileName(fileName):
-    return fileName.replace("/","-")+".puml"
 
-def generateDiagramFileName(fileName):
-    return fileName.replace("/","-")+"" + DIAGEAM_FILE_EXTENSION
+def generate_puml_file_name(fileName):
+    return fileName.replace("/", "-") + ".puml"
 
-def generatePng( filepath):
+
+def generate_diagram_file_name(fileName):
+    return fileName.replace("/", "-") + "" + DIAGEAM_FILE_EXTENSION
+
+
+def generate_png(filepath):
     os.system("java -jar plantuml/plantuml.jar " + filepath)
 
-def generateSvg( filepath):
+
+def generate_svg(filepath):
     os.system("java -jar plantuml/plantuml.jar -tsvg " + filepath)
+
 
 class DrawingPosition(Enum):
     RIGHT = "tight"
@@ -21,10 +26,12 @@ class DrawingPosition(Enum):
     TOP = "top"
     BOTTOM = "bottom"
 
+
 class DrawingStyle(Enum):
     NOTE = "note"
     DOMAIN = "package"
     LEGEND = "legend"
+
 
 class DrawingColor(Enum):
     BLUE = "#blue"
@@ -36,89 +43,110 @@ class DrawingColor(Enum):
     YELLOW = "#yellow"
     ORANGE = "#orange"
 
+
 class DrawingTool:
 
     @staticmethod
-    def generateStartOfPuml():
-        lstOutput = list()
-        lstOutput.append("@startuml")
-        lstOutput.append("scale max 2560 height")
-        lstOutput.append("scale max 2048 width")
-        lstOutput.append("")
-        return lstOutput
+    def generate_start_of_puml():
+        lst_output = list()
+        lst_output.append("@startuml")
+        lst_output.append("scale max 2560 height")
+        lst_output.append("scale max 2048 width")
+        lst_output.append("")
+        return lst_output
 
     @staticmethod
-    def generateEndOfPuml():
-        lstOutput = list()
-        lstOutput.append("@enduml")
-        return lstOutput
+    def generate_end_of_puml():
+        lst_output = list()
+        lst_output.append("@enduml")
+        return lst_output
+
     @staticmethod
-    def defineNoteStyle():
-        lstNote = list()
-        lstNote.append("skinparam " + DrawingStyle.NOTE.value +  " {")
-        lstNote.append("borderColor black")
-        lstNote.append("backgroundColor #FFD28A")
-        lstNote.append("}")
-        lstNote.append("")
-        return lstNote
-    
+    def define_note_style():
+        lst_note = list()
+        lst_note.append("skinparam " + DrawingStyle.NOTE.value + " {")
+        lst_note.append("borderColor black")
+        lst_note.append("backgroundColor #FFD28A")
+        lst_note.append("}")
+        lst_note.append("")
+        return lst_note
+
     @staticmethod
     def defineDomainStyle():
-        lstDomain = list()
-        lstDomain.append("skinparam " + DrawingStyle.DOMAIN.value +  " {")
-        lstDomain.append("borderColor black")
-        lstDomain.append("backgroundColor #A5FFD6")
-        lstDomain.append("}")
-        lstDomain.append("")
-        return lstDomain
-    
-        
-    @staticmethod
-    def generateNote(title, position: DrawingPosition, items, firstLine = ""):
-        items = list(dict.fromkeys(items))
-        lstNote = list()
-        if title.strip() != "" and len(items) >= 1 :
-            lstNote.append(DrawingStyle.NOTE.value + " " + position.value +  " of [" + title +"]")
-            lstNote.append("<b>" + firstLine + "</b>")
-            for item in items:
-                lstNote.append("  - " + item)
-            lstNote.append("end " + DrawingStyle.NOTE.value)
-            lstNote.append("")
-        return lstNote
+        lst_domain = list()
+        lst_domain.append("skinparam " + DrawingStyle.DOMAIN.value + " {")
+        lst_domain.append("borderColor black")
+        lst_domain.append("backgroundColor #A5FFD6")
+        lst_domain.append("}")
+        lst_domain.append("")
+        return lst_domain
 
     @staticmethod
-    def generateLegend(title, positionVertical: DrawingPosition, positionHorizontal: DrawingPosition, items, back_color: DrawingColor):
+    def generate_note(title, position: DrawingPosition, items, firstLine=""):
         items = list(dict.fromkeys(items))
-        lstNote = list()
-        if title.strip() != "" and len(items) >= 1 :
-            lstNote.append(DrawingStyle.LEGEND.value + " " + positionVertical.value +  "   " + positionHorizontal.value )
-            lstNote.append("<b>" + title + "</b>")
+        lst_note = list()
+        if title.strip() != "" and len(items) >= 1:
+            lst_note.append(DrawingStyle.NOTE.value + " " +
+                           position.value + " of [" + title + "]")
+            lst_note.append("<b>" + firstLine + "</b>")
             for item in items:
-                lstNote.append("  - " + item)
-            lstNote.append("end" + DrawingStyle.LEGEND.value)
-            lstNote.append("")
-        return lstNote
-    
-    @staticmethod
-    def generateDomain(title, description = None):
-        lstDomain = list()
-        if title.strip() != "" :
-            lstDomain.append(DrawingStyle.DOMAIN.value + " \"*" +  title + "*\" {")
-            lstDomain.append("[" +  title + "]" )
-            lstDomain.append("}")
-            lstDomain.append("")
-        return lstDomain    
-    
-    @staticmethod
-    def generateOtherLabel(title, description = ""):       
-        lstDomain = list()
-        if title.strip() != "" :
-            lstDomain.append(DrawingStyle.DOMAIN.value + " \"" +  description + "\" #FFA07A{")
-            lstDomain.append("[" +  title + "]" )
-            lstDomain.append("}")
-            lstDomain.append("")
-        return lstDomain        
+                lst_note.append("  - " + item)
+            lst_note.append("end " + DrawingStyle.NOTE.value)
+            lst_note.append("")
+        return lst_note
 
-if __name__ == "__main__" :
-        print(DrawingStyle.NOTE)
-        print(DrawingStyle.NOTE.value)
+    @staticmethod
+    def generate_legend(
+            title,
+            positionVertical: DrawingPosition,
+            positionHorizontal: DrawingPosition,
+            items,
+            back_color: DrawingColor):
+        items = list(dict.fromkeys(items))
+        lst_note = list()
+        if title.strip() != "" and len(items) >= 1:
+            lst_note.append(
+                DrawingStyle.LEGEND.value +
+                " " +
+                positionVertical.value +
+                "   " +
+                positionHorizontal.value)
+            lst_note.append("<b>" + title + "</b>")
+            for item in items:
+                lst_note.append("  - " + item)
+            lst_note.append("end" + DrawingStyle.LEGEND.value)
+            lst_note.append("")
+        return lst_note
+
+    @staticmethod
+    def generate_domain(title, description=None):
+        lst_domain = list()
+        if title.strip() != "":
+            lst_domain.append(
+                DrawingStyle.DOMAIN.value +
+                " \"*" +
+                title +
+                "*\" {")
+            lst_domain.append("[" + title + "]")
+            lst_domain.append("}")
+            lst_domain.append("")
+        return lst_domain
+
+    @staticmethod
+    def generate_other_label(title, description=""):
+        lst_domain = list()
+        if title.strip() != "":
+            lst_domain.append(
+                DrawingStyle.DOMAIN.value +
+                " \"" +
+                description +
+                "\" #FFA07A{")
+            lst_domain.append("[" + title + "]")
+            lst_domain.append("}")
+            lst_domain.append("")
+        return lst_domain
+
+
+if __name__ == "__main__":
+    print(DrawingStyle.NOTE)
+    print(DrawingStyle.NOTE.value)

@@ -7,7 +7,6 @@ from logic.AnalyzerLogic import *
 from AppSetting import *
 
 
-
 class FileUi(QVBoxLayout):
     def __init__(self, mainWindow):
         super().__init__()
@@ -29,18 +28,18 @@ class FileUi(QVBoxLayout):
         self.layoutSelectedPathButton = QVBoxLayout()
 
         self.lstSelectedPath = QListWidget()
-        self.btnRemoveFromList = QPushButton(icon = QIcon(ICON_PATH + "delete.png"))
+        self.btnRemoveFromList = QPushButton(
+            icon=QIcon(ICON_PATH + "delete.png"))
         self.btnRemoveFromList.setToolTip("Remove selected item from the list")
-        self.btnRemoveFromList.setMinimumSize(24,24)
-        self.btnRemoveFromList.setIconSize(QSize(24,24))
+        self.btnRemoveFromList.setMinimumSize(24, 24)
+        self.btnRemoveFromList.setIconSize(QSize(24, 24))
 
     def configSignals(self):
         self.btnRemoveFromList.clicked.connect(self.removeFromTheList)
 
-
     def configLayout(self):
 
-        #layoutSelectedPath
+        # layoutSelectedPath
         self.layoutSelectedPathButton.addWidget(self.btnRemoveFromList)
         self.layoutSelectedPathButton.setAlignment(Qt.AlignTop)
 
@@ -51,16 +50,15 @@ class FileUi(QVBoxLayout):
         self.layoutSelectedPath.addWidget(self.lstSelectedPath)
         self.layoutSelectedPath.addLayout(self.layoutSelectedPathButton)
 
-
         self.grpResult.setLayout(self.layoutSelectedPath)
 
         self.addWidget(self.grpResult)
-        #self.addLayout(self.layoutSelectedPath)
-
+        # self.addLayout(self.layoutSelectedPath)
 
     def removeFromTheList(self):
-        listItems=self.lstSelectedPath.selectedItems()
-        if not listItems: return        
+        listItems = self.lstSelectedPath.selectedItems()
+        if not listItems:
+            return
         for item in listItems:
             self.lstSelectedPath.takeItem(self.lstSelectedPath.row(item))
 
@@ -70,13 +68,13 @@ class FileUi(QVBoxLayout):
         for item in items:
             paths.append(item.text())
         return paths
-    
+
     def getAllPaths(self):
         paths = list()
         for i in range(self.lstSelectedPath.count()):
             paths.append(self.lstSelectedPath.item(i).text())
         return paths
-    
+
     def onAddFileFolder(self, path):
         print(path)
         item = QListWidgetItem(path)

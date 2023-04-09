@@ -9,7 +9,6 @@ from PythonUtilityClasses.SystemUtility import *
 from AppSetting import *
 
 
-
 class FilterUi(QHBoxLayout):
     def __init__(self, mainWindow, analyzerLogic):
         super().__init__()
@@ -32,7 +31,8 @@ class FilterUi(QHBoxLayout):
         self.COL_TYPE_WIDTH = 140
         self.COL_EXACT_WORD_WIDTH = 100
         self.MARGIN = 20
-        self.TABLE_MIN_WIDTH = self.COL_TITLE_WIDTH + self.COL_TYPE_WIDTH + self.MARGIN + self.COL_EXACT_WORD_WIDTH
+        self.TABLE_MIN_WIDTH = self.COL_TITLE_WIDTH + \
+            self.COL_TYPE_WIDTH + self.MARGIN + self.COL_EXACT_WORD_WIDTH
         self.COL_TITLE_INDEX = 0
         self.COL_TYPE_INDEX = 1
         self.COL_EXACT_WORD_INDEX = 2
@@ -43,11 +43,17 @@ class FilterUi(QHBoxLayout):
         self.lblFilterType = QLabel("Rule type")
         self.edtPattern = QLineEdit()
 
-        self.btnFilter =UiUtility.createButton("Generate output", QIcon(ICON_PATH + "filter.png"), self.BTN_WIDTH, self.BTN_HEIGHT)        
-        self.btnAddFilterRule =UiUtility.createButton("Add a new filter", QIcon(ICON_PATH + "add.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
-        self.btnClearFilterRules =UiUtility.createButton("Clear all the filters", QIcon(ICON_PATH + "broom.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
-        self.btnRemoveSelected =UiUtility.createButton("Remove the selected filter", QIcon(ICON_PATH + "minus.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
-
+        self.btnFilter = UiUtility.createButton("Generate output", QIcon(
+            ICON_PATH + "filter.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
+        self.btnAddFilterRule = UiUtility.createButton(
+            "Add a new filter", QIcon(
+                ICON_PATH + "add.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
+        self.btnClearFilterRules = UiUtility.createButton(
+            "Clear all the filters", QIcon(
+                ICON_PATH + "broom.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
+        self.btnRemoveSelected = UiUtility.createButton(
+            "Remove the selected filter", QIcon(
+                ICON_PATH + "minus.png"), self.BTN_WIDTH, self.BTN_HEIGHT)
 
         self.chbxExactWord = QCheckBox("Exact Word")
 
@@ -55,15 +61,17 @@ class FilterUi(QHBoxLayout):
         self.groupBox = QGroupBox("Filter Rules")
 
         for filterType in FilterType:
-            self.cmbRuleType.addItem(filterType.name)   
-            
+            self.cmbRuleType.addItem(filterType.name)
+
         self.tblRule.setColumnCount(self.TABLE_COLUMNS_NUMBER)
         self.tblRule.setMinimumWidth(self.TABLE_MIN_WIDTH)
         self.tblRule.setMinimumHeight(self.TABLE_MINIMUM_HEIGHT)
 
         self.tblRule.setColumnWidth(self.COL_TITLE_INDEX, self.COL_TITLE_WIDTH)
         self.tblRule.setColumnWidth(self.COL_TYPE_INDEX, self.COL_TYPE_WIDTH)
-        self.tblRule.setColumnWidth(self.COL_EXACT_WORD_INDEX, self.COL_EXACT_WORD_WIDTH)
+        self.tblRule.setColumnWidth(
+            self.COL_EXACT_WORD_INDEX,
+            self.COL_EXACT_WORD_WIDTH)
         self.tblRule.setSelectionMode(QTableWidget.SingleSelection)
         self.tblRule.setSelectionBehavior(QTableWidget.SelectRows)
 
@@ -74,7 +82,6 @@ class FilterUi(QHBoxLayout):
         self.layoutUserInput = QHBoxLayout()
         self.grpLayout = QHBoxLayout()
 
-
     def configSignals(self):
         self.btnFilter.clicked.connect(self.onFilter)
         self.btnAddFilterRule.clicked.connect(self.onAddFilterRule)
@@ -83,11 +90,11 @@ class FilterUi(QHBoxLayout):
         self.cmbRuleType.currentIndexChanged.connect(self.onIndexChanged)
 
     def configLayout(self):
-        #layoutAnalyzer
+        # layoutAnalyzer
         self.grpLayout.addWidget(self.lblFilterType)
         self.grpLayout.addWidget(self.cmbRuleType)
 
-        #layoutAnalyzerConfig
+        # layoutAnalyzerConfig
         self.layoutFilterEntry.addWidget(self.lblPattern)
         self.layoutFilterEntry.addWidget(self.edtPattern)
         self.layoutFilterEntry.addWidget(self.chbxExactWord)
@@ -105,18 +112,19 @@ class FilterUi(QHBoxLayout):
         self.layoutLeft.addLayout(self.layoutFilterButtons)
         self.layoutLeft.addLayout(self.layoutUserInput)
 
-        self.groupBox.setMinimumWidth(self.TABLE_MIN_WIDTH + 3 * self.BTN_WIDTH )
+        self.groupBox.setMinimumWidth(
+            self.TABLE_MIN_WIDTH + 3 * self.BTN_WIDTH)
         self.groupBox.setLayout(self.layoutLeft)
         self.addWidget(self.groupBox)
 
-
     def onFilter(self):
-            #fileName, filteredPolicyFile = FilterResult().filter(self.lstRules, self.analyzerLogic.listOfPolicyFiles)
-            if self.lstRules == []:
-                return
-            fileName, filteredPolicyFile = FilterResult().filter(self.lstRules, self.analyzerLogic.refPolicyFile)
-            print(fileName)
-            self.analyzerLogic.onAnalyzeFinished(filteredPolicyFile)
+        # fileName, filteredPolicyFile = FilterResult().filter(self.lstRules, self.analyzerLogic.listOfPolicyFiles)
+        if self.lstRules == []:
+            return
+        fileName, filteredPolicyFile = FilterResult().filter(
+            self.lstRules, self.analyzerLogic.refPolicyFile)
+        print(fileName)
+        self.analyzerLogic.onAnalyzeFinished(filteredPolicyFile)
 
     def onClearFilterRules(self):
         self.lstRules.clear()
@@ -130,7 +138,8 @@ class FilterUi(QHBoxLayout):
         if rule.keyword == "":
             return
         print("self.selectedFilterType: ", self.selectedFilterType)
-        rule.filterType = FilterRule.getFilterTypeFromStr(self.cmbRuleType.currentText())
+        rule.filterType = FilterRule.getFilterTypeFromStr(
+            self.cmbRuleType.currentText())
 
         self.onGetFilter(rule)
 
@@ -138,30 +147,39 @@ class FilterUi(QHBoxLayout):
         self.lstRules.append(rule)
         index = self.tblRule.rowCount()
         self.tblRule.setRowCount(index + 1)
-        self.tblRule.setItem(index, self.COL_TITLE_INDEX, QTableWidgetItem(rule.keyword.strip()))
-        self.tblRule.setItem(index, self.COL_TYPE_INDEX, QTableWidgetItem(rule.filterType.name.strip()))
-        self.tblRule.setItem(index, self.COL_EXACT_WORD_INDEX, QTableWidgetItem(str(rule.exactWord)))
+        self.tblRule.setItem(
+            index,
+            self.COL_TITLE_INDEX,
+            QTableWidgetItem(
+                rule.keyword.strip()))
+        self.tblRule.setItem(
+            index, self.COL_TYPE_INDEX, QTableWidgetItem(
+                rule.filterType.name.strip()))
+        self.tblRule.setItem(index,
+                             self.COL_EXACT_WORD_INDEX,
+                             QTableWidgetItem(str(rule.exactWord)))
+
     def onRemoveSelected(self):
         row = self.tblRule.currentRow()
         if row == -1:
             return
         index = self.tblRule.selectedIndexes()[0].row()
-        #print("index: ", index)
-        #print("selectedIndex: ", self.tblRule.selectedIndexes())
+        # print("index: ", index)
+        # print("selectedIndex: ", self.tblRule.selectedIndexes())
         self.tblRule.removeRow(row)
-        #print("self.lstRules: ", self.lstRules)
+        # print("self.lstRules: ", self.lstRules)
         del self.lstRules[index]
-        #print("self.lstRules: ", self.lstRules)
+        # print("self.lstRules: ", self.lstRules)
 
     def onIndexChanged(self, i):
-        self.selectedFilterType = FilterRule.getFilterTypeFromStr(self.cmbRuleType.currentText())
-        #print("self.selectedFilterType: ", self.selectedFilterType)
+        self.selectedFilterType = FilterRule.getFilterTypeFromStr(
+            self.cmbRuleType.currentText())
+        # print("self.selectedFilterType: ", self.selectedFilterType)
 
     def getSelectedFilterType(self):
         return self.selectedFilterType
 
     def setSelectedFilterType(self, filterType):
-        if type(filterType) !=  type(FilterType):
+        if not isinstance(filterType, type(FilterType)):
             filterType = FilterType.DOMAIN
         self.selectedFilterType = FilterType(filterType)
-
