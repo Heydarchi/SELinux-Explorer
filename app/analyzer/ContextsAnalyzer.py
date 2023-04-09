@@ -31,7 +31,9 @@ class ContextsAnalyzer(AbstractAnalyzer):
         file_reader = FR.FileReader()
         temp_lines = file_reader.read_file_lines(file_path)
         for line in temp_lines:
-            self.extract_definition(line)
+            context = self.extract_definition(line)
+            if context is not None:
+                self.policy_file.contexts.append(context)
 
         # print(self.policy_file)
         return self.policy_file
@@ -58,9 +60,10 @@ class ContextsAnalyzer(AbstractAnalyzer):
                 if len(security_items) > 4:
                     context.security_context.categories = security_items[4]
             # print(context)
-            self.policy_file.contexts.append(context)
+            return context
         except Exception as err:
             MyLogger.log_error(sys, err, input_string)
+            return None
 
     def analyze_port_contexts(self):
         pass
