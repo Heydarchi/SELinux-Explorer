@@ -23,5 +23,6 @@ jobs:
       run: codespell --ignore-words=config/codespell_ignore.txt **/*
 
     - name: Run tests
-      run: pytest
-      working-directory: app
+      run: pytest test/
+      env:
+        PYTHONPATH: ./app
