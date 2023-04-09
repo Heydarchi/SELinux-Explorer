@@ -13,7 +13,7 @@ class AnalyzerLogic:
 
     def initVariables(self):
         self.keepResult = False
-        self.listOfDiagrams = list()
+        self.listOfDiagrams = []
         self.refPolicyFile = PolicyFiles()
         self.drawer = RelationDrawer()
 

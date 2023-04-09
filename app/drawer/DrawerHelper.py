@@ -4,12 +4,12 @@ from enum import Enum
 DIAGEAM_FILE_EXTENSION = ".png"
 
 
-def generate_puml_file_name(fileName):
-    return fileName.replace("/", "-") + ".puml"
+def generate_puml_file_name(file_name):
+    return file_name.replace("/", "-") + ".puml"
 
 
-def generate_diagram_file_name(fileName):
-    return fileName.replace("/", "-") + "" + DIAGEAM_FILE_EXTENSION
+def generate_diagram_file_name(file_name):
+    return file_name.replace("/", "-") + "" + DIAGEAM_FILE_EXTENSION
 
 
 def generate_png(filepath):
@@ -48,7 +48,7 @@ class DrawingTool:
 
     @staticmethod
     def generate_start_of_puml():
-        lst_output = list()
+        lst_output = []
         lst_output.append("@startuml")
         lst_output.append("scale max 2560 height")
         lst_output.append("scale max 2048 width")
@@ -57,13 +57,13 @@ class DrawingTool:
 
     @staticmethod
     def generate_end_of_puml():
-        lst_output = list()
+        lst_output = []
         lst_output.append("@enduml")
         return lst_output
 
     @staticmethod
     def define_note_style():
-        lst_note = list()
+        lst_note = []
         lst_note.append("skinparam " + DrawingStyle.NOTE.value + " {")
         lst_note.append("borderColor black")
         lst_note.append("backgroundColor #FFD28A")
@@ -73,7 +73,7 @@ class DrawingTool:
 
     @staticmethod
     def defineDomainStyle():
-        lst_domain = list()
+        lst_domain = []
         lst_domain.append("skinparam " + DrawingStyle.DOMAIN.value + " {")
         lst_domain.append("borderColor black")
         lst_domain.append("backgroundColor #A5FFD6")
@@ -82,13 +82,13 @@ class DrawingTool:
         return lst_domain
 
     @staticmethod
-    def generate_note(title, position: DrawingPosition, items, firstLine=""):
+    def generate_note(title, position: DrawingPosition, items, first_line=""):
         items = list(dict.fromkeys(items))
-        lst_note = list()
+        lst_note = []
         if title.strip() != "" and len(items) >= 1:
             lst_note.append(DrawingStyle.NOTE.value + " " +
                            position.value + " of [" + title + "]")
-            lst_note.append("<b>" + firstLine + "</b>")
+            lst_note.append("<b>" + first_line + "</b>")
             for item in items:
                 lst_note.append("  - " + item)
             lst_note.append("end " + DrawingStyle.NOTE.value)
@@ -103,7 +103,7 @@ class DrawingTool:
             items,
             back_color: DrawingColor):
         items = list(dict.fromkeys(items))
-        lst_note = list()
+        lst_note = []
         if title.strip() != "" and len(items) >= 1:
             lst_note.append(
                 DrawingStyle.LEGEND.value +
@@ -120,7 +120,7 @@ class DrawingTool:
 
     @staticmethod
     def generate_domain(title, description=None):
-        lst_domain = list()
+        lst_domain = []
         if title.strip() != "":
             lst_domain.append(
                 DrawingStyle.DOMAIN.value +
@@ -134,7 +134,7 @@ class DrawingTool:
 
     @staticmethod
     def generate_other_label(title, description=""):
-        lst_domain = list()
+        lst_domain = []
         if title.strip() != "":
             lst_domain.append(
                 DrawingStyle.DOMAIN.value +

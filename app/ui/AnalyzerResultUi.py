@@ -32,7 +32,7 @@ class AnalyzerResultUi(QVBoxLayout):
                                self.COL_TYPE_WIDTH + self.MARGIN
         self.COL_TITLE_INDEX = 0
         self.COL_TYPE_INDEX = 1
-        self.lastRulesResult = list()
+        self.lastRulesResult = []
         self.BTN_WIDTH = 28
         self.BTN_HEIGHT = 28
 

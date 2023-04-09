@@ -59,10 +59,10 @@ class FilterResult:
         self.remove_duplicated_Items()
 
         drawer = RelationDrawer()
-        drawer.drawUml(self.filteredPolicyFile)
+        drawer.draw_uml(self.filteredPolicyFile)
 
         drawer_adv = AdvancedDrawer()
-        drawer_adv.drawUml(self.filteredPolicyFile)
+        drawer_adv.draw_uml(self.filteredPolicyFile)
 
         return generate_diagram_file_name(
             self.filteredPolicyFile.fileName), self.filteredPolicyFile

@@ -11,16 +11,16 @@ from MyLogger import *
 
 class FileAnalyzer(AbstractAnalyzer):
     def __init__(self) -> None:
-        self.listOfPolicyFiles = list()
-        self.listOfAnalyzerInfo = list()
+        self.listOfPolicyFiles = []
+        self.listOfAnalyzerInfo = []
 
     def clear(self):
-        self.listOfPolicyFiles = list()
-        self.listOfAnalyzerInfo = list()
+        self.listOfPolicyFiles = []
+        self.listOfAnalyzerInfo = []
         print("The previous analyze result is cleared!")
 
     def analyze(self, targetPaths):
-        list_of_files = list()
+        list_of_files = []
         for path in targetPaths:
             list_of_files.extend(self.gatherFileInfo(path, "*"))
 
@@ -56,9 +56,9 @@ class FileAnalyzer(AbstractAnalyzer):
 
     def detectLang(self, fileName):
         for fileType in FileTypeEnum:
-            # if fileType.label in os.path.basename(fileName):
+            # if fileType.label in os.path.basename(file_name):
             if os.path.basename(fileName).strip().endswith(fileType.label):
-                # print(os.path.basename(fileName))
+                # print(os.path.basename(file_name))
                 return fileType
 
         return FileTypeEnum.UNDEFINED

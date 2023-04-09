@@ -42,7 +42,7 @@ class SettingClass:
 
     @staticmethod
     def saveListAsJson(file_name, lst_of_objects):
-        lst_str = list()
+        lst_str = []
         for item in lst_of_objects:
             lst_str.append(item.to_json())
         FileWriter.write_list_to_file("ref/" + file_name + ".json", lst_str)

@@ -185,7 +185,7 @@ class ToolbarUi(QToolBar):
             self, 'Text Input Dialog', 'Enter your name:')
         if ok:
             SettingClass.saveListAsJson(
-                refName, self.analyzerLogic.listOfPolicyFiles)
+                refName, self.analyzerLogic.list_of_policy_files)
             print("AppSetting saved!")
 
     def onAbout(self):

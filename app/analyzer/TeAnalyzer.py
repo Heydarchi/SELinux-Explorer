@@ -110,7 +110,7 @@ class TeAnalyzer(AbstractAnalyzer):
             return None
 
     def extractRule(self, input_string):
-        lst_rules = list()
+        lst_rules = []
         try:
             input_string = input_string.replace(
                 ' : ',
@@ -132,7 +132,7 @@ class TeAnalyzer(AbstractAnalyzer):
                 if rule_enum.label == items[0].strip():
 
                     count_brackets = input_string.count("}")
-                    lst_bracket_items = list()
+                    lst_bracket_items = []
                     if count_brackets > 0:
                         offset = 0
                         while '{' in input_string[offset:]:

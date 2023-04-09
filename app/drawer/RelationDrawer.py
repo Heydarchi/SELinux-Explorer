@@ -1,169 +1,111 @@
 from model.PolicyEntities import *
 from PythonUtilityClasses import FileWriter as FW
 from datetime import *
-from queue import Queue
-from threading import Thread
-from time import sleep
 from drawer.DrawerHelper import *
 from AppSetting import *
+from drawer.AbstractDrawer import *
 
+class RelationDrawer(AbstractDrawer):
 
-class RelationDrawer(Thread):
+    def draw_uml(self, policyFile: PolicyFiles):
+        self.dict_of_participant = {}
+        self.drawer_class = DrawerClass()
 
-    def __init__(self) -> None:
-        Thread.__init__(self)
-        self.mapList = list()
-        self.mapList.append(UmlRelationMap("", InheritanceEnum.DEPENDED))
-        self.mapList.append(UmlRelationMap("", InheritanceEnum.EXTENDED))
-        self.mapList.append(UmlRelationMap("", InheritanceEnum.IMPLEMENTED))
+        plant_uml_list = []
+        plant_uml_list.append("@startuml")
 
-        self.dataTypeToIgnore = []
-        self.dictOfParticipant = dict()
-        self.drawerClass = DrawerClass()
+        self.dump_policy_file(policyFile)
+        plant_uml_list.extend(self.drawer_class.participants)
+        plant_uml_list.extend(self.drawer_class.rules)
 
-        self.letShutdownThread = False
-        self.queuePolicyFiles = Queue()
-        self.listOfPolicyFiles = list()
-        self.disableDrawing = False
-
-    def setDisableDrawing(self, state):
-        self.disableDrawing = state
-
-    def run(self):
-        while self.letShutdownThread == False or not self.queuePolicyFiles.empty():
-            if self.queuePolicyFiles.empty():
-                sleep(0.05)
-            else:
-                self.drawUml(self.queuePolicyFiles.get())
-
-        if len(self.listOfPolicyFiles) > 0:
-            self.drawListOfUml(self.listOfPolicyFiles)
-
-    def enqueuePolicyFile(self, policyFile):
-        self.queuePolicyFiles.put(policyFile)
-        self.listOfPolicyFiles.append(policyFile)
-
-    def drawUml(self, policyFile: PolicyFiles):
-        self.dictOfParticipant = dict()
-        self.drawerClass = DrawerClass()
-
-        plantUmlList = list()
-        plantUmlList.append("@startuml")
-
-        self.dumpPolicyFile(policyFile)
-        plantUmlList.extend(self.drawerClass.participants)
-        plantUmlList.extend(self.drawerClass.rules)
-
-        plantUmlList.append("@enduml")
+        plant_uml_list.append("@enduml")
 
         # Remove redundance items
-        plantUmlList = list(dict.fromkeys(plantUmlList))
-        # print(plantUmlList)
-        filePath = OUT_DIR + "seq_" + generate_puml_file_name(policyFile.fileName)
-        self.writeToFile(filePath, plantUmlList)
-        print("drawing: ", filePath)
+        plant_uml_list = list(dict.fromkeys(plant_uml_list))
+        # print(plant_uml_list)
+        file_path = OUT_DIR + "seq_" + generate_puml_file_name(policyFile.fileName)
+        self.write_to_file(file_path, plant_uml_list)
+        print("drawing: ", file_path)
+        generate_png(file_path)
 
-        if not self.disableDrawing:
-            generate_png(filePath)
-        # print(policyFile)
+    def draw_list_of_uml(self, policy_files: List[PolicyFiles]):
+        self.dict_of_participant = {}
+        self.drawer_class = DrawerClass()
 
-    def drawListOfUml(self, policyFiles: List[PolicyFiles]):
-        self.dictOfParticipant = dict()
-        self.drawerClass = DrawerClass()
+        plant_uml_list = []
+        plant_uml_list.extend(DrawingTool.generate_start_of_puml())
 
-        plantUmlList = list()
-        plantUmlList.extend(DrawingTool.generate_start_of_puml())
+        for policy_file in policy_files:
+            self.dump_policy_file(policy_file)
 
-        for policyFile in policyFiles:
-            self.dumpPolicyFile(policyFile)
+        plant_uml_list.extend(self.drawer_class.participants)
+        plant_uml_list.extend(self.drawer_class.rules)
 
-        plantUmlList.extend(self.drawerClass.participants)
-        plantUmlList.extend(self.drawerClass.rules)
-
-        plantUmlList.extend(DrawingTool.generate_end_of_puml())
+        plant_uml_list.extend(DrawingTool.generate_end_of_puml())
 
         # Remove redundance items
-        plantUmlList = list(dict.fromkeys(plantUmlList))
-        # print(plantUmlList)
-        filePath = OUT_DIR + "/Integrated-" + \
+        plant_uml_list = list(dict.fromkeys(plant_uml_list))
+        # print(plant_uml_list)
+        file_path = OUT_DIR + "/Integrated-" + \
             datetime.today().strftime("%d-%m-%y---%H-%M-%s") + "_relation.puml"
-        '''self.writeToFile(filePath, plantUmlList)
-        print("drawing: ", filePath)'''
+        '''self.writeToFile(file_path, plant_uml_list)
+        print("drawing: ", file_path)'''
 
-        if not self.disableDrawing:
-            self.generate_png(filePath)
-        # print(policyFile)
+        if not self.disable_drawing:
+            self.generate_png(file_path)
+        # print(policy_file)
 
-    def dumpPolicyFile(self, policyFile: PolicyFiles):
-        plantUmlList = list()
-
-        if policyFile is not None:
-            self.drawerClass.participants.extend(
-                self.drawSeApp(policyFile.seApps))
-            self.drawerClass.participants.extend(
-                self.drawTypeDef(policyFile.typeDef))
-            self.drawerClass.participants.extend(
-                self.drawContext(policyFile.contexts))
-            self.drawerClass.rules.extend(self.drawRule(policyFile.rules))
-
-        return plantUmlList
-
-    def drawTypeDef(self, typeDefs: List[TypeDef]):
-        typeDefList = list()
-        for typeDef in typeDefs:
-            # typeDef.append("\"" + typeDef.name + "\" -----> \"" + typeDef.types + "\"" )
-            typeDefList.append(
+    def draw_type_def(self, typeDefs: List[TypeDef]):
+        type_def_list = []
+        for type_def in typeDefs:
+            # type_def.append("\"" + type_def.name + "\" -----> \"" + type_def.types + "\"" )
+            type_def_list.append(
                 "participant " +
-                self.insertNewParticipant(
-                    typeDef.name) +
+                self.insert_new_participant(
+                    type_def.name) +
                 " [\n=" +
-                typeDef.name +
+                type_def.name +
                 "\n ----- \n\"\"" +
                 ', '.join(
-                    typeDef.types) +
+                    type_def.types) +
                 "\"\"\n]")
-        return typeDefList
+        return type_def_list
 
-    def drawContext(self, contexts: List[Context]):
-        contextList = list()
+    def draw_context(self, contexts: List[Context]):
+        context_list = []
         for context in contexts:
-            contextList.append(
+            context_list.append(
                 "participant " +
-                self.insertNewParticipant(
+                self.insert_new_participant(
                     context.securityContext.type) +
                 " [\n=" +
                 context.securityContext.type +
                 "\n ----- \n\"\"" +
                 context.pathName +
                 "\"\"\n]")
-        return contextList
+        return context_list
 
-    def drawSeApp(self, seAppContexts: List[SeAppContext]):
-        seAppList = list()
-        for seAppContext in seAppContexts:
-            seAppList.append(
+    def draw_se_app(self, se_app_contexts: List[SeAppContext]):
+        se_app_list = []
+        for se_app_context in se_app_contexts:
+            se_app_list.append(
                 "participant " +
-                self.insertNewParticipant(
-                    seAppContext.domain) +
+                self.insert_new_participant(
+                    se_app_context.domain) +
                 " [\n=" +
-                seAppContext.domain +
+                se_app_context.domain +
                 "\n ----- \n\"\"" +
-                seAppContext.user +
+                se_app_context.user +
                 "\"\"\n]")
-        return seAppList
+        return se_app_list
 
-    def drawRule(self, rules: List[Rule]):
-        ruleList = list()
+    def draw_rule(self, rules: List[Rule]):
+        rule_list = []
         for rule in rules:
-            if rule.source in self.dictOfParticipant:
-                src = self.dictOfParticipant[rule.source]
-            else:
-                src = rule.source
-
             if rule.rule == RuleEnum.NEVER_ALLOW:
-                ruleList.append(
+                rule_list.append(
                     "" +
-                    self.insertNewParticipant(
+                    self.insert_new_participant(
                         rule.source) +
                     " -----[#red]>x \"" +
                     rule.target +
@@ -174,9 +116,9 @@ class RelationDrawer(Thread):
                         rule.permissions) +
                     ")")
             else:
-                ruleList.append(
+                rule_list.append(
                     "" +
-                    self.insertNewParticipant(
+                    self.insert_new_participant(
                         rule.source) +
                     " -----[#green]> \"" +
                     rule.target +
@@ -187,42 +129,10 @@ class RelationDrawer(Thread):
                         rule.permissions) +
                     ")")
 
-        return ruleList
+        return rule_list
 
-    def insertNewParticipant(self, name):
-        if any(x in name for x in ["-", "/", ":"]):
-            if name not in self.dictOfParticipant:
-                self.dictOfParticipant[name] = name.replace(
-                    "-",
-                    "__").replace(
-                    "/",
-                    "_1_").replace(
-                    ":",
-                    "_2_")
-                # print ( "==========", name, self.dictOfParticipant[name])
-                self.drawerClass.participants.append(
-                    "participant " +
-                    self.insertNewParticipant(
-                        self.dictOfParticipant[name]) +
-                    " [\n=" +
-                    name +
-                    "\n ]")
-            return self.dictOfParticipant[name]
-        else:
-            return name
-
-    def writeToFile(self, fileName, listOfStr):
-        fw = FW.FileWriter
-        fw.write_list_to_file(fileName, listOfStr)
+    def write_to_file(self, file_name, list_of_str):
+        file_write = FW.FileWriter
+        file_write.write_list_to_file(file_name, list_of_str)
 
 
-if __name__ == "__main__":
-    '''print(sys.argv)
-    policyFile = ClassNode()
-    policyFile.name = "TestClass"
-    policyFile.relations.append( Inheritance("Class1", InheritanceEnum.DEPENDED) )
-    policyFile.relations.append( Inheritance("Class2", InheritanceEnum.EXTENDED) )
-    policyFile.relations.append( Inheritance("Class3", InheritanceEnum.IMPLEMENTED) )
-    relationDrawer = RelationDrawer()
-    relationDrawer.drawUml(policyFile)
-    '''

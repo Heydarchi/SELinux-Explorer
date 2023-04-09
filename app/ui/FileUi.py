@@ -63,14 +63,14 @@ class FileUi(QVBoxLayout):
             self.lstSelectedPath.takeItem(self.lstSelectedPath.row(item))
 
     def getSelectedPaths(self):
-        paths = list()
+        paths = []
         items = self.lstSelectedPath.selectedItems()
         for item in items:
             paths.append(item.text())
         return paths
 
     def getAllPaths(self):
-        paths = list()
+        paths = []
         for i in range(self.lstSelectedPath.count()):
             paths.append(self.lstSelectedPath.item(i).text())
         return paths

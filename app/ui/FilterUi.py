@@ -22,7 +22,7 @@ class FilterUi(QHBoxLayout):
         self.configLayout()
 
     def initVariables(self):
-        self.lstRules = list()
+        self.lstRules = []
         self.BTN_WIDTH = 28
         self.BTN_HEIGHT = 48
         self.selectedFilterType = None

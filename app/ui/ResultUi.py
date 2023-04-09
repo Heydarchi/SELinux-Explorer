@@ -66,7 +66,7 @@ class ResultUi(QVBoxLayout):
 
     def initVariables(self):
         self.diagram = None
-        self.lstDiagrams = list()
+        self.lstDiagrams = []
 
     def initWidgets(self):
         self.lstResults = QListWidget()
