@@ -113,8 +113,8 @@ class SeAppContext(JSONWizard):
     type: str = ""
     level_from: str = ""
     level_from: str = ""
-    type_def: TypeDef = TypeDef()
-    attribute: Attribute = Attribute()
+    type_def: TypeDef = field(default_factory=TypeDef)
+    attribute: Attribute = field(default_factory=Attribute)
 
 # pathname_regexp [file_type] security_context
 
@@ -124,7 +124,7 @@ class Context(JSONWizard):
     path_name: str = ""
     file_type: str = ""
     security_context: SecurityContext = None
-    type_def: TypeDef = TypeDef()
+    type_def: TypeDef = field(default_factory=TypeDef)
     domain_name: str = ""
 
 
