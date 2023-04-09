@@ -45,7 +45,7 @@ class SettingClass:
         lst_str = list()
         for item in lst_of_objects:
             lst_str.append(item.to_json())
-        FileWriter.writeListToFile("ref/" + file_name + ".json", lst_str)
+        FileWriter.write_list_to_file("ref/" + file_name + ".json", lst_str)
 
 
 if __name__ == "__main__":

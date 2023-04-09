@@ -76,24 +76,24 @@ class AnalyzerLogic:
         return refPolicyFile
 
     def clearOutput(self):
-        files = SystemUtility().getListOfFiles(os.getcwd() + "/" + OUT_DIR, "*")
+        files = SystemUtility().get_list_of_files(os.getcwd() + "/" + OUT_DIR, "*")
         for file in files:
             if os.path.isfile(file):
-                SystemUtility().deleteFiles(file)
+                SystemUtility().delete_files(file)
         self.onAnalyzeFinished(None)
         self.updateAnalyzerDataResult(None)
 
     def clearFileFromAnalyzer(self, filePath):
         self.analyzer.clear()
-        SystemUtility().deleteFiles(generate_diagram_file_name(filePath))
-        SystemUtility().deleteFiles(generate_puml_file_name(filePath))
+        SystemUtility().delete_files(generate_diagram_file_name(filePath))
+        SystemUtility().delete_files(generate_puml_file_name(filePath))
         self.onAnalyzeFinished(None)
 
     def removeFile(self, filePath):
-        SystemUtility().deleteFiles(
+        SystemUtility().delete_files(
             os.path.splitext(filePath)[0] +
             DIAGEAM_FILE_EXTENSION)
-        SystemUtility().deleteFiles(os.path.splitext(filePath)[0] + ".puml")
+        SystemUtility().delete_files(os.path.splitext(filePath)[0] + ".puml")
 
     def clear(self):
         self.refPolicyFile = PolicyFiles()
@@ -112,6 +112,6 @@ class AnalyzerLogic:
         self.updateAnalyzerDataResult = updateResult
 
     def onAnalyzeFinished(self, filteredPolicyFile):
-        self.listOfDiagrams = SystemUtility().getListOfFiles(
+        self.listOfDiagrams = SystemUtility().get_list_of_files(
             os.getcwd() + "/" + OUT_DIR, "*" + DIAGEAM_FILE_EXTENSION)
         self.updateResult()

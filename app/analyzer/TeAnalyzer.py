@@ -15,7 +15,7 @@ class TeAnalyzer(AbstractAnalyzer):
         self.file_path = file_path
         self.policyFile = PolicyFiles(file_path, "", FileTypeEnum.TE_FILE)
         file_reader = FR.FileReader()
-        temp_lines = file_reader.readFileLines(file_path)
+        temp_lines = file_reader.read_file_lines(file_path)
         last_line = ""
         macro_found = False
         for line in temp_lines:

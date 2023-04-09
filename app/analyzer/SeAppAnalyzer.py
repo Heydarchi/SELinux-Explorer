@@ -15,7 +15,7 @@ class SeAppAnalyzer(AbstractAnalyzer):
         self.policyFile = PolicyFiles(
             filePath, "", FileTypeEnum.SEAPP_CONTEXTS)
         file_reader = FR.FileReader()
-        temp_lines = file_reader.readFileLines(filePath)
+        temp_lines = file_reader.read_file_lines(filePath)
         for line in temp_lines:
             self.processLine(line)
 

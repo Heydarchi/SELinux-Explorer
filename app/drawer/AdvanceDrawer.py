@@ -206,7 +206,7 @@ class AdvancedDrawer:
 
     def writeToFile(self, fileName, listOfStr):
         fw = FW.FileWriter
-        fw.writeListToFile(fileName, listOfStr)
+        fw.write_list_to_file(fileName, listOfStr)
 
 
 if __name__ == "__main__":

@@ -31,7 +31,7 @@ class MainWindow(QMainWindow):
 
     def loadSetting(self):
         if os.path.isfile("app_setting.json"):
-            json_str = FileReader().readFile("app_setting.json")
+            json_str = FileReader().read_file("app_setting.json")
             self.appSetting = AppSetting.from_json(json_str)
             self.layoutPath.lastOpenedPath = self.appSetting.lastOpenedPath
             self.toolbar.keepResult = self.appSetting.keepTheResult
@@ -46,7 +46,7 @@ class MainWindow(QMainWindow):
         self.appSetting.keepTheResult = self.toolbar.keepResult
         self.appSetting.selectedFilterType = self.layoutFilter.getSelectedFilterType()
 
-        FileWriter.writeFile("app_setting.json", self.appSetting.to_json())
+        FileWriter.write_file("app_setting.json", self.appSetting.to_json())
         print("AppSetting saved!")
 
     def initMainLayout(self):

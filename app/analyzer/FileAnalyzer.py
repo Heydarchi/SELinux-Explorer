@@ -43,11 +43,11 @@ class FileAnalyzer(AbstractAnalyzer):
     def gatherFileInfo(self, targetPath, pattern):
 
         system_utility = SU.SystemUtility()
-        list_of_files = system_utility.getListOfFiles(targetPath, pattern)
+        list_of_files = system_utility.get_list_of_files(targetPath, pattern)
         for file in list_of_files:
             try:
                 analyzerInfo = AnalyzerInfo()
-                analyzerInfo.sourceFile = system_utility.getFileInfo(file)
+                analyzerInfo.sourceFile = system_utility.get_file_info(file)
                 self.listOfAnalyzerInfo.append(analyzerInfo)
             except Exception as e:
                 MyLogger.logError(sys, e)
