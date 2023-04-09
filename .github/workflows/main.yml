@@ -24,5 +24,6 @@ jobs:
 
     - name: Run tests
       run: pytest test/
+      working-directory: app
       env:
         PYTHONPATH: ./app
