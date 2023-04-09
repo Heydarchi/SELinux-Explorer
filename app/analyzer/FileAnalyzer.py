@@ -2,11 +2,10 @@ import sys
 
 from PythonUtilityClasses import SystemUtility as SU
 from analyzer.TeAnalyzer import *
-from analyzer.ContextsAnalyzer import *
-from analyzer.SeAppAnalyzer import *
-from drawer.RelationDrawer import *
+from analyzer.ContextsAnalyzer import ContextsAnalyzer
+from analyzer.SeAppAnalyzer import SeAppAnalyzer
 from analyzer.AnalyzerEntities import *
-from MyLogger import *
+import MyLogger
 
 
 class FileAnalyzer(AbstractAnalyzer):
@@ -50,7 +49,7 @@ class FileAnalyzer(AbstractAnalyzer):
                 analyzer_info.source_file = system_utility.get_file_info(file)
                 self.list_of_analyzer_info.append(analyzer_info)
             except Exception as err:
-                MyLogger.log_error(sys, e)
+                MyLogger.log_error(sys, err)
         # print(self.list_of_analyzer_info)
         return list_of_files
 

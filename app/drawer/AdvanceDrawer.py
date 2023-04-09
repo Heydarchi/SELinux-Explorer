@@ -1,7 +1,9 @@
-from model.PolicyEntities import *
+from model.PolicyEntities import PolicyFile, TypeDef, Rule, RuleEnum
+from model.PolicyEntities import SeAppContext, Context, DOMAIN_EXECUTABLE
 from PythonUtilityClasses import FileWriter as FW
-from drawer.DrawerHelper import *
-from AppSetting import *
+from drawer.DrawerHelper import generate_png, generate_puml_file_name
+from drawer.DrawerHelper import DrawingTool, DrawingPosition, DrawingColor
+from AppSetting import OUT_DIR
 from typing import List
 from drawer.AbstractDrawer import *
 

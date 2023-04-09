@@ -1,8 +1,5 @@
-from model.PolicyEntities import *
-from drawer.DrawerHelper import *
-from AppSetting import *
-from typing import List
-from model.PolicyEntities import *
+from model.PolicyEntities import DrawerClass, UmlRelationMap
+from model.PolicyEntities import PolicyFile, InheritanceEnum
 
 
 class AbstractDrawer:

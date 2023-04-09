@@ -1,5 +1,4 @@
 import sys
-from pathlib import Path
 from analyzer.AnalyzerUtility import *
 from analyzer.AbstractAnalyzer import *
 from model.PolicyEntities import *

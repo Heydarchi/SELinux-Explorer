@@ -1,9 +1,11 @@
-from model.PolicyEntities import *
+from model.PolicyEntities import PolicyFile, TypeDef, Rule, RuleEnum
+from model.PolicyEntities import SeAppContext, Context
 from PythonUtilityClasses import FileWriter as FW
 from datetime import *
-from drawer.DrawerHelper import *
-from AppSetting import *
+from drawer.DrawerHelper import generate_png, generate_puml_file_name
+from AppSetting import OUT_DIR
 from drawer.AbstractDrawer import *
+from typing import List
 
 class RelationDrawer(AbstractDrawer):
 
