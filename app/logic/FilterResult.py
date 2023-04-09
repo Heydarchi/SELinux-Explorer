@@ -44,8 +44,9 @@ class FilterResult:
         self.filtered_policy_file.file_name = "domain_filtered"
 
         for filter_rule in lst_rules:
-            self.filtered_policy_file.file_name = self.filtered_policy_file.file_name + \
-                                                  ("_ew_" if filter_rule.exact_word else "_") + filter_rule.keyword
+            self.filtered_policy_file.file_name = \
+                self.filtered_policy_file.file_name + \
+                ("_ew_" if filter_rule.exact_word else "_") + filter_rule.keyword
 
             if FilterType(filter_rule.filter_type) == FilterType.DOMAIN:
                 self.filter_domain(filter_rule, policy_file)
@@ -68,7 +69,9 @@ class FilterResult:
             self.filtered_policy_file.file_name), self.filtered_policy_file
 
     def remove_duplicated_Items(self):
-        # Remove duplicated items from type_def, contexts, se_apps, rules, macros of filtered_policy_file
+        ''' Remove duplicated items from type_def,
+        contexts,se_apps, rules, macros of
+        filtered_policy_file'''
         # print(self.filtered_policy_file.type_def)
         self.filtered_policy_file.type_def = list(
             {item.name: item for item in self.filtered_policy_file.type_def}.values())
@@ -149,7 +152,7 @@ class FilterResult:
                         policy_file))
 
     def filter_pathname(self, filter_rule, policy_file):
-        '''filter context having path_name or se_app havong name
+        '''filter context having path_name or se_apps havong name
         in policy_file and add to self.filtered_policy_file'''
         for context in policy_file.contexts:
             print("context.path_name: ", context.path_name, filter_rule)
@@ -170,7 +173,7 @@ class FilterResult:
                     FilterRule(FilterType.DOMAIN, domain, True), policy_file))
 
         for se_app in policy_file.se_apps:
-            print("se_app.name: ", se_app.name, filter_rule)
+            print("se_apps.name: ", se_app.name, filter_rule)
             if self.check_similarity(filter_rule, se_app.name):
                 if se_app.domain.strip().endswith("_exec"):
                     domain = se_app.domain.strip().replace("_exec", "")

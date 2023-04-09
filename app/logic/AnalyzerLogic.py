@@ -4,7 +4,6 @@ from drawer.DrawerHelper import *
 from AppSetting import *
 from model.PolicyEntities import *
 
-
 class AnalyzerLogic:
     def __init__(self):
         super().__init__()

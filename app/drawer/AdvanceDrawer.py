@@ -104,9 +104,9 @@ class AdvancedDrawer(AbstractDrawer):
                     "Types"))
         return context_list
 
-    def draw_se_app(self, se_app_contexts: List[SeAppContext]):
+    def draw_se_app(self, se_apps: List[SeAppContext]):
         se_app_list = []
-        for se_app_context in se_app_contexts:
+        for se_app_context in se_apps:
             se_app_list.extend(DrawingTool.generate_domain(se_app_context.domain))
 
             lst_note = []
@@ -165,5 +165,3 @@ class AdvancedDrawer(AbstractDrawer):
     def write_to_file(self, file_name, list_of_str):
         file_writer = FW.FileWriter
         file_writer.write_list_to_file(file_name, list_of_str)
-
-
