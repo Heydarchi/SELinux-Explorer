@@ -91,6 +91,15 @@ cd app
 python main.py
 ```
 <br/>
+<br/>
+
+## Development
+### How to run spell check locally
+There is a script to run spell check locally. It will check all the files in the `app` directory and ignore the words in the `app/config/codespell_ignore.txt` file.
+
+```
+codespell -I app/config/codespell_ignore.txt app/
+```
 
 ## Features and TODOs
 
