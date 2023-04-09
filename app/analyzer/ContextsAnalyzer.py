@@ -36,7 +36,7 @@ class ContextsAnalyzer(AbstractAnalyzer):
         for line in temp_lines:
             self.extract_definition(line)
 
-        # print(self.policyFile)
+        # print(self.policy_file)
         return self.policyFile
 
     def extract_definition(self, input_string):

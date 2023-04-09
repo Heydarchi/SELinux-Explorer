@@ -139,12 +139,12 @@ class ToolbarUi(QToolBar):
 
     def onAnalyzeSelectedPaths(self):
         paths = self.getSelectedPaths()
-        self.analyzerLogic.analyzeAll(paths)
+        self.analyzerLogic.analyze_all(paths)
         UiUtility.showMessage("Analyzer", "The selected files are analyzed!")
 
     def onAnalyzeAll(self):
         paths = self.getAllPaths()
-        self.analyzerLogic.analyzeAll(paths)
+        self.analyzerLogic.analyze_all(paths)
         UiUtility.showMessage("Analyzer", "All the files are analyzed!")
 
     def onClearAnalyze(self):
@@ -152,13 +152,13 @@ class ToolbarUi(QToolBar):
         print("Cleared analyzer!")
 
     def onClearOutput(self):
-        self.analyzerLogic.clearOutput()
+        self.analyzerLogic.clear_output()
         print("Cleared output!")
 
     def onWipeAll(self):
         self.onClearOutput()
         self.onClearAnalyze()
-        self.analyzerLogic.onAnalyzeFinished(None)
+        self.analyzerLogic.on_analyze_finished(None)
         print("Wiped all!")
 
     def onResultAdded(self, filePath):
@@ -167,7 +167,7 @@ class ToolbarUi(QToolBar):
 
     def onAnalyzeFinished(self):
         self.lstResults.clear()
-        for file in self.analyzerLogic.listOfDiagrams:
+        for file in self.analyzerLogic.list_of_diagrams:
             self.lstResults.addItem(QListWidgetItem(file))
 
     def onSelectedResult(self):
@@ -178,7 +178,7 @@ class ToolbarUi(QToolBar):
 
     def onClickedKeepResult(self):
         self.keepResult = self.sender().isChecked()
-        self.analyzerLogic.setKeepResult(self.sender().isChecked())
+        self.analyzerLogic.set_keep_result(self.sender().isChecked())
 
     def onMakeReference(self):
         refName, ok = QInputDialog.getText(

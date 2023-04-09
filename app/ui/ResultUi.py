@@ -90,7 +90,7 @@ class ResultUi(QVBoxLayout):
         self.btnDeleteSelected.clicked.connect(self.onDeleteSelectedFile)
         self.btnOpenSingle.clicked.connect(self.onOpenSingleFile)
         self.btnOpenMultiple.clicked.connect(self.onOpenMultipleFiles)
-        self.analyzerLogic.setUiUpdateSignal(self.onAnalyzeFinished)
+        self.analyzerLogic.set_ui_update_signal(self.onAnalyzeFinished)
 
     def configLayout(self):
         self.layoutButton.addWidget(self.btnDeleteSelected)
@@ -110,7 +110,7 @@ class ResultUi(QVBoxLayout):
         for item in items:
             filePath = item.text()
             self.lstResults.takeItem(self.lstResults.row(item))
-            self.analyzerLogic.removeFile(filePath)
+            self.analyzerLogic.remove_file(filePath)
 
     def onResultAdded(self, filePath):
         item = QListWidgetItem(filePath)
@@ -118,7 +118,7 @@ class ResultUi(QVBoxLayout):
 
     def onAnalyzeFinished(self):
         self.lstResults.clear()
-        for file in self.analyzerLogic.listOfDiagrams:
+        for file in self.analyzerLogic.list_of_diagrams:
             self.lstResults.addItem(QListWidgetItem(file))
 
     def onSelectedResult(self):

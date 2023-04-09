@@ -8,111 +8,102 @@ from model.PolicyEntities import *
 class AnalyzerLogic:
     def __init__(self):
         super().__init__()
-        self.initVariables()
-        self.initAnalyzer()
+        self.init_variables()
+        self.init_analyzer()
 
-    def initVariables(self):
-        self.keepResult = False
-        self.listOfDiagrams = []
-        self.refPolicyFile = PolicyFiles()
+    def init_variables(self):
+        self.keep_result = False
+        self.list_of_diagrams = []
+        self.ref_policy_file = PolicyFiles()
         self.drawer = RelationDrawer()
 
-    def initAnalyzer(self):
+    def init_analyzer(self):
         self.analyzer = FileAnalyzer()
 
-    def analyzeAll(self, paths):
-        if self.keepResult:
-            policyFiles.extend(self.analyzer.analyze(paths))
+    def analyze_all(self, paths):
+        if self.keep_result:
+            policy_files.extend(self.analyzer.analyze(paths))
         else:
-            policyFiles = self.analyzer.analyze(paths)
+            policy_files = self.analyzer.analyze(paths)
 
-        self.refPolicyFile = self.makeRefPolicyFile(policyFiles)
-        self.onAnalyzeFinished(None)
-        self.updateAnalyzerDataResult(self.refPolicyFile)
+        self.ref_policy_file = self.make_ref_policy_file(policy_files)
+        self.on_analyze_finished(None)
+        self.update_analyzer_data_result(self.ref_policy_file)
 
-    '''def onAnalyzeSelectedPaths(self, paths):
-        if self.keepResult :
-            self.listOfPolicyFiles.extend(self.analyzer.analyze(paths))
-        else:
-            self.listOfPolicyFiles = self.analyzer.analyze(paths)
 
-        self.onAnalyzeFinished(None)
-        self.updateAnalyzerDataResult(self.listOfPolicyFiles)
-    '''
-
-    def makeRefPolicyFile(self, policyFiles):
-        if policyFiles is None or len(policyFiles) == 0:
+    def make_ref_policy_file(self, policy_files):
+        if policy_files is None or len(policy_files) == 0:
             return None
 
-        refPolicyFile = PolicyFiles()
-        for policyFile in policyFiles:
-            refPolicyFile.typeDef.extend(policyFile.typeDef)
-            refPolicyFile.attribute.extend(policyFile.attribute)
-            refPolicyFile.contexts.extend(policyFile.contexts)
-            refPolicyFile.seApps.extend(policyFile.seApps)
-            refPolicyFile.rules.extend(policyFile.rules)
-            refPolicyFile.macros.extend(policyFile.macros)
-            refPolicyFile.macroCalls.extend(policyFile.macroCalls)
+        ref_policy_file = PolicyFiles()
+        for policyFile in policy_files:
+            ref_policy_file.typeDef.extend(policyFile.typeDef)
+            ref_policy_file.attribute.extend(policyFile.attribute)
+            ref_policy_file.contexts.extend(policyFile.contexts)
+            ref_policy_file.seApps.extend(policyFile.seApps)
+            ref_policy_file.rules.extend(policyFile.rules)
+            ref_policy_file.macros.extend(policyFile.macros)
+            ref_policy_file.macroCalls.extend(policyFile.macroCalls)
 
-        for macoCall in refPolicyFile.macroCalls:
-            # print("macroCall.name: ", macoCall.name)
-            for macro in refPolicyFile.macros:
+        for maco_call in ref_policy_file.macroCalls:
+            # print("macroCall.name: ", maco_call.name)
+            for macro in ref_policy_file.macros:
                 # print("macro.name: ", macro.name)
-                if macro.name == macoCall.name:
+                if macro.name == maco_call.name:
                     rules = macro.rules
                     for rule in rules:
                         '''Need to replace $number in source, target or 
                         classType with parameter from macro call with
                          the same number'''
-                        for i in range(0, len(macoCall.parameters)):
+                        for i in range(0, len(maco_call.parameters)):
                             rule.source = rule.source.replace(
-                                "$" + str(i + 1), macoCall.parameters[i])
+                                "$" + str(i + 1), maco_call.parameters[i])
                             rule.target = rule.target.replace(
-                                "$" + str(i + 1), macoCall.parameters[i])
+                                "$" + str(i + 1), maco_call.parameters[i])
                             rule.classType = rule.classType.replace(
-                                "$" + str(i), macoCall.parameters[i])
+                                "$" + str(i), maco_call.parameters[i])
                         # print("rule: ", rule)
-                        refPolicyFile.rules.append(rule)
-                        refPolicyFile.macroCalls.clear()
-        return refPolicyFile
+                        ref_policy_file.rules.append(rule)
+                        ref_policy_file.macroCalls.clear()
+        return ref_policy_file
 
-    def clearOutput(self):
+    def clear_output(self):
         files = SystemUtility().get_list_of_files(os.getcwd() + "/" + OUT_DIR, "*")
         for file in files:
             if os.path.isfile(file):
                 SystemUtility().delete_files(file)
-        self.onAnalyzeFinished(None)
-        self.updateAnalyzerDataResult(None)
+        self.on_analyze_finished(None)
+        self.update_analyzer_data_result(None)
 
-    def clearFileFromAnalyzer(self, filePath):
+    def clear_file_from_analyzer(self, file_path):
         self.analyzer.clear()
-        SystemUtility().delete_files(generate_diagram_file_name(filePath))
-        SystemUtility().delete_files(generate_puml_file_name(filePath))
-        self.onAnalyzeFinished(None)
+        SystemUtility().delete_files(generate_diagram_file_name(file_path))
+        SystemUtility().delete_files(generate_puml_file_name(file_path))
+        self.on_analyze_finished(None)
 
-    def removeFile(self, filePath):
+    def remove_file(self, file_path):
         SystemUtility().delete_files(
-            os.path.splitext(filePath)[0] +
+            os.path.splitext(file_path)[0] +
             DIAGEAM_FILE_EXTENSION)
-        SystemUtility().delete_files(os.path.splitext(filePath)[0] + ".puml")
+        SystemUtility().delete_files(os.path.splitext(file_path)[0] + ".puml")
 
     def clear(self):
-        self.refPolicyFile = PolicyFiles()
+        self.ref_policy_file = PolicyFiles()
 
-    def getImagePath(self, filePath):
+    def get_image_path(self, filePath):
         return generate_diagram_file_name(filePath)
 
-    def setKeepResult(self, state):
-        self.keepResult = state
-        print("self.keepResult:", self.keepResult)
+    def set_keep_result(self, state):
+        self.keep_result = state
+        print("self.keep_result:", self.keep_result)
 
-    def setUiUpdateSignal(self, updateResult):
-        self.updateResult = updateResult
+    def set_ui_update_signal(self, update_result):
+        self.update_result = update_result
 
-    def setUiUpdateAnalyzerDataSignal(self, updateResult):
-        self.updateAnalyzerDataResult = updateResult
+    def set_ui_update_analyzer_data_signal(self, update_result):
+        self.update_analyzer_data_result = update_result
 
-    def onAnalyzeFinished(self, filteredPolicyFile):
-        self.listOfDiagrams = SystemUtility().get_list_of_files(
+    def on_analyze_finished(self, filtered_policy_file):
+        self.list_of_diagrams = SystemUtility().get_list_of_files(
             os.getcwd() + "/" + OUT_DIR, "*" + DIAGEAM_FILE_EXTENSION)
-        self.updateResult()
+        self.update_result()

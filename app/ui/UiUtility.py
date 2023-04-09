@@ -10,7 +10,7 @@ class UiUtility:
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Information)
         msg.setText(message)
-        msg.setWindowTitle("Information MessageBox")
+        msg.setWindowTitle(title)
         msg.setStandardButtons(QMessageBox.Ok)
         msg.exec_()
 

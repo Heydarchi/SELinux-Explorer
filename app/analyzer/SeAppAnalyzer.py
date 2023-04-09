@@ -19,7 +19,7 @@ class SeAppAnalyzer(AbstractAnalyzer):
         for line in temp_lines:
             self.processLine(line)
 
-        # print(self.policyFile)
+        # print(self.policy_file)
         return self.policyFile
 
     def processLine(self, input_string):

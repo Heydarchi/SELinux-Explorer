@@ -31,21 +31,21 @@ class FilterRule(JSONWizard):
 
     @staticmethod
     def getFilterTypeFromStr(keyword):
-        for filterType in FilterType:
-            if keyword == filterType.name:
-                return filterType
+        for filter_type in FilterType:
+            if keyword == filter_type.name:
+                return filter_type
 
 
 class FilterResult:
 
     def filter(self, lst_rules, policy_file):
 
-        self.filteredPolicyFile = PolicyFiles()
-        self.filteredPolicyFile.fileName = "domain_filtered"
+        self.filtered_policy_file = PolicyFiles()
+        self.filtered_policy_file.fileName = "domain_filtered"
 
         for filter_rule in lst_rules:
-            self.filteredPolicyFile.fileName = self.filteredPolicyFile.fileName + \
-                ("_ew_" if filter_rule.exactWord else "_") + filter_rule.keyword
+            self.filtered_policy_file.fileName = self.filtered_policy_file.fileName + \
+                                                 ("_ew_" if filter_rule.exactWord else "_") + filter_rule.keyword
 
             if FilterType(filter_rule.filterType) == FilterType.DOMAIN:
                 self.filter_domain(filter_rule, policy_file)
@@ -59,23 +59,23 @@ class FilterResult:
         self.remove_duplicated_Items()
 
         drawer = RelationDrawer()
-        drawer.draw_uml(self.filteredPolicyFile)
+        drawer.draw_uml(self.filtered_policy_file)
 
         drawer_adv = AdvancedDrawer()
-        drawer_adv.draw_uml(self.filteredPolicyFile)
+        drawer_adv.draw_uml(self.filtered_policy_file)
 
         return generate_diagram_file_name(
-            self.filteredPolicyFile.fileName), self.filteredPolicyFile
+            self.filtered_policy_file.fileName), self.filtered_policy_file
 
     def remove_duplicated_Items(self):
-        # Remove duplicated items from typeDef, contexts, seApps, rules, macros of filteredPolicyFile
-        # print(self.filteredPolicyFile.typeDef)
-        self.filteredPolicyFile.typeDef = list(
-            {item.name: item for item in self.filteredPolicyFile.typeDef}.values())
-        self.filteredPolicyFile.contexts = list(
-            {item.pathName: item for item in self.filteredPolicyFile.contexts}.values())
-        self.filteredPolicyFile.seApps = list(
-            {item.name: item for item in self.filteredPolicyFile.seApps}.values())
+        # Remove duplicated items from typeDef, contexts, seApps, rules, macros of filtered_policy_file
+        # print(self.filtered_policy_file.typeDef)
+        self.filtered_policy_file.typeDef = list(
+            {item.name: item for item in self.filtered_policy_file.typeDef}.values())
+        self.filtered_policy_file.contexts = list(
+            {item.pathName: item for item in self.filtered_policy_file.contexts}.values())
+        self.filtered_policy_file.seApps = list(
+            {item.name: item for item in self.filtered_policy_file.seApps}.values())
 
         # Define a lambda function to extract a hashable representation of each
         # Rule object
@@ -88,72 +88,72 @@ class FilterResult:
                 sorted(
                     r.permissions)))
         # Remove duplicates based on all fields
-        self.filteredPolicyFile.rules = list(
-            {get_hashable_rule(r): r for r in self.filteredPolicyFile.rules}.values())
+        self.filtered_policy_file.rules = list(
+            {get_hashable_rule(r): r for r in self.filtered_policy_file.rules}.values())
 
-    def filter_domain(self, filterRule, policyFile):
+    def filter_domain(self, filter_rule, policy_file):
 
-        self.filteredPolicyFile.typeDef.extend(
-            self.filter_typedef(filterRule, policyFile))
-        self.filteredPolicyFile.contexts.extend(
-            self.filter_context(filterRule, policyFile))
-        self.filteredPolicyFile.seApps.extend(
-            self.filter_se_app(filterRule, policyFile))
-        self.filteredPolicyFile.rules.extend(
-            self.filter_rule(filterRule, policyFile))
-        self.filteredPolicyFile.macros.extend(
-            self.filter_function(filterRule, policyFile))
-        self.filteredPolicyFile.attribute.extend(
-            self.filter_attribute(filterRule, policyFile))
+        self.filtered_policy_file.typeDef.extend(
+            self.filter_typedef(filter_rule, policy_file))
+        self.filtered_policy_file.contexts.extend(
+            self.filter_context(filter_rule, policy_file))
+        self.filtered_policy_file.seApps.extend(
+            self.filter_se_app(filter_rule, policy_file))
+        self.filtered_policy_file.rules.extend(
+            self.filter_rule(filter_rule, policy_file))
+        self.filtered_policy_file.macros.extend(
+            self.filter_function(filter_rule, policy_file))
+        self.filtered_policy_file.attribute.extend(
+            self.filter_attribute(filter_rule, policy_file))
 
-    def filter_filename(self, filterRule, policyFile):
+    def filter_filename(self, filter_rule, policy_file):
         # print("----filterFilename")
-        if self.check_similarity(filterRule, policyFile.fileName):
-            self.filteredPolicyFile.typeDef.extend(policyFile.typeDef)
-            self.filteredPolicyFile.contexts.extend(policyFile.contexts)
-            self.filteredPolicyFile.seApps.extend(policyFile.seApps)
-            self.filteredPolicyFile.rules.extend(policyFile.rules)
-            self.filteredPolicyFile.macros.extend(policyFile.macros)
-            self.filteredPolicyFile.attribute.extend(policyFile.attribute)
+        if self.check_similarity(filter_rule, policy_file.fileName):
+            self.filtered_policy_file.typeDef.extend(policy_file.typeDef)
+            self.filtered_policy_file.contexts.extend(policy_file.contexts)
+            self.filtered_policy_file.seApps.extend(policy_file.seApps)
+            self.filtered_policy_file.rules.extend(policy_file.rules)
+            self.filtered_policy_file.macros.extend(policy_file.macros)
+            self.filtered_policy_file.attribute.extend(policy_file.attribute)
 
-    def filter_permission(self, filterRule, policyFile):
-        '''Filter rules having permission in the policyFile and put them in filteredPolicyFile'''
-        # print("----filterPermission: ", filterRule)
-        for rule in policyFile.rules:
-            if filterRule.keyword in rule.permissions:
+    def filter_permission(self, filter_rule, policy_file):
+        '''Filter rules having permission in the policy_file and put them in filtered_policy_file'''
+        # print("----filterPermission: ", filter_rule)
+        for rule in policy_file.rules:
+            if filter_rule.keyword in rule.permissions:
                 # print(rule)
                 tempRule = rule
-                tempRule.permissions = [filterRule.keyword]
-                self.filteredPolicyFile.rules.append(tempRule)
-                self.filteredPolicyFile.typeDef.extend(self.filter_typedef(
-                    FilterRule(FilterType.DOMAIN, rule.source, True), policyFile))
-                self.filteredPolicyFile.typeDef.extend(self.filter_typedef(
-                    FilterRule(FilterType.DOMAIN, rule.target, True), policyFile))
-                self.filteredPolicyFile.contexts.extend(self.filter_context(
-                    FilterRule(FilterType.DOMAIN, rule.source, True), policyFile))
-                self.filteredPolicyFile.contexts.extend(self.filter_context(
-                    FilterRule(FilterType.DOMAIN, rule.target, True), policyFile))
-                self.filteredPolicyFile.seApps.extend(
+                tempRule.permissions = [filter_rule.keyword]
+                self.filtered_policy_file.rules.append(tempRule)
+                self.filtered_policy_file.typeDef.extend(self.filter_typedef(
+                    FilterRule(FilterType.DOMAIN, rule.source, True), policy_file))
+                self.filtered_policy_file.typeDef.extend(self.filter_typedef(
+                    FilterRule(FilterType.DOMAIN, rule.target, True), policy_file))
+                self.filtered_policy_file.contexts.extend(self.filter_context(
+                    FilterRule(FilterType.DOMAIN, rule.source, True), policy_file))
+                self.filtered_policy_file.contexts.extend(self.filter_context(
+                    FilterRule(FilterType.DOMAIN, rule.target, True), policy_file))
+                self.filtered_policy_file.seApps.extend(
                     self.filter_se_app(
                         FilterRule(
                             FilterType.DOMAIN,
                             rule.source,
                             True),
-                        policyFile))
-                self.filteredPolicyFile.seApps.extend(
+                        policy_file))
+                self.filtered_policy_file.seApps.extend(
                     self.filter_se_app(
                         FilterRule(
                             FilterType.DOMAIN,
                             rule.target,
                             True),
-                        policyFile))
+                        policy_file))
 
-    def filter_pathname(self, filterRule, policyFile):
+    def filter_pathname(self, filter_rule, policy_file):
         '''filter context having pathName or se_app havong name
-        in policyFile and add to self.filteredPolicyFile'''
-        for context in policyFile.contexts:
-            print("context.pathName: ", context.pathName, filterRule)
-            if self.check_similarity(filterRule, context.pathName):
+        in policy_file and add to self.filtered_policy_file'''
+        for context in policy_file.contexts:
+            print("context.pathName: ", context.pathName, filter_rule)
+            if self.check_similarity(filter_rule, context.pathName):
                 if context.securityContext.type.strip().endswith("_exec"):
                     domain = context.securityContext.type.strip().replace("_exec", "")
                 else:
@@ -161,154 +161,154 @@ class FilterResult:
                 print(
                     "context.securityContext.type: ",
                     context.securityContext.type)
-                self.filteredPolicyFile.contexts.append(context)
-                self.filteredPolicyFile.typeDef.extend(self.filter_typedef(
-                    FilterRule(FilterType.DOMAIN, domain, True), policyFile))
-                self.filteredPolicyFile.seApps.extend(self.filter_se_app(
-                    FilterRule(FilterType.DOMAIN, domain, True), policyFile))
-                self.filteredPolicyFile.rules.extend(self.filter_rule(
-                    FilterRule(FilterType.DOMAIN, domain, True), policyFile))
+                self.filtered_policy_file.contexts.append(context)
+                self.filtered_policy_file.typeDef.extend(self.filter_typedef(
+                    FilterRule(FilterType.DOMAIN, domain, True), policy_file))
+                self.filtered_policy_file.seApps.extend(self.filter_se_app(
+                    FilterRule(FilterType.DOMAIN, domain, True), policy_file))
+                self.filtered_policy_file.rules.extend(self.filter_rule(
+                    FilterRule(FilterType.DOMAIN, domain, True), policy_file))
 
-        for se_app in policyFile.seApps:
-            print("se_app.name: ", se_app.name, filterRule)
-            if self.check_similarity(filterRule, se_app.name):
+        for se_app in policy_file.seApps:
+            print("se_app.name: ", se_app.name, filter_rule)
+            if self.check_similarity(filter_rule, se_app.name):
                 if se_app.domain.strip().endswith("_exec"):
                     domain = se_app.domain.strip().replace("_exec", "")
                 else:
                     domain = se_app.domain.strip()
                 print("domain: ", domain)
-                self.filteredPolicyFile.seApps.append(se_app)
-                self.filteredPolicyFile.typeDef.extend(self.filter_typedef(
-                    FilterRule(FilterType.DOMAIN, domain, True), policyFile))
-                self.filteredPolicyFile.contexts.extend(self.filter_context(
-                    FilterRule(FilterType.DOMAIN, domain, True), policyFile))
-                self.filteredPolicyFile.rules.extend(self.filter_rule(
-                    FilterRule(FilterType.DOMAIN, domain, True), policyFile))
+                self.filtered_policy_file.seApps.append(se_app)
+                self.filtered_policy_file.typeDef.extend(self.filter_typedef(
+                    FilterRule(FilterType.DOMAIN, domain, True), policy_file))
+                self.filtered_policy_file.contexts.extend(self.filter_context(
+                    FilterRule(FilterType.DOMAIN, domain, True), policy_file))
+                self.filtered_policy_file.rules.extend(self.filter_rule(
+                    FilterRule(FilterType.DOMAIN, domain, True), policy_file))
 
-    def filter_classyype(self, filterRule, policyFile):
+    def filter_classyype(self, filter_rule, policy_file):
         '''find domain and rule with the same class type
         and then filter based on the found domain'''
-        for type_def in policyFile.typeDef:
+        for type_def in policy_file.typeDef:
             for type in type_def.types:
-                if self.check_similarity(filterRule, type):
-                    self.filteredPolicyFile.typeDef.append(type_def)
-                    self.filteredPolicyFile.rules.extend(
+                if self.check_similarity(filter_rule, type):
+                    self.filtered_policy_file.typeDef.append(type_def)
+                    self.filtered_policy_file.rules.extend(
                         self.filter_rule(
                             FilterRule(
                                 FilterType.DOMAIN,
                                 type_def.name,
                                 True),
-                            policyFile))
-                    self.filteredPolicyFile.contexts.extend(self.filter_context(
-                        FilterRule(FilterType.DOMAIN, type_def.name, True), policyFile))
-                    self.filteredPolicyFile.seApps.extend(
+                            policy_file))
+                    self.filtered_policy_file.contexts.extend(self.filter_context(
+                        FilterRule(FilterType.DOMAIN, type_def.name, True), policy_file))
+                    self.filtered_policy_file.seApps.extend(
                         self.filter_se_app(
                             FilterRule(
                                 FilterType.DOMAIN,
                                 type_def.name,
                                 True),
-                            policyFile))
+                            policy_file))
 
-        for rule in policyFile.rules:
-            if self.check_similarity(filterRule, rule.classType):
-                self.filteredPolicyFile.rules.append(rule)
-                self.filteredPolicyFile.typeDef.extend(self.filter_typedef(
-                    FilterRule(FilterType.DOMAIN, rule.source, True), policyFile))
-                self.filteredPolicyFile.typeDef.extend(self.filter_typedef(
-                    FilterRule(FilterType.DOMAIN, rule.target, True), policyFile))
-                self.filteredPolicyFile.contexts.extend(self.filter_context(
-                    FilterRule(FilterType.DOMAIN, rule.source, True), policyFile))
-                self.filteredPolicyFile.contexts.extend(self.filter_context(
-                    FilterRule(FilterType.DOMAIN, rule.target, True), policyFile))
-                self.filteredPolicyFile.seApps.extend(
+        for rule in policy_file.rules:
+            if self.check_similarity(filter_rule, rule.classType):
+                self.filtered_policy_file.rules.append(rule)
+                self.filtered_policy_file.typeDef.extend(self.filter_typedef(
+                    FilterRule(FilterType.DOMAIN, rule.source, True), policy_file))
+                self.filtered_policy_file.typeDef.extend(self.filter_typedef(
+                    FilterRule(FilterType.DOMAIN, rule.target, True), policy_file))
+                self.filtered_policy_file.contexts.extend(self.filter_context(
+                    FilterRule(FilterType.DOMAIN, rule.source, True), policy_file))
+                self.filtered_policy_file.contexts.extend(self.filter_context(
+                    FilterRule(FilterType.DOMAIN, rule.target, True), policy_file))
+                self.filtered_policy_file.seApps.extend(
                     self.filter_se_app(
                         FilterRule(
                             FilterType.DOMAIN,
                             rule.source,
                             True),
-                        policyFile))
-                self.filteredPolicyFile.seApps.extend(
+                        policy_file))
+                self.filtered_policy_file.seApps.extend(
                     self.filter_se_app(
                         FilterRule(
                             FilterType.DOMAIN,
                             rule.target,
                             True),
-                        policyFile))
+                        policy_file))
 
-        for se_app in policyFile.seApps:
+        for se_app in policy_file.seApps:
             for type in se_app.typeDef.types:
-                if self.check_similarity(filterRule, type):
-                    self.filteredPolicyFile.typeDef.append(se_app.typeDef)
-                    self.filteredPolicyFile.rules.extend(
+                if self.check_similarity(filter_rule, type):
+                    self.filtered_policy_file.typeDef.append(se_app.typeDef)
+                    self.filtered_policy_file.rules.extend(
                         self.filter_rule(
                             FilterRule(
                                 FilterType.DOMAIN,
                                 se_app.typeDef.name,
                                 True),
-                            policyFile))
-                    self.filteredPolicyFile.contexts.extend(
+                            policy_file))
+                    self.filtered_policy_file.contexts.extend(
                         self.filter_context(
                             FilterRule(
                                 FilterType.DOMAIN,
                                 se_app.typeDef.name,
                                 True),
-                            policyFile))
-                    self.filteredPolicyFile.seApps.extend(
+                            policy_file))
+                    self.filtered_policy_file.seApps.extend(
                         self.filter_se_app(
                             FilterRule(
                                 FilterType.DOMAIN,
                                 se_app.typeDef.name,
                                 True),
-                            policyFile))
+                            policy_file))
 
-    def check_similarity(self, filterRule, stringToCheck):
-        if filterRule.exactWord:
-            return stringToCheck.strip() == filterRule.keyword.strip()
+    def check_similarity(self, filter_rule, string_to_check):
+        if filter_rule.exactWord:
+            return string_to_check.strip() == filter_rule.keyword.strip()
         else:
-            return filterRule.keyword.strip() in stringToCheck.strip()
+            return filter_rule.keyword.strip() in string_to_check.strip()
 
-    def filter_typedef(self, filterRule, policyFile):
+    def filter_typedef(self, filter_rule, policy_file):
         lst_tye_def = []
-        for type_def in policyFile.typeDef:
-            if self.check_similarity(filterRule, type_def.name):
+        for type_def in policy_file.typeDef:
+            if self.check_similarity(filter_rule, type_def.name):
                 lst_tye_def.append(type_def)
         return lst_tye_def
 
-    def filter_context(self, filterRule, policyFile):
+    def filter_context(self, filter_rule, policy_file):
         lst_context = []
-        for context in policyFile.contexts:
-            if self.check_similarity(filterRule, context.securityContext.type):
+        for context in policy_file.contexts:
+            if self.check_similarity(filter_rule, context.securityContext.type):
                 lst_context.append(context)
         return lst_context
 
-    def filter_se_app(self, filterRule, policyFile):
+    def filter_se_app(self, filter_rule, policy_file):
         lst_se_app = []
-        for se_app in policyFile.seApps:
-            if self.check_similarity(filterRule, se_app.domain):
+        for se_app in policy_file.seApps:
+            if self.check_similarity(filter_rule, se_app.domain):
                 lst_se_app.append(se_app)
         return lst_se_app
 
-    def filter_rule(self, filterRule, policyFile):
+    def filter_rule(self, filter_rule, policy_file):
         lst_rule = []
-        for rule in policyFile.rules:
+        for rule in policy_file.rules:
             if self.check_similarity(
-                    filterRule,
+                    filter_rule,
                     rule.source) or self.check_similarity(
-                    filterRule,
+                    filter_rule,
                     rule.target):
                 lst_rule.append(rule)
         return lst_rule
 
-    def filter_function(self, filterRule, policyFile):
+    def filter_function(self, filter_rule, policy_file):
         lst_function = []
-        for function in policyFile.macros:
-            if self.check_similarity(filterRule, function.name):
+        for function in policy_file.macros:
+            if self.check_similarity(filter_rule, function.name):
                 lst_function.append(function)
         return lst_function
 
-    def filter_attribute(self, filterRule, policyFile):
+    def filter_attribute(self, filter_rule, policy_file):
         lst_attribute = []
-        for attribute in policyFile.attribute:
-            if self.check_similarity(filterRule, attribute.name):
+        for attribute in policy_file.attribute:
+            if self.check_similarity(filter_rule, attribute.name):
                 lst_attribute.append(attribute)
         return lst_attribute

@@ -122,9 +122,9 @@ class FilterUi(QHBoxLayout):
         if not self.lstRules:
             return
         fileName, filteredPolicyFile = FilterResult().filter(
-            self.lstRules, self.analyzerLogic.refPolicyFile)
+            self.lstRules, self.analyzerLogic.ref_policy_file)
         print(fileName)
-        self.analyzerLogic.onAnalyzeFinished(filteredPolicyFile)
+        self.analyzerLogic.on_analyze_finished(filteredPolicyFile)
 
     def onClearFilterRules(self):
         self.lstRules.clear()

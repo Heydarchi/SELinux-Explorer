@@ -34,7 +34,7 @@ class AdvancedDrawer(AbstractDrawer):
         print("drawing: ", file_path)
 
         generate_png(file_path)
-        # print(policyFile)
+        # print(policy_file)
 
     def dump_policy_file(self, policy_file: PolicyFiles):
 

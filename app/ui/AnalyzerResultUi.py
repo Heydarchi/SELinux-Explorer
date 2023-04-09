@@ -79,7 +79,7 @@ class AnalyzerResultUi(QVBoxLayout):
 
     def configSignals(self):
         self.btnAddSelected.clicked.connect(self.onAddSelectedFilter)
-        self.analyzerLogic.setUiUpdateAnalyzerDataSignal(
+        self.analyzerLogic.set_ui_update_analyzer_data_signal(
             self.onAnalyzeFinished)
         self.cmbFilter.currentIndexChanged.connect(self.onFilterChanged)
         self.edtSearch.textChanged.connect(self.onSeachTextChanged)
@@ -122,7 +122,7 @@ class AnalyzerResultUi(QVBoxLayout):
         self.sendToFilterUi(rule)
 
     def onResultAdded(self, lstRules):
-        '''item = QListWidgetItem(filePath)
+        '''item = QListWidgetItem(file_path)
         self.tblResult.addItem(item)'''
         pass
 
