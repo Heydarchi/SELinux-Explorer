@@ -17,7 +17,7 @@ class AdvancedDrawer(AbstractDrawer):
 
         self.dump_policy_file(policy_file)
 
-        plant_uml_list.extend(DrawingTool.defineDomainStyle())
+        plant_uml_list.extend(DrawingTool.define_domain_style())
         plant_uml_list.extend(DrawingTool.define_note_style())
         plant_uml_list.extend(self.drawer_class.participants)
         plant_uml_list.extend(self.drawer_class.rules)
@@ -29,7 +29,7 @@ class AdvancedDrawer(AbstractDrawer):
         # list(dict.fromkeys(plant_uml_list))
 
         # print(plant_uml_list)
-        file_path = OUT_DIR + generate_puml_file_name(policy_file.fileName)
+        file_path = OUT_DIR + generate_puml_file_name(policy_file.file_name)
         self.write_to_file(file_path, plant_uml_list)
         print("drawing: ", file_path)
 
@@ -43,14 +43,14 @@ class AdvancedDrawer(AbstractDrawer):
         return  super().dump_policy_file(policy_file)
 
     def correlate_data(self, policy_file: PolicyFile):
-        for se_app in policy_file.seApps:
-            for i in reversed(range(len(policy_file.typeDef))):
-                if se_app.domain == policy_file.typeDef[i].name:
-                    se_app.typeDef.types.extend(policy_file.typeDef[i].types)
-                    del policy_file.typeDef[i]
+        for se_app in policy_file.se_apps:
+            for i in reversed(range(len(policy_file.type_def))):
+                if se_app.domain == policy_file.type_def[i].name:
+                    se_app.type_def.types.extend(policy_file.type_def[i].types)
+                    del policy_file.type_def[i]
                     break
 
-        for se_app in policy_file.seApps:
+        for se_app in policy_file.se_apps:
             for i in reversed(range(len(policy_file.attribute))):
                 if se_app.domain == policy_file.attribute[i].name:
                     se_app.attribute = policy_file.attribute[i]
@@ -58,13 +58,13 @@ class AdvancedDrawer(AbstractDrawer):
                     break
 
         for j in range(len(policy_file.contexts)):
-            for i in reversed(range(len(policy_file.typeDef))):
-                if policy_file.contexts[j].securityContext.type.replace(
-                        DOMAIN_EXECUTABLE, "") == policy_file.typeDef[i].name:
-                    policy_file.contexts[j].domainName = policy_file.typeDef[i].name
-                    policy_file.contexts[j].typeDef.types.extend(
-                        policy_file.typeDef[i].types)
-                    del policy_file.typeDef[i]
+            for i in reversed(range(len(policy_file.type_def))):
+                if policy_file.contexts[j].security_context.type.replace(
+                        DOMAIN_EXECUTABLE, "") == policy_file.type_def[i].name:
+                    policy_file.contexts[j].domain_name = policy_file.type_def[i].name
+                    policy_file.contexts[j].type_def.types.extend(
+                        policy_file.type_def[i].types)
+                    del policy_file.type_def[i]
                     break
         return policy_file
 
@@ -88,15 +88,15 @@ class AdvancedDrawer(AbstractDrawer):
         for context in contexts:
             context_list.extend(
                 DrawingTool.generate_other_label(
-                    context.domainName,
-                    context.pathName))
+                    context.domain_name,
+                    context.path_name))
 
             lst_note = []
-            # lst_note.append("Path: " + context.pathName)
-            lst_note.extend(context.typeDef.types)
+            # lst_note.append("Path: " + context.path_name)
+            lst_note.extend(context.type_def.types)
             context_list.extend(
                 DrawingTool.generate_note(
-                    context.domainName,
+                    context.domain_name,
                     DrawingPosition.TOP,
                     lst_note,
                     "Types"))
@@ -104,16 +104,16 @@ class AdvancedDrawer(AbstractDrawer):
 
     def draw_se_app(self, se_app_contexts: List[SeAppContext]):
         se_app_list = []
-        for seAppContext in se_app_contexts:
-            se_app_list.extend(DrawingTool.generate_domain(seAppContext.domain))
+        for se_app_context in se_app_contexts:
+            se_app_list.extend(DrawingTool.generate_domain(se_app_context.domain))
 
             lst_note = []
-            lst_note.append(seAppContext.user)
-            lst_note.extend(seAppContext.typeDef.types)
-            lst_note.extend(seAppContext.attribute.attributes)
+            lst_note.append(se_app_context.user)
+            lst_note.extend(se_app_context.type_def.types)
+            lst_note.extend(se_app_context.attribute.attributes)
             se_app_list.extend(
                 DrawingTool.generate_note(
-                    seAppContext.domain,
+                    se_app_context.domain,
                     DrawingPosition.TOP,
                     lst_note,
                     "Types"))

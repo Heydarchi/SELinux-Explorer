@@ -51,11 +51,14 @@ class AbstractDrawer:
 
         if policy_file is not None:
             self.drawer_class.participants.extend(
-                self.draw_se_app(policy_file.seApps))
+                self.draw_se_app(policy_file.se_apps))
             self.drawer_class.participants.extend(
-                self.draw_type_def(policy_file.typeDef))
+                self.draw_type_def(policy_file.type_def))
             self.drawer_class.participants.extend(
                 self.draw_context(policy_file.contexts))
             self.drawer_class.rules.extend(self.draw_rule(policy_file.rules))
 
         return plant_uml_list
+
+    def draw_uml(self, policy_file: PolicyFile):
+        pass

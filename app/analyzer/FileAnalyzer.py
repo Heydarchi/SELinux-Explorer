@@ -11,69 +11,69 @@ from MyLogger import *
 
 class FileAnalyzer(AbstractAnalyzer):
     def __init__(self) -> None:
-        self.listOfPolicyFiles = []
-        self.listOfAnalyzerInfo = []
+        self.list_of_policy_files = []
+        self.list_of_analyzer_info = []
 
     def clear(self):
-        self.listOfPolicyFiles = []
-        self.listOfAnalyzerInfo = []
+        self.list_of_policy_files = []
+        self.list_of_analyzer_info = []
         print("The previous analyze result is cleared!")
 
-    def analyze(self, targetPaths):
+    def analyze(self, target_paths):
         list_of_files = []
-        for path in targetPaths:
-            list_of_files.extend(self.gatherFileInfo(path, "*"))
+        for path in target_paths:
+            list_of_files.extend(self.gather_file_info(path, "*"))
 
         if list_of_files is None or len(list_of_files) == 0:
             print("Nothing to analyze!")
             return
 
         for file_path in list_of_files:
-            file_type = self.detectLang(file_path)
+            file_type = self.detect_lang(file_path)
             if file_type != FileTypeEnum.UNDEFINED:
                 print("Analyzing: " + file_path)
-                policy_file = self.invokeAnalyzerClass(file_type, file_path)
-                self.listOfPolicyFiles.append(policy_file)
+                policy_file = self.invoke_analyzer_class(file_type, file_path)
+                self.list_of_policy_files.append(policy_file)
             else:
                 pass
                 # print("Undefined file extension : " + file_path)
 
-        return self.listOfPolicyFiles
+        return self.list_of_policy_files
 
-    def gatherFileInfo(self, targetPath, pattern):
+    def gather_file_info(self, target_path, pattern):
 
         system_utility = SU.SystemUtility()
-        list_of_files = system_utility.get_list_of_files(targetPath, pattern)
+        list_of_files = system_utility.get_list_of_files(target_path, pattern)
         for file in list_of_files:
             try:
-                analyzerInfo = AnalyzerInfo()
-                analyzerInfo.sourceFile = system_utility.get_file_info(file)
-                self.listOfAnalyzerInfo.append(analyzerInfo)
-            except Exception as e:
-                MyLogger.logError(sys, e)
-        # print(self.listOfAnalyzerInfo)
+                analyzer_info = AnalyzerInfo()
+                analyzer_info.source_file = system_utility.get_file_info(file)
+                self.list_of_analyzer_info.append(analyzer_info)
+            except Exception as err:
+                MyLogger.log_error(sys, e)
+        # print(self.list_of_analyzer_info)
         return list_of_files
 
-    def detectLang(self, fileName):
-        for fileType in FileTypeEnum:
-            # if fileType.label in os.path.basename(file_name):
-            if os.path.basename(fileName).strip().endswith(fileType.label):
+    def detect_lang(self, file_name):
+        for file_type in FileTypeEnum:
+            # if file_type.label in os.path.basename(file_name):
+            if os.path.basename(file_name).strip().endswith(file_type.label):
                 # print(os.path.basename(file_name))
-                return fileType
+                return file_type
 
         return FileTypeEnum.UNDEFINED
 
-    def invokeAnalyzerClass(self, fileType, filePath):
-        if fileType == FileTypeEnum.TE_FILE:
-            return TeAnalyzer().analyze(filePath)
-        elif fileType == FileTypeEnum.SEAPP_CONTEXTS:
-            return SeAppAnalyzer().analyze(filePath)
-        elif fileType in [FileTypeEnum.FILE_CONTEXTS,
-                          FileTypeEnum.SERVICE_CONTEXTS,
-                          FileTypeEnum.HWSERVICE_CONTEXTS,
-                          FileTypeEnum.VNDSERVICE_CONTEXTS,
-                          FileTypeEnum.PROPERTY_CONTEXTS]:
-            return ContextsAnalyzer().analyze(filePath)
+    def invoke_analyzer_class(self, file_type, file_path):
+        if file_type == FileTypeEnum.TE_FILE:
+            return TeAnalyzer().analyze(file_path)
+        elif file_type == FileTypeEnum.SEAPP_CONTEXTS:
+            return SeAppAnalyzer().analyze(file_path)
+        elif file_type in [FileTypeEnum.FILE_CONTEXTS,
+                           FileTypeEnum.SERVICE_CONTEXTS,
+                           FileTypeEnum.HWSERVICE_CONTEXTS,
+                           FileTypeEnum.VNDSERVICE_CONTEXTS,
+                           FileTypeEnum.PROPERTY_CONTEXTS]:
+            return ContextsAnalyzer().analyze(file_path)
         else:
             return
 

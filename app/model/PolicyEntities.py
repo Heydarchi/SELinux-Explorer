@@ -48,7 +48,7 @@ class FileTypeEnum(Enum):
 
 @dataclass
 class Controls(JSONWizard):
-    className: str
+    class_name: str
     permissions: List[str] = field(default_factory=list)
 
 
@@ -71,7 +71,7 @@ class Rule(JSONWizard):
     rule: str = ""
     source: str = ""
     target: str = ""
-    classType: str = ""
+    class_type: str = ""
     permissions: List[str] = field(default_factory=list)
 
 # user:role:type:sensitivity[:categories]
@@ -100,20 +100,20 @@ class Attribute(JSONWizard):
 
 @dataclass
 class SeAppContext(JSONWizard):
-    neverAllow: bool = False
-    isSystemServer: bool = False
-    isEphemeralApp: bool = False
+    never_allow: bool = False
+    is_system_server: bool = False
+    is_ephemeral_app: bool = False
     user: str = ""
     seinfo: str = ""
     name: str = ""
-    isPrivApp: bool = False
-    minTargetSdkVersion: int = 0
-    fromRunAs: bool = False
+    is_priv_app: bool = False
+    min_target_sdk_version: int = 0
+    from_run_as: bool = False
     domain: str = ""
     type: str = ""
-    levelFrom: str = ""
-    levelFrom: str = ""
-    typeDef: TypeDef = TypeDef()
+    level_from: str = ""
+    level_from: str = ""
+    type_def: TypeDef = TypeDef()
     attribute: Attribute = Attribute()
 
 # pathname_regexp [file_type] security_context
@@ -121,17 +121,17 @@ class SeAppContext(JSONWizard):
 
 @dataclass
 class Context(JSONWizard):
-    pathName: str = ""
-    fileType: str = ""
-    securityContext: SecurityContext = None
-    typeDef: TypeDef = TypeDef()
-    domainName: str = ""
+    path_name: str = ""
+    file_type: str = ""
+    security_context: SecurityContext = None
+    type_def: TypeDef = TypeDef()
+    domain_name: str = ""
 
 
 @dataclass
 class PolicyMacro:
     name: str = ""
-    rulesString: List[str] = field(default_factory=list)
+    rules_string: List[str] = field(default_factory=list)
     rules: List[Rule] = field(default_factory=list)
 
 
@@ -143,16 +143,16 @@ class PolicyMacroCall:
 
 @dataclass
 class PolicyFile(JSONWizard):
-    fileName: str = ""
+    file_name: str = ""
     description: str = ""
-    fileType: FileTypeEnum = FileTypeEnum.UNDEFINED
-    typeDef: List[TypeDef] = field(default_factory=list)
+    file_type: FileTypeEnum = FileTypeEnum.UNDEFINED
+    type_def: List[TypeDef] = field(default_factory=list)
     attribute: List[Attribute] = field(default_factory=list)
     contexts: List[Context] = field(default_factory=list)
-    seApps: List[SeAppContext] = field(default_factory=list)
+    se_apps: List[SeAppContext] = field(default_factory=list)
     rules: List[Rule] = field(default_factory=list)
     macros: List[PolicyMacro] = field(default_factory=list)
-    macroCalls: List[PolicyMacroCall] = field(default_factory=list)
+    macro_calls: List[PolicyMacroCall] = field(default_factory=list)
 
 
 @dataclass

@@ -88,10 +88,10 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(app_icon)
 
     def _config_signals(self):
-        self.toolbar.connectToGetSelectedPaths(
+        self.toolbar.connect_to_get_selected_paths(
             self.layout_path.get_selected_paths)
         self.toolbar.connect_to_get_all_paths(self.layout_path.get_all_paths)
-        self.toolbar.connectOnAddFileFolder(self.layout_path.on_add_file_folder)
+        self.toolbar.connect_on_add_file_folder(self.layout_path.on_add_file_folder)
         self.layout_analyzer_result.connect_to_filter_ui(
             self.layout_filter.on_get_filter)
 

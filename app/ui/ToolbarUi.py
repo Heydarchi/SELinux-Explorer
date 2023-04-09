@@ -12,11 +12,11 @@ from AppSetting import *
 
 
 class ToolbarUi(QToolBar):
-    def __init__(self, mainWindow, analyzerLogic, appSetting):
+    def __init__(self, main_window, analyzer_logic, app_setting):
         super().__init__()
-        self.main_window = mainWindow
-        self.analyzer_logic = analyzerLogic
-        self.app_setting = appSetting
+        self.main_window = main_window
+        self.analyzer_logic = analyzer_logic
+        self.app_setting = app_setting
         self._init_variables()
         self._init_widgets()
         self._config_signals()
@@ -112,10 +112,10 @@ class ToolbarUi(QToolBar):
 
         self.setOrientation(Qt.Vertical)
 
-    def connectOnAddFileFolder(self, on_add_file_folder):
+    def connect_on_add_file_folder(self, on_add_file_folder):
         self.add_file_folder = on_add_file_folder
 
-    def connectToGetSelectedPaths(self, get_selected_path):
+    def connect_to_get_selected_paths(self, get_selected_path):
         self.get_selected_paths = get_selected_path
 
     def connect_to_get_all_paths(self, get_all_paths):
@@ -182,9 +182,9 @@ class ToolbarUi(QToolBar):
         self.analyzer_logic.set_keep_result(self.sender().isChecked())
 
     def on_make_reference(self):
-        ref_name, ok = QInputDialog.getText(
+        ref_name, confirm = QInputDialog.getText(
             self, 'Text Input Dialog', 'Enter your name:')
-        if ok:
+        if confirm:
             SettingClass.save_list_as_json(
                 ref_name, self.analyzer_logic.list_of_policy_files)
             print("AppSetting saved!")

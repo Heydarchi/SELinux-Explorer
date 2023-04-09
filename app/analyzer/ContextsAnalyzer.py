@@ -10,34 +10,34 @@ from MyLogger import MyLogger
 class ContextsAnalyzer(AbstractAnalyzer):
 
     def __init__(self) -> None:
-        self.policyFile = None
+        self.policy_file = None
 
-    def analyze(self, filePath):
-        if "file_contexts" in filePath:
-            self.policyFile = PolicyFile(
-                filePath, "", FileTypeEnum.FILE_CONTEXTS)
-        elif "vndservice_contexts" in filePath:
-            self.policyFile = PolicyFile(
-                filePath, "", FileTypeEnum.VNDSERVICE_CONTEXTS)
-        elif "hwservice_contexts" in filePath:
-            self.policyFile = PolicyFile(
-                filePath, "", FileTypeEnum.HWSERVICE_CONTEXTS)
-        elif "service_contexts" in filePath:
-            self.policyFile = PolicyFile(
-                filePath, "", FileTypeEnum.SERVICE_CONTEXTS)
-        elif "property_contexts" in filePath:
-            self.policyFile = PolicyFile(
-                filePath, "", FileTypeEnum.PROPERTY_CONTEXTS)
+    def analyze(self, file_path):
+        if "file_contexts" in file_path:
+            self.policy_file = PolicyFile(
+                file_path, "", FileTypeEnum.FILE_CONTEXTS)
+        elif "vndservice_contexts" in file_path:
+            self.policy_file = PolicyFile(
+                file_path, "", FileTypeEnum.VNDSERVICE_CONTEXTS)
+        elif "hwservice_contexts" in file_path:
+            self.policy_file = PolicyFile(
+                file_path, "", FileTypeEnum.HWSERVICE_CONTEXTS)
+        elif "service_contexts" in file_path:
+            self.policy_file = PolicyFile(
+                file_path, "", FileTypeEnum.SERVICE_CONTEXTS)
+        elif "property_contexts" in file_path:
+            self.policy_file = PolicyFile(
+                file_path, "", FileTypeEnum.PROPERTY_CONTEXTS)
         else:
             return
 
         file_reader = FR.FileReader()
-        temp_lines = file_reader.read_file_lines(filePath)
+        temp_lines = file_reader.read_file_lines(file_path)
         for line in temp_lines:
             self.extract_definition(line)
 
         # print(self.policy_file)
-        return self.policyFile
+        return self.policy_file
 
     def extract_definition(self, input_string):
         try:
@@ -48,30 +48,30 @@ class ContextsAnalyzer(AbstractAnalyzer):
             # print ("Cleaned: ",input_string)
             context = Context()
             items = input_string.replace(";", "").strip().split()
-            context.pathName = items[0]
+            context.path_name = items[0]
             if len(items) > 1:
-                context.typeDef = TypeDef()
+                context.type_def = TypeDef()
                 security_items = items[1].split(":")
-                context.securityContext = SecurityContext()
+                context.security_context = SecurityContext()
                 # print(security_items)
-                context.securityContext.user = security_items[0]
-                context.securityContext.role = security_items[1]
-                context.securityContext.type = security_items[2]
-                context.securityContext.level = security_items[3]
+                context.security_context.user = security_items[0]
+                context.security_context.role = security_items[1]
+                context.security_context.type = security_items[2]
+                context.security_context.level = security_items[3]
                 if len(security_items) > 4:
-                    context.securityContext.categories = security_items[4]
+                    context.security_context.categories = security_items[4]
             # print(context)
-            self.policyFile.contexts.append(context)
-        except Exception as e:
-            MyLogger.logError(sys, e, input_string)
+            self.policy_file.contexts.append(context)
+        except Exception as err:
+            MyLogger.log_error(sys, err, input_string)
 
-    def analyzePortContexts(self):
+    def analyze_port_contexts(self):
         pass
 
-    def analyzeGenfsContexts(self):
+    def analyze_genfs_contexts(self):
         pass
 
-    def analyzeKeysConf(self):
+    def analyze_keys_conf(self):
         pass
 
 

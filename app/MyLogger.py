@@ -10,7 +10,7 @@ logging.basicConfig(
 class MyLogger:
 
     @staticmethod
-    def logError(_sys, _exception, _message=None):
+    def log_error(_sys, _exception, _message=None):
         exception_type, exception_object, exception_traceback = _sys.exc_info()
         filename = exception_traceback.tb_frame.f_code.co_filename
         line_number = exception_traceback.tb_lineno
@@ -21,13 +21,13 @@ class MyLogger:
             logging.error("_message: " + str(_message))
 
     @staticmethod
-    def logInfo(_message):
+    def log_info(_message):
         logging.info(_message)
 
     @staticmethod
-    def logWarning(_message):
+    def log_warning(_message):
         logging.warning(_message)
 
     @staticmethod
-    def logDebug(_message):
+    def log_debug(_message):
         logging.debug(_message)

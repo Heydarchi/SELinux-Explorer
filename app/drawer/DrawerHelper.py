@@ -72,7 +72,7 @@ class DrawingTool:
         return lst_note
 
     @staticmethod
-    def defineDomainStyle():
+    def define_domain_style():
         lst_domain = []
         lst_domain.append("skinparam " + DrawingStyle.DOMAIN.value + " {")
         lst_domain.append("borderColor black")
@@ -98,8 +98,8 @@ class DrawingTool:
     @staticmethod
     def generate_legend(
             title,
-            positionVertical: DrawingPosition,
-            positionHorizontal: DrawingPosition,
+            position_vertical: DrawingPosition,
+            position_horizontal: DrawingPosition,
             items,
             back_color: DrawingColor):
         items = list(dict.fromkeys(items))
@@ -108,9 +108,9 @@ class DrawingTool:
             lst_note.append(
                 DrawingStyle.LEGEND.value +
                 " " +
-                positionVertical.value +
+                position_vertical.value +
                 "   " +
-                positionHorizontal.value)
+                position_horizontal.value)
             lst_note.append("<b>" + title + "</b>")
             for item in items:
                 lst_note.append("  - " + item)

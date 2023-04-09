@@ -11,10 +11,10 @@ from AppSetting import *
 
 
 class FilterUi(QHBoxLayout):
-    def __init__(self, mainWindow, analyzerLogic):
+    def __init__(self, main_window, analyzer_logic):
         super().__init__()
-        self.mainWindow = mainWindow
-        self.analyzer_logic = analyzerLogic
+        self.mainWindow = main_window
+        self.analyzer_logic = analyzer_logic
         self._init_variables()
         self._init_layout()
         self._init_widgets()
@@ -121,10 +121,10 @@ class FilterUi(QHBoxLayout):
     def on_filter(self):
         if not self.lst_rules:
             return
-        file_name, filteredPolicyFile = FilterResult().filter(
+        file_name, filtered_policy_file = FilterResult().filter(
             self.lst_rules, self.analyzer_logic.ref_policy_file)
         print(file_name)
-        self.analyzer_logic.on_analyze_finished(filteredPolicyFile)
+        self.analyzer_logic.on_analyze_finished(filtered_policy_file)
 
     def on_clear_filter_rules(self):
         self.lst_rules.clear()
@@ -133,12 +133,12 @@ class FilterUi(QHBoxLayout):
 
     def on_add_filter_rule(self):
         rule = FilterRule()
-        rule.exactWord = self.chbx_exact_word.isChecked()
+        rule.exact_word = self.chbx_exact_word.isChecked()
         rule.keyword = self.edt_pattern.text().strip()
         if rule.keyword == "":
             return
         print("self.selected_filter_type: ", self.selected_filter_type)
-        rule.filterType = FilterRule.getFilterTypeFromStr(
+        rule.filter_type = FilterRule.get_filter_type_from_str(
             self.cmb_rule_type.currentText())
 
         self.on_get_filter(rule)
@@ -154,10 +154,10 @@ class FilterUi(QHBoxLayout):
                 rule.keyword.strip()))
         self.tbl_rule.setItem(
             index, self.COL_TYPE_INDEX, QTableWidgetItem(
-                rule.filterType.name.strip()))
+                rule.filter_type.name.strip()))
         self.tbl_rule.setItem(index,
                               self.COL_EXACT_WORD_INDEX,
-                              QTableWidgetItem(str(rule.exactWord)))
+                              QTableWidgetItem(str(rule.exact_word)))
 
     def on_remove_selected(self):
         row = self.tbl_rule.currentRow()
@@ -172,14 +172,14 @@ class FilterUi(QHBoxLayout):
         # print("self.lst_rules: ", self.lst_rules)
 
     def on_index_changed(self, i):
-        self.selected_filter_type = FilterRule.getFilterTypeFromStr(
+        self.selected_filter_type = FilterRule.get_filter_type_from_str(
             self.cmb_rule_type.currentText())
         # print("self.selected_filter_type: ", self.selected_filter_type)
 
     def get_selected_filter_type(self):
         return self.selected_filter_type
 
-    def set_selected_filter_type(self, filterType):
-        if not isinstance(filterType, type(FilterType)):
-            filterType = FilterType.DOMAIN
-        self.selected_filter_type = FilterType(filterType)
+    def set_selected_filter_type(self, filter_type):
+        if not isinstance(filter_type, type(FilterType)):
+            filter_type = FilterType.DOMAIN
+        self.selected_filter_type = FilterType(filter_type)

@@ -9,11 +9,11 @@ from MyLogger import MyLogger
 
 class TeAnalyzer(AbstractAnalyzer):
     def __init__(self) -> None:
-        self.policyFile = None
+        self.policy_file = None
 
     def analyze(self, file_path):
         self.file_path = file_path
-        self.policyFile = PolicyFile(file_path, "", FileTypeEnum.TE_FILE)
+        self.policy_file = PolicyFile(file_path, "", FileTypeEnum.TE_FILE)
         file_reader = FR.FileReader()
         temp_lines = file_reader.read_file_lines(file_path)
         last_line = ""
@@ -26,7 +26,7 @@ class TeAnalyzer(AbstractAnalyzer):
             if macro_found:
                 if ")" in line:
                     macro_found = False
-                    self.processLine(last_line + " " + line)
+                    self.process_line(last_line + " " + line)
                 else:
                     last_line = last_line + " " + line
             else:
@@ -34,11 +34,11 @@ class TeAnalyzer(AbstractAnalyzer):
                     macro_found = True
                     last_line = line
                 else:
-                    self.processLine(line)
+                    self.process_line(line)
 
-        return self.policyFile
+        return self.policy_file
 
-    def processLine(self, input_string):
+    def process_line(self, input_string):
         input_string = clean_line(input_string)
         if input_string is None:
             return
@@ -46,27 +46,27 @@ class TeAnalyzer(AbstractAnalyzer):
         # print("items: ", items)
         if len(items) > 0:
             if items[0].strip() == "type":
-                type_def = self.extractDefinition(input_string)
+                type_def = self.extract_definition(input_string)
                 if type_def is not None:
-                    self.policyFile.typeDef.append(type_def)
+                    self.policy_file.type_def.append(type_def)
             elif items[0].strip() == "typeattribute":
-                attribute = self.extractAttribite(input_string)
+                attribute = self.extract_attribite(input_string)
                 if attribute is not None:
-                    self.policyFile.attribute.append(attribute)
+                    self.policy_file.attribute.append(attribute)
             elif items[0] in ["allow", "neverallow"]:
-                self.policyFile.rules.extend(self.extractRule(input_string))
+                self.policy_file.rules.extend(self.extract_rule(input_string))
             elif "define" in input_string:
-                macro = self.extractMacro(input_string)
+                macro = self.extract_macro(input_string)
                 if macro is not None:
-                    self.policyFile.macros.append(macro)
+                    self.policy_file.macros.append(macro)
             elif "(" in input_string and ")" in input_string:
-                macro_call = self.extractMacroCall(input_string)
+                macro_call = self.extract_macro_call(input_string)
                 if macro_call is not None:
-                    self.policyFile.macroCalls.append(macro_call)
+                    self.policy_file.macro_calls.append(macro_call)
             else:
-                MyLogger.logError(sys, "Unknown line", input_string)
+                MyLogger.log_error(sys, "Unknown line", input_string)
 
-    def extractDefinition(self, input_string):
+    def extract_definition(self, input_string):
         try:
             types = input_string.replace(
                 ";", "").replace(
@@ -75,28 +75,28 @@ class TeAnalyzer(AbstractAnalyzer):
             type_def.name = types[0].strip()
             type_def.types.extend(types[1:])
             if DOMAIN_EXECUTABLE in type_def.name:
-                if not self.mergeExecDomain(type_def):
+                if not self.merge_exec_domain(type_def):
                     return type_def
             else:
                 return type_def
 
-        except Exception as e:
-            MyLogger.logError(sys, e, input_string)
+        except Exception as err:
+            MyLogger.log_error(sys, err, input_string)
             return None
 
-    def mergeExecDomain(self, type_def_exec):
+    def merge_exec_domain(self, type_def_exec):
         try:
             title = type_def_exec.name.replace(DOMAIN_EXECUTABLE, "")
-            for type_def in self.policyFile.typeDef:
+            for type_def in self.policy_file.type_def:
                 if type_def.name == title:
                     type_def.types.extend(type_def_exec.types)
                     return True
             return False
-        except Exception as e:
-            MyLogger.logError(sys, e, type_def_exec)
+        except Exception as err:
+            MyLogger.log_error(sys, err, type_def_exec)
             return False
 
-    def extractAttribite(self, input_string):
+    def extract_attribite(self, input_string):
         try:
             attribute = Attribute()
             types = input_string.replace(";", "").replace(
@@ -105,11 +105,11 @@ class TeAnalyzer(AbstractAnalyzer):
             attribute.types.extend(types[1:])
             return attribute
 
-        except Exception as e:
-            MyLogger.logError(sys, e, input_string)
+        except Exception as err:
+            MyLogger.log_error(sys, err, input_string)
             return None
 
-    def extractRule(self, input_string):
+    def extract_rule(self, input_string):
         lst_rules = []
         try:
             input_string = input_string.replace(
@@ -163,18 +163,18 @@ class TeAnalyzer(AbstractAnalyzer):
                         targets = dst_items[0].split()
                         for target in targets:
                             rule.target = target
-                            rule.classType = dst_items[1]
+                            rule.class_type = dst_items[1]
                             rule.permissions = permissions
                         lst_rules.append(rule)
 
                     return
 
-        except Exception as e:
-            MyLogger.logError(sys, e, input_string)
+        except Exception as err:
+            MyLogger.log_error(sys, err, input_string)
         finally:
             return lst_rules
 
-    def extractMacro(self, input_string):
+    def extract_macro(self, input_string):
         try:
             lst_lines = input_string.splitlines()
             macro = PolicyMacro()
@@ -191,15 +191,15 @@ class TeAnalyzer(AbstractAnalyzer):
             for line in lst_lines:
                 if ")" in line.strip():
                     break
-                macro.rulesString.append(line)
-                macro.rules.extend(self.extractRule(line))
+                macro.rules_string.append(line)
+                macro.rules.extend(self.extract_rule(line))
             # print("macro: ", macro)
             return macro
-        except Exception as e:
-            MyLogger.logError(sys, e, input_string)
+        except Exception as err:
+            MyLogger.log_error(sys, err, input_string)
             return None
 
-    def extractMacroCall(self, input_string):
+    def extract_macro_call(self, input_string):
         try:
             # Convert string to PolicyMacroCall
             macro_call = PolicyMacroCall()
@@ -207,12 +207,12 @@ class TeAnalyzer(AbstractAnalyzer):
             macro_call.parameters = input_string.split(
                 "(")[1].replace(")", "").strip().split(",")
             return macro_call
-        except Exception as e:
-            MyLogger.logError(sys, e, input_string)
+        except Exception as err:
+            MyLogger.log_error(sys, err, input_string)
             return None
 
 
 if __name__ == "__main__":
     print(sys.argv)
-    teAnalyzer = TeAnalyzer()
-    print(teAnalyzer.analyze(sys.argv[1]))
+    te_analyzer = TeAnalyzer()
+    print(te_analyzer.analyze(sys.argv[1]))

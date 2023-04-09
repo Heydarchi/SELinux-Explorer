@@ -55,10 +55,10 @@ class DiagramWindow(QWidget):
 
 
 class ResultUi(QVBoxLayout):
-    def __init__(self, mainWindow, analyzerLogic):
+    def __init__(self, main_window, analyzer_logic):
         super().__init__()
-        self.main_window = mainWindow
-        self.analyzer_logic = analyzerLogic
+        self.main_window = main_window
+        self.analyzer_logic = analyzer_logic
         self._init_variables()
         self._init_widgets()
         self._config_signals()
@@ -108,12 +108,12 @@ class ResultUi(QVBoxLayout):
         if not items:
             return
         for item in items:
-            filePath = item.text()
+            file_path = item.text()
             self.lst_results.takeItem(self.lst_results.row(item))
-            self.analyzer_logic.remove_file(filePath)
+            self.analyzer_logic.remove_file(file_path)
 
-    def on_result_added(self, filePath):
-        item = QListWidgetItem(filePath)
+    def on_result_added(self, file_path):
+        item = QListWidgetItem(file_path)
         self.lst_results.addItem(item)
 
     def on_analyze_finished(self):

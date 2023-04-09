@@ -23,7 +23,7 @@ class RelationDrawer(AbstractDrawer):
         # Remove redundance items
         plant_uml_list = list(dict.fromkeys(plant_uml_list))
         # print(plant_uml_list)
-        file_path = OUT_DIR + "seq_" + generate_puml_file_name(policyFile.fileName)
+        file_path = OUT_DIR + "seq_" + generate_puml_file_name(policyFile.file_name)
         self.write_to_file(file_path, plant_uml_list)
         print("drawing: ", file_path)
         generate_png(file_path)
@@ -77,11 +77,11 @@ class RelationDrawer(AbstractDrawer):
             context_list.append(
                 "participant " +
                 self.insert_new_participant(
-                    context.securityContext.type) +
+                    context.security_context.type) +
                 " [\n=" +
-                context.securityContext.type +
+                context.security_context.type +
                 "\n ----- \n\"\"" +
-                context.pathName +
+                context.path_name +
                 "\"\"\n]")
         return context_list
 

@@ -8,9 +8,9 @@ from AppSetting import *
 
 
 class FileUi(QVBoxLayout):
-    def __init__(self, mainWindow):
+    def __init__(self, main_window):
         super().__init__()
-        self.mainWindow = mainWindow
+        self.main_window = main_window
         self._init_variables()
         self._init_widgets()
         self._config_signals()

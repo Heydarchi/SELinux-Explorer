@@ -112,12 +112,12 @@ class AnalyzerResultUi(QVBoxLayout):
     def on_add_selected_filter(self):
         row = self.tbl_result.currentRow()
         rule = FilterRule()
-        rule.exactWord = UiUtility.ask_question(
+        rule.exact_word = UiUtility.ask_question(
             self.main_window, "Exact word",
             "Do you want to add the exact word?")
         rule.keyword = self.tbl_result.item(
             row, self.COL_TITLE_INDEX).text().strip()
-        rule.filterType = FilterRule.getFilterTypeFromStr(
+        rule.filter_type = FilterRule.get_filter_type_from_str(
             self.tbl_result.item(row, self.COL_TYPE_INDEX).text().strip())
         self.send_to_filter_ui(rule)
 
@@ -148,7 +148,7 @@ class AnalyzerResultUi(QVBoxLayout):
         if policy_file is None:
             return domain_rules
 
-        for type_def in policy_file.typeDef:
+        for type_def in policy_file.type_def:
             if type_def.name.strip() != "":
                 domain_rules.append(
                     FilterRule(
@@ -156,7 +156,7 @@ class AnalyzerResultUi(QVBoxLayout):
                         type_def.name,
                         False))
 
-        for se_apps in policy_file.seApps:
+        for se_apps in policy_file.se_apps:
             if se_apps.domain.strip() != "":
                 domain_rules.append(
                     FilterRule(
@@ -165,11 +165,11 @@ class AnalyzerResultUi(QVBoxLayout):
                         False))
 
         for context in policy_file.contexts:
-            if context.domainName.strip() != "":
+            if context.domain_name.strip() != "":
                 domain_rules.append(
                     FilterRule(
                         FilterType.DOMAIN,
-                        context.domainName,
+                        context.domain_name,
                         False))
 
         for attribute in policy_file.attribute:
@@ -188,7 +188,7 @@ class AnalyzerResultUi(QVBoxLayout):
         if policy_file is None:
             return file_path_rules
 
-        for se_apps in policy_file.seApps:
+        for se_apps in policy_file.se_apps:
             if se_apps.name.strip() != "":
                 file_path_rules.append(
                     FilterRule(
@@ -197,11 +197,11 @@ class AnalyzerResultUi(QVBoxLayout):
                         False))
 
         for context in policy_file.contexts:
-            if context.pathName.strip() != "":
+            if context.path_name.strip() != "":
                 file_path_rules.append(
                     FilterRule(
                         FilterType.FILE_PATH,
-                        context.pathName,
+                        context.path_name,
                         False))
 
         file_path_rules = list(set(file_path_rules))
@@ -239,7 +239,7 @@ class AnalyzerResultUi(QVBoxLayout):
         if policy_file is None:
             return class_type_rules
 
-        for type_def in policy_file.typeDef:
+        for type_def in policy_file.type_def:
             for _type in type_def.types:
                 if _type.strip() != "":
                     class_type_rules.append(
@@ -249,7 +249,7 @@ class AnalyzerResultUi(QVBoxLayout):
                             False))
 
         for context in policy_file.contexts:
-            for _type in context.typeDef.types:
+            for _type in context.type_def.types:
                 if _type.strip() != "":
                     class_type_rules.append(
                         FilterRule(
@@ -258,11 +258,11 @@ class AnalyzerResultUi(QVBoxLayout):
                             False))
 
         for rule in policy_file.rules:
-            if rule.classType.strip() != "":
+            if rule.class_type.strip() != "":
                 class_type_rules.append(
                     FilterRule(
                         FilterType.CLASS_TYPE,
-                        rule.classType,
+                        rule.class_type,
                         False))
 
         class_type_rules = list(set(class_type_rules))
@@ -316,7 +316,7 @@ class AnalyzerResultUi(QVBoxLayout):
                     lst_rules[i].keyword.strip()))
             self.tbl_result.setItem(
                 i, self.COL_TYPE_INDEX, QTableWidgetItem(
-                    lst_rules[i].filterType.name.strip()))
+                    lst_rules[i].filter_type.name.strip()))
 
     def search_result(self, lst_rules, keyword, case_sensitive):
         lst_search_result = []

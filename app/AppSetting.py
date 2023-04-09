@@ -5,7 +5,7 @@ from dataclass_wizard import JSONWizard
 from PythonUtilityClasses.FileWriter import *
 
 ICON_PATH = './ui/icons/'
-APP_VERSION = '0.2.4-beta'
+APP_VERSION = '0.2.5-beta'
 APP_NAME = 'SELinux Explorer'
 APP_AUTHOR = 'Mohammad Hossein Heydarchi'
 AUTHOR_EMAIL = 'm.h.heydarchi@gmail.com'
@@ -51,8 +51,8 @@ class SettingClass:
 if __name__ == "__main__":
     app_setting = AppSetting()
     app_setting.last_opened_path = "123456"
-    app_setting.filterClassType = True
-    print(app_setting.filterClassType)
+    app_setting.filter_class_type = True
+    print(app_setting.filter_class_type)
     print(app_setting.to_json())
 
     # appS = AppSetting()

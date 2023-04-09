@@ -1,11 +1,9 @@
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import List
 from PythonUtilityClasses.SystemUtility import *
 
 
 @dataclass
 class AnalyzerInfo:
-    sourceFile: FileInfo = FileInfo()
-    pumlFile: FileInfo = FileInfo()
-    pngFile: FileInfo = FileInfo()
+    source_file: FileInfo = FileInfo()
+    puml_file: FileInfo = FileInfo()
+    png_file: FileInfo = FileInfo()

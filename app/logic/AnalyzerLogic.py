@@ -36,16 +36,16 @@ class AnalyzerLogic:
             return None
 
         ref_policy_file = PolicyFile()
-        for policyFile in policy_files:
-            ref_policy_file.typeDef.extend(policyFile.typeDef)
-            ref_policy_file.attribute.extend(policyFile.attribute)
-            ref_policy_file.contexts.extend(policyFile.contexts)
-            ref_policy_file.seApps.extend(policyFile.seApps)
-            ref_policy_file.rules.extend(policyFile.rules)
-            ref_policy_file.macros.extend(policyFile.macros)
-            ref_policy_file.macroCalls.extend(policyFile.macroCalls)
+        for policy_file in policy_files:
+            ref_policy_file.type_def.extend(policy_file.type_def)
+            ref_policy_file.attribute.extend(policy_file.attribute)
+            ref_policy_file.contexts.extend(policy_file.contexts)
+            ref_policy_file.se_apps.extend(policy_file.se_apps)
+            ref_policy_file.rules.extend(policy_file.rules)
+            ref_policy_file.macros.extend(policy_file.macros)
+            ref_policy_file.macro_calls.extend(policy_file.macro_calls)
 
-        for maco_call in ref_policy_file.macroCalls:
+        for maco_call in ref_policy_file.macro_calls:
             # print("macroCall.name: ", maco_call.name)
             for macro in ref_policy_file.macros:
                 # print("macro.name: ", macro.name)
@@ -53,18 +53,18 @@ class AnalyzerLogic:
                     rules = macro.rules
                     for rule in rules:
                         '''Need to replace $number in source, target or 
-                        classType with parameter from macro call with
+                        class_type with parameter from macro call with
                          the same number'''
                         for i in range(0, len(maco_call.parameters)):
                             rule.source = rule.source.replace(
                                 "$" + str(i + 1), maco_call.parameters[i])
                             rule.target = rule.target.replace(
                                 "$" + str(i + 1), maco_call.parameters[i])
-                            rule.classType = rule.classType.replace(
+                            rule.class_type = rule.class_type.replace(
                                 "$" + str(i), maco_call.parameters[i])
                         # print("rule: ", rule)
                         ref_policy_file.rules.append(rule)
-                        ref_policy_file.macroCalls.clear()
+                        ref_policy_file.macro_calls.clear()
         return ref_policy_file
 
     def clear_output(self):
@@ -90,8 +90,8 @@ class AnalyzerLogic:
     def clear(self):
         self.ref_policy_file = PolicyFile()
 
-    def get_image_path(self, filePath):
-        return generate_diagram_file_name(filePath)
+    def get_image_path(self, file_path):
+        return generate_diagram_file_name(file_path)
 
     def set_keep_result(self, state):
         self.keep_result = state
