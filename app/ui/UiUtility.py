@@ -6,7 +6,7 @@ from PyQt5.QtCore import QSize
 class UiUtility:
 
     @staticmethod
-    def showMessage(title, message, iconType=QMessageBox.Information):
+    def show_message(title, message, iconType=QMessageBox.Information):
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Information)
         msg.setText(message)
@@ -15,7 +15,7 @@ class UiUtility:
         msg.exec_()
 
     @staticmethod
-    def askQuestion(handle, title, message):
+    def ask_question(handle, title, message):
         reply = QMessageBox.question(
             handle,
             title,
@@ -25,7 +25,7 @@ class UiUtility:
         return True if reply == QMessageBox.Yes else False
 
     @staticmethod
-    def createButton(title, btnIcon, width, height):
+    def create_button(title, btnIcon, width, height):
         btn = QPushButton(icon=QIcon(btnIcon))
         btn.setToolTip(title)
         btn.setMinimumSize(width, height)

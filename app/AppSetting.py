@@ -5,7 +5,7 @@ from dataclass_wizard import JSONWizard
 from PythonUtilityClasses.FileWriter import *
 
 ICON_PATH = './ui/icons/'
-APP_VERSION = '0.2.3-beta'
+APP_VERSION = '0.2.4-beta'
 APP_NAME = 'SELinux Explorer'
 APP_AUTHOR = 'Mohammad Hossein Heydarchi'
 AUTHOR_EMAIL = 'm.h.heydarchi@gmail.com'
@@ -18,30 +18,30 @@ OUT_DIR = 'out/'
 
 @dataclass
 class AppSetting(JSONWizard):
-    lastOpenedPath: str = ""
-    listOfAddedPaths: List[str] = field(default_factory=list)
-    keepTheResult: bool = False
-    selectedFilterType: bool = False
-    filterDomain: bool = False
-    filterFilename: bool = False
-    filterPermission: bool = False
+    last_opened_path: str = ""
+    list_of_added_paths: List[str] = field(default_factory=list)
+    keep_the_result: bool = False
+    selected_filter_type: bool = False
+    filter_domain: bool = False
+    filter_filename: bool = False
+    filter_permission: bool = False
 
 
 class SettingClass:
     def __init__(self) -> None:
-        self.refDir = "ref"
-        self.outDir = "out"
-        self.initDirs()
+        self.ref_dir = "ref"
+        self.out_dir = "out"
+        self.init_dirs()
 
-    def initDirs(self):
-        if not os.path.exists(self.outDir):
-            os.makedirs(self.outDir)
+    def init_dirs(self):
+        if not os.path.exists(self.out_dir):
+            os.makedirs(self.out_dir)
 
-        if not os.path.exists(self.refDir):
-            os.makedirs(self.refDir)
+        if not os.path.exists(self.ref_dir):
+            os.makedirs(self.ref_dir)
 
     @staticmethod
-    def saveListAsJson(file_name, lst_of_objects):
+    def save_list_as_json(file_name, lst_of_objects):
         lst_str = []
         for item in lst_of_objects:
             lst_str.append(item.to_json())
@@ -49,13 +49,13 @@ class SettingClass:
 
 
 if __name__ == "__main__":
-    appSetting = AppSetting()
-    appSetting.lastOpenedPath = "123456"
-    appSetting.filterClassType = True
-    print(appSetting.filterClassType)
-    print(appSetting.to_json())
+    app_setting = AppSetting()
+    app_setting.last_opened_path = "123456"
+    app_setting.filterClassType = True
+    print(app_setting.filterClassType)
+    print(app_setting.to_json())
 
     # appS = AppSetting()
-    appS = AppSetting.from_json(appSetting.to_json())
-    print(appS.lastOpenedPath)
+    appS = AppSetting.from_json(app_setting.to_json())
+    print(appS.last_opened_path)
     print(appS.filterClassType)

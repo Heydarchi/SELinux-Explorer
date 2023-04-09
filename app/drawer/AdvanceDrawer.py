@@ -36,13 +36,13 @@ class AdvancedDrawer(AbstractDrawer):
         generate_png(file_path)
         # print(policy_file)
 
-    def dump_policy_file(self, policy_file: PolicyFiles):
+    def dump_policy_file(self, policy_file: PolicyFile):
 
         policy_file = self.correlate_data(policy_file)
 
         return  super().dump_policy_file(policy_file)
 
-    def correlate_data(self, policy_file: PolicyFiles):
+    def correlate_data(self, policy_file: PolicyFile):
         for se_app in policy_file.seApps:
             for i in reversed(range(len(policy_file.typeDef))):
                 if se_app.domain == policy_file.typeDef[i].name:

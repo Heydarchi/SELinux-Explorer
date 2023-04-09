@@ -142,7 +142,7 @@ class PolicyMacroCall:
 
 
 @dataclass
-class PolicyFiles(JSONWizard):
+class PolicyFile(JSONWizard):
     fileName: str = ""
     description: str = ""
     fileType: FileTypeEnum = FileTypeEnum.UNDEFINED

@@ -9,84 +9,84 @@ from AppSetting import *
 class AboutWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.initWidgets()
-        self.configLayout()
-        self.configSinals()
+        self._init_widgets()
+        self._config_layout()
+        self._config_signals()
 
-    def initWidgets(self):
-        self.lblAppIcon = QLabel()
-        self.lblAppName = QLabel(APP_NAME)
-        self.lblAppVersion = QLabel(APP_VERSION)
-        self.lblAppAuthor = QLabel(APP_AUTHOR)
-        self.lblAppAuthorEmail = QLabel(AUTHOR_EMAIL)
-        self.lblAppLicense = QLabel("License: " + APP_LICENSE)
-        self.lblAppWebsite = QLabel(
+    def _init_widgets(self):
+        self.lbl_app_icon = QLabel()
+        self.lbl_app_name = QLabel(APP_NAME)
+        self.lbl_app_version = QLabel(APP_VERSION)
+        self.lbl_app_author = QLabel(APP_AUTHOR)
+        self.lbl_app_author_email = QLabel(AUTHOR_EMAIL)
+        self.lbl_app_license = QLabel("License: " + APP_LICENSE)
+        self.lbl_app_website = QLabel(
             "<a href=\"" +
             APP_WEBSITE +
             "\">" +
             APP_WEBSITE +
             "</a>")
 
-        self.btnOk = QPushButton("OK")
+        self.btn_ok = QPushButton("OK")
 
-        self.lblAppIcon.setPixmap(QPixmap(APP_ICON_PATH))
+        self.lbl_app_icon.setPixmap(QPixmap(APP_ICON_PATH))
 
-        self.lblAppName.setStyleSheet("font-size: 20px; font-weight: bold;")
-        self.lblAppVersion.setStyleSheet("font-size: 15px; font-weight: bold;")
-        self.lblAppAuthor.setStyleSheet("font-size: 15px; font-weight: normal")
-        self.lblAppAuthorEmail.setStyleSheet(
+        self.lbl_app_name.setStyleSheet("font-size: 20px; font-weight: bold;")
+        self.lbl_app_version.setStyleSheet("font-size: 15px; font-weight: bold;")
+        self.lbl_app_author.setStyleSheet("font-size: 15px; font-weight: normal")
+        self.lbl_app_author_email.setStyleSheet(
             "font-size: 15px; font-weight: normal;")
-        self.lblAppWebsite.setStyleSheet(
+        self.lbl_app_website.setStyleSheet(
             "font-size: 15px; font-weight: normal;")
-        self.lblAppLicense.setStyleSheet("font-size: 15px; font-weight: bold;")
+        self.lbl_app_license.setStyleSheet("font-size: 15px; font-weight: bold;")
 
-        self.lblAppWebsite.setOpenExternalLinks(True)
+        self.lbl_app_website.setOpenExternalLinks(True)
 
-        self.lblAppIcon.setMaximumWidth(100)
-        self.lblAppIcon.setMaximumHeight(100)
+        self.lbl_app_icon.setMaximumWidth(100)
+        self.lbl_app_icon.setMaximumHeight(100)
 
-        self.lblAppIcon.setAlignment(Qt.AlignCenter)
-        self.lblAppName.setAlignment(Qt.AlignCenter)
-        self.lblAppVersion.setAlignment(Qt.AlignCenter)
-        self.lblAppAuthor.setAlignment(Qt.AlignCenter)
-        self.lblAppAuthorEmail.setAlignment(Qt.AlignCenter)
-        self.lblAppLicense.setAlignment(Qt.AlignCenter)
-        self.lblAppWebsite.setAlignment(Qt.AlignCenter)
+        self.lbl_app_icon.setAlignment(Qt.AlignCenter)
+        self.lbl_app_name.setAlignment(Qt.AlignCenter)
+        self.lbl_app_version.setAlignment(Qt.AlignCenter)
+        self.lbl_app_author.setAlignment(Qt.AlignCenter)
+        self.lbl_app_author_email.setAlignment(Qt.AlignCenter)
+        self.lbl_app_license.setAlignment(Qt.AlignCenter)
+        self.lbl_app_website.setAlignment(Qt.AlignCenter)
 
         self.vbox = QVBoxLayout()
 
-        self.groupBox = QGroupBox("About")
+        self.group_box = QGroupBox("About")
 
         self.hbox = QHBoxLayout()
 
-    def configLayout(self):
-        self.vbox.addWidget(self.lblAppIcon)
-        self.vbox.addWidget(self.lblAppName)
-        self.vbox.addWidget(self.lblAppVersion)
-        self.vbox.addWidget(self.lblAppLicense)
+    def _config_layout(self):
+        self.vbox.addWidget(self.lbl_app_icon)
+        self.vbox.addWidget(self.lbl_app_name)
+        self.vbox.addWidget(self.lbl_app_version)
+        self.vbox.addWidget(self.lbl_app_license)
         self.vbox.addWidget(QWidget())
         self.vbox.addWidget(QWidget())
-        self.vbox.addWidget(self.lblAppAuthor)
-        self.vbox.addWidget(self.lblAppAuthorEmail)
+        self.vbox.addWidget(self.lbl_app_author)
+        self.vbox.addWidget(self.lbl_app_author_email)
         self.vbox.addWidget(QWidget())
         self.vbox.addWidget(QWidget())
-        self.vbox.addWidget(self.lblAppWebsite)
+        self.vbox.addWidget(self.lbl_app_website)
 
         self.vbox.setAlignment(Qt.AlignCenter)
-        self.groupBox.setLayout(self.vbox)
-        self.groupBox.setAlignment(Qt.AlignCenter)
-        self.hbox.addWidget(self.groupBox)
+        self.group_box.setLayout(self.vbox)
+        self.group_box.setAlignment(Qt.AlignCenter)
+        self.hbox.addWidget(self.group_box)
 
         self.setLayout(self.hbox)
 
         self.setWindowTitle("About")
         self.setWindowIcon(QIcon(APP_ICON_PATH))
-        self.setWindowPosition()
+        self.set_window_position()
 
-    def configSinals(self):
-        self.btnOk.clicked.connect(self.close)
+    def _config_signals(self):
+        self.btn_ok.clicked.connect(self.close)
 
-    def setWindowPosition(self):
+    def set_window_position(self):
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)

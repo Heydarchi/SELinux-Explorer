@@ -19,91 +19,91 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle(APP_NAME + " " + APP_VERSION)
-        self.initVariables()
-        self.initMainLayout()
-        self.configSignals()
-        self.loadSetting()
+        self._init_variables()
+        self._initMainLayout()
+        self._config_signals()
+        self.load_setting()
 
-    def initVariables(self):
-        self.analyzerLogic = AnalyzerLogic()
-        self.appSetting = AppSetting()
-        self.settingUtil = SettingClass()
+    def _init_variables(self):
+        self.analyzer_logic = AnalyzerLogic()
+        self.app_setting = AppSetting()
+        self.setting_util = SettingClass()
 
-    def loadSetting(self):
+    def load_setting(self):
         if os.path.isfile("app_setting.json"):
             json_str = FileReader().read_file("app_setting.json")
-            self.appSetting = AppSetting.from_json(json_str)
-            self.layoutPath.lastOpenedPath = self.appSetting.lastOpenedPath
-            self.toolbar.keep_result = self.appSetting.keepTheResult
-            self.layoutFilter.setSelectedFilterType(
-                self.appSetting.selectedFilterType)
+            self.app_setting = AppSetting.from_json(json_str)
+            self.layout_path.last_opened_path = self.app_setting.last_opened_path
+            self.toolbar.keep_result = self.app_setting.keep_the_result
+            self.layout_filter.set_selected_filter_type(
+                self.app_setting.selected_filter_type)
             print("AppSetting loaded!")
         else:
-            self.saveSetting()
+            self.save_setting()
 
-    def saveSetting(self):
-        self.appSetting.lastOpenedPath = self.layoutPath.lastOpenedPath
-        self.appSetting.keepTheResult = self.toolbar.keep_result
-        self.appSetting.selectedFilterType = \
-            self.layoutFilter.getSelectedFilterType()
+    def save_setting(self):
+        self.app_setting.last_opened_path = self.layout_path.last_opened_path
+        self.app_setting.keep_the_result = self.toolbar.keep_result
+        self.app_setting.selected_filter_type = \
+            self.layout_filter.get_selected_filter_type()
 
-        FileWriter.write_file("app_setting.json", self.appSetting.to_json())
+        FileWriter.write_file("app_setting.json", self.app_setting.to_json())
         print("AppSetting saved!")
 
-    def initMainLayout(self):
-        self.layoutPath = FileUi(self)
-        self.layoutFilter = FilterUi(self, self.analyzerLogic)
-        self.layoutResult = ResultUi(self, self.analyzerLogic)
-        self.layoutAnalyzerResult = AnalyzerResultUi(self, self.analyzerLogic)
-        self.toolbar = ToolbarUi(self, self.analyzerLogic, self.appSetting)
-        self.statusbar = StatusbarUi(self, self.analyzerLogic)
-        self.mainLayoutLeft = QVBoxLayout()
-        self.mainLayoutRight = QVBoxLayout()
-        self.mainLayout = QHBoxLayout()
+    def _initMainLayout(self):
+        self.layout_path = FileUi(self)
+        self.layout_filter = FilterUi(self, self.analyzer_logic)
+        self.layout_result = ResultUi(self, self.analyzer_logic)
+        self.layout_analyzer_result = AnalyzerResultUi(self, self.analyzer_logic)
+        self.toolbar = ToolbarUi(self, self.analyzer_logic, self.app_setting)
+        self.statusbar = StatusbarUi(self, self.analyzer_logic)
+        self.main_layout_left = QVBoxLayout()
+        self.main_layout_right = QVBoxLayout()
+        self.main_layout = QHBoxLayout()
         self.container = QWidget()
 
-        self.mainLayoutLeft.addLayout(self.layoutPath)
-        self.mainLayoutLeft.addLayout(self.layoutResult)
-        self.mainLayout.addLayout(self.mainLayoutLeft)
-        self.mainLayout.addLayout(self.mainLayoutRight)
+        self.main_layout_left.addLayout(self.layout_path)
+        self.main_layout_left.addLayout(self.layout_result)
+        self.main_layout.addLayout(self.main_layout_left)
+        self.main_layout.addLayout(self.main_layout_right)
 
-        self.mainLayoutRight.addLayout(self.layoutAnalyzerResult)
-        self.mainLayoutRight.addLayout(self.layoutFilter)
+        self.main_layout_right.addLayout(self.layout_analyzer_result)
+        self.main_layout_right.addLayout(self.layout_filter)
 
-        self.container.setLayout(self.mainLayout)
+        self.container.setLayout(self.main_layout)
         # Set the central widget of the Window.
         self.setCentralWidget(self.container)
 
         self.addToolBar(Qt.LeftToolBarArea, self.toolbar)
         self.setStatusBar(self.statusbar)
 
-        self.setWindowPosition()
+        self._set_window_position()
 
-        appIcon = QIcon()
-        appIcon.addFile(ICON_PATH + 'icon_16.png', QSize(16, 16))
-        appIcon.addFile(ICON_PATH + 'icon_24.png', QSize(24, 24))
-        appIcon.addFile(ICON_PATH + 'icon_32.png', QSize(32, 32))
-        appIcon.addFile(ICON_PATH + 'icon_64.png', QSize(64, 64))
-        appIcon.addFile(ICON_PATH + 'icon_256.png', QSize(256, 256))
-        self.setWindowIcon(appIcon)
+        app_icon = QIcon()
+        app_icon.addFile(ICON_PATH + 'icon_16.png', QSize(16, 16))
+        app_icon.addFile(ICON_PATH + 'icon_24.png', QSize(24, 24))
+        app_icon.addFile(ICON_PATH + 'icon_32.png', QSize(32, 32))
+        app_icon.addFile(ICON_PATH + 'icon_64.png', QSize(64, 64))
+        app_icon.addFile(ICON_PATH + 'icon_256.png', QSize(256, 256))
+        self.setWindowIcon(app_icon)
 
-    def configSignals(self):
+    def _config_signals(self):
         self.toolbar.connectToGetSelectedPaths(
-            self.layoutPath.getSelectedPaths)
-        self.toolbar.connectToGetAllPaths(self.layoutPath.getAllPaths)
-        self.toolbar.connectOnAddFileFolder(self.layoutPath.onAddFileFolder)
-        self.layoutAnalyzerResult.connectToFilterUi(
-            self.layoutFilter.onGetFilter)
+            self.layout_path.get_selected_paths)
+        self.toolbar.connect_to_get_all_paths(self.layout_path.get_all_paths)
+        self.toolbar.connectOnAddFileFolder(self.layout_path.on_add_file_folder)
+        self.layout_analyzer_result.connect_to_filter_ui(
+            self.layout_filter.on_get_filter)
 
-    def setWindowPosition(self):
+    def _set_window_position(self):
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
-    def disposeObjects(self):
-        self.layoutResult.onDispose()
-        self.toolbar.onDispose()
+    def dispose_objects(self):
+        self.layout_result.on_dispose()
+        self.toolbar.on_dispose()
 
     def closeEvent(self, event):
         result = QMessageBox().question(self,
@@ -113,6 +113,6 @@ class MainWindow(QMainWindow):
         event.ignore()
 
         if result == QMessageBox.Yes:
-            self.saveSetting()
-            self.disposeObjects()
+            self.save_setting()
+            self.dispose_objects()
             event.accept()

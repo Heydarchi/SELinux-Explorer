@@ -7,7 +7,7 @@ from drawer.AbstractDrawer import *
 
 class RelationDrawer(AbstractDrawer):
 
-    def draw_uml(self, policyFile: PolicyFiles):
+    def draw_uml(self, policyFile: PolicyFile):
         self.dict_of_participant = {}
         self.drawer_class = DrawerClass()
 
@@ -28,7 +28,7 @@ class RelationDrawer(AbstractDrawer):
         print("drawing: ", file_path)
         generate_png(file_path)
 
-    def draw_list_of_uml(self, policy_files: List[PolicyFiles]):
+    def draw_list_of_uml(self, policy_files: List[PolicyFile]):
         self.dict_of_participant = {}
         self.drawer_class = DrawerClass()
 

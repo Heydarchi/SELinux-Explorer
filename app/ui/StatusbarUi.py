@@ -7,8 +7,8 @@ from PythonUtilityClasses.SystemUtility import *
 class StatusbarUi(QStatusBar):
     def __init__(self, mainWindow, analyzerLogic):
         super().__init__()
-        self.mainWindow = mainWindow
-        self.analyzerLogic = analyzerLogic
+        self.main_window = mainWindow
+        self.analyzer_logic = analyzerLogic
 
-    def updateStatusbar(self, message):
+    def update_statusbar(self, message):
         self.showMessage(message)

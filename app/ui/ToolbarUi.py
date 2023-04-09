@@ -14,184 +14,185 @@ from AppSetting import *
 class ToolbarUi(QToolBar):
     def __init__(self, mainWindow, analyzerLogic, appSetting):
         super().__init__()
-        self.mainWindow = mainWindow
-        self.analyzerLogic = analyzerLogic
-        self.appSetting = appSetting
-        self.initVariables()
-        self.initWidgets()
-        self.configSignals()
-        self.configLayout()
+        self.main_window = mainWindow
+        self.analyzer_logic = analyzerLogic
+        self.app_setting = appSetting
+        self._init_variables()
+        self._init_widgets()
+        self._config_signals()
+        self._config_layout()
 
-    def initVariables(self):
-        self.keepResult = False
+    def _init_variables(self):
+        self.keep_result = False
         self.about = None
+        self.lst_results = []
 
-    def initWidgets(self):
-        self.actAddFile = QAction(
+    def _init_widgets(self):
+        self.act_add_file = QAction(
             QIcon(
                 ICON_PATH +
                 'add-file.png'),
             "Add a file to the list",
-            self.mainWindow)
-        self.actAddPath = QAction(
+            self.main_window)
+        self.act_add_path = QAction(
             QIcon(
                 ICON_PATH +
                 'add-folder.png'),
             "Add a Path to the list",
-            self.mainWindow)
-        self.actRemoveOutput = QAction(
+            self.main_window)
+        self.act_remove_output = QAction(
             QIcon(
                 ICON_PATH +
                 'remove.png'),
             "Remove Outputs",
-            self.mainWindow)
-        self.actClearAnalyze = QAction(
+            self.main_window)
+        self.act_clear_analyze = QAction(
             QIcon(
                 ICON_PATH +
                 'reset.png'),
             "Clear Analyze",
-            self.mainWindow)
-        self.actWipeAll = QAction(
+            self.main_window)
+        self.act_wipe_all = QAction(
             QIcon(
                 ICON_PATH + 'broom.png'),
             "Wipe all(output, analyze, etc.)",
-            self.mainWindow)
-        self.actMakeReference = QAction(
+            self.main_window)
+        self.act_make_reference = QAction(
             QIcon(
                 ICON_PATH +
                 'reference.png'),
             "Make reference from the analyzed data",
-            self.mainWindow)
-        self.actAnalyzeAll = QAction(
+            self.main_window)
+        self.act_analyze_all = QAction(
             QIcon(
                 ICON_PATH +
                 'magic-wand.png'),
             "Analyze all the files/paths",
-            self.mainWindow)
-        self.actKeepResult = QAction(
+            self.main_window)
+        self.act_keep_result = QAction(
             QIcon(
                 ICON_PATH + 'hosting.png'),
             "Don't erase the current result before Analyzing",
-            self.mainWindow)
-        self.actAbout = QAction(
+            self.main_window)
+        self.act_about = QAction(
             QIcon(
                 ICON_PATH +
                 'information.png'),
             "About",
-            self.mainWindow)
+            self.main_window)
 
-        self.actKeepResult.setCheckable(True)
+        self.act_keep_result.setCheckable(True)
 
-    def configSignals(self):
-        self.addAction(self.actAddFile)
-        self.addAction(self.actAddPath)
+    def _config_signals(self):
+        self.addAction(self.act_add_file)
+        self.addAction(self.act_add_path)
         self.addSeparator()
-        self.addAction(self.actAnalyzeAll)
+        self.addAction(self.act_analyze_all)
         self.addSeparator()
-        self.addAction(self.actMakeReference)
+        self.addAction(self.act_make_reference)
         self.addSeparator()
-        self.addAction(self.actRemoveOutput)
-        self.addAction(self.actClearAnalyze)
-        self.addAction(self.actWipeAll)
+        self.addAction(self.act_remove_output)
+        self.addAction(self.act_clear_analyze)
+        self.addAction(self.act_wipe_all)
         self.addSeparator()
-        self.addAction(self.actKeepResult)
+        self.addAction(self.act_keep_result)
         self.addSeparator()
-        self.addAction(self.actAbout)
+        self.addAction(self.act_about)
 
-    def configLayout(self):
-        self.actAddFile.triggered.connect(self.onAddFile)
-        self.actAddPath.triggered.connect(self.onAddPath)
-        self.actAnalyzeAll.triggered.connect(self.onAnalyzeAll)
-        self.actClearAnalyze.triggered.connect(self.onClearAnalyze)
-        self.actRemoveOutput.triggered.connect(self.onClearOutput)
-        self.actWipeAll.triggered.connect(self.onWipeAll)
-        self.actKeepResult.triggered.connect(self.onClickedKeepResult)
-        self.actMakeReference.triggered.connect(self.onMakeReference)
-        self.actAbout.triggered.connect(self.onAbout)
+    def _config_layout(self):
+        self.act_add_file.triggered.connect(self.on_add_file)
+        self.act_add_path.triggered.connect(self.on_add_path)
+        self.act_analyze_all.triggered.connect(self.on_analyze_all)
+        self.act_clear_analyze.triggered.connect(self.on_clear_analyze)
+        self.act_remove_output.triggered.connect(self.on_clear_output)
+        self.act_wipe_all.triggered.connect(self.on_wipe_all)
+        self.act_keep_result.triggered.connect(self.on_clicked_keep_result)
+        self.act_make_reference.triggered.connect(self.on_make_reference)
+        self.act_about.triggered.connect(self.on_about)
 
         self.setOrientation(Qt.Vertical)
 
-    def connectOnAddFileFolder(self, onAddFileFolder):
-        self.addFileFolder = onAddFileFolder
+    def connectOnAddFileFolder(self, on_add_file_folder):
+        self.add_file_folder = on_add_file_folder
 
-    def connectToGetSelectedPaths(self, getSelectedPath):
-        self.getSelectedPaths = getSelectedPath
+    def connectToGetSelectedPaths(self, get_selected_path):
+        self.get_selected_paths = get_selected_path
 
-    def connectToGetAllPaths(self, getAllPaths):
-        self.getAllPaths = getAllPaths
+    def connect_to_get_all_paths(self, get_all_paths):
+        self.get_all_paths = get_all_paths
 
-    def onAddFile(self):
-        dlg = QFileDialog(directory=self.appSetting.lastOpenedPath)
+    def on_add_file(self):
+        dlg = QFileDialog(directory=self.app_setting.last_opened_path)
         if dlg.exec_():
-            self.addPathToList(dlg.selectedFiles()[0])
+            self.add_path_to_list(dlg.selectedFiles()[0])
 
-    def onAddPath(self):
-        self.addPathToList(
+    def on_add_path(self):
+        self.add_path_to_list(
             QFileDialog(
-                directory=self.appSetting.lastOpenedPath).getExistingDirectory(
-                self.mainWindow,
+                directory=self.app_setting.last_opened_path).getExistingDirectory(
+                self.main_window,
                 'Hey! Select a Folder',
                 options=QFileDialog.ShowDirsOnly))
 
-    def addPathToList(self, path):
-        self.appSetting.lastOpenedPath = path
-        self.addFileFolder(path)
+    def add_path_to_list(self, path):
+        self.app_setting.last_opened_path = path
+        self.add_file_folder(path)
 
-    def onAnalyzeSelectedPaths(self):
-        paths = self.getSelectedPaths()
-        self.analyzerLogic.analyze_all(paths)
-        UiUtility.showMessage("Analyzer", "The selected files are analyzed!")
+    def on_analyze_selected_paths(self):
+        paths = self.get_selected_paths()
+        self.analyzer_logic.analyze_all(paths)
+        UiUtility.show_message("Analyzer", "The selected files are analyzed!")
 
-    def onAnalyzeAll(self):
-        paths = self.getAllPaths()
-        self.analyzerLogic.analyze_all(paths)
-        UiUtility.showMessage("Analyzer", "All the files are analyzed!")
+    def on_analyze_all(self):
+        paths = self.get_all_paths()
+        self.analyzer_logic.analyze_all(paths)
+        UiUtility.show_message("Analyzer", "All the files are analyzed!")
 
-    def onClearAnalyze(self):
-        self.analyzerLogic.clear()
+    def on_clear_analyze(self):
+        self.analyzer_logic.clear()
         print("Cleared analyzer!")
 
-    def onClearOutput(self):
-        self.analyzerLogic.clear_output()
+    def on_clear_output(self):
+        self.analyzer_logic.clear_output()
         print("Cleared output!")
 
-    def onWipeAll(self):
-        self.onClearOutput()
-        self.onClearAnalyze()
-        self.analyzerLogic.on_analyze_finished(None)
+    def on_wipe_all(self):
+        self.on_clear_output()
+        self.on_clear_analyze()
+        self.analyzer_logic.on_analyze_finished(None)
         print("Wiped all!")
 
-    def onResultAdded(self, filePath):
-        item = QListWidgetItem(filePath)
-        self.lstResults.addItem(item)
+    def on_result_added(self, file_path):
+        item = QListWidgetItem(file_path)
+        self.lst_results.addItem(item)
 
-    def onAnalyzeFinished(self):
-        self.lstResults.clear()
-        for file in self.analyzerLogic.list_of_diagrams:
-            self.lstResults.addItem(QListWidgetItem(file))
+    def on_analyze_finished(self):
+        self.lst_results.clear()
+        for file in self.analyzer_logic.list_of_diagrams:
+            self.lst_results.addItem(QListWidgetItem(file))
 
-    def onSelectedResult(self):
-        listItems = self.lstResults.selectedItems()
-        if len(listItems) > 0:
-            self.diagram = DiagramWindow(listItems[0].text())
+    def on_selected_result(self):
+        list_items = self.lst_results.selectedItems()
+        if len(list_items) > 0:
+            self.diagram = DiagramWindow(list_items[0].text())
             self.diagram.show()
 
-    def onClickedKeepResult(self):
-        self.keepResult = self.sender().isChecked()
-        self.analyzerLogic.set_keep_result(self.sender().isChecked())
+    def on_clicked_keep_result(self):
+        self.keep_result = self.sender().isChecked()
+        self.analyzer_logic.set_keep_result(self.sender().isChecked())
 
-    def onMakeReference(self):
-        refName, ok = QInputDialog.getText(
+    def on_make_reference(self):
+        ref_name, ok = QInputDialog.getText(
             self, 'Text Input Dialog', 'Enter your name:')
         if ok:
-            SettingClass.saveListAsJson(
-                refName, self.analyzerLogic.list_of_policy_files)
+            SettingClass.save_list_as_json(
+                ref_name, self.analyzer_logic.list_of_policy_files)
             print("AppSetting saved!")
 
-    def onAbout(self):
+    def on_about(self):
         self.about = AboutWindow()
         self.about.show()
 
-    def onDispose(self):
+    def on_dispose(self):
         if self.about is not None:
             self.about.close()

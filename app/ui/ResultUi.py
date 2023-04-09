@@ -12,23 +12,23 @@ from AppSetting import *
 
 
 class DiagramWindow(QWidget):
-    def __init__(self, filePath):
+    def __init__(self, file_path):
         super().__init__()
-        self.filePath = filePath
-        self.initVariables()
-        self.initWidgets()
-        self.configLayout()
+        self.file_path = file_path
+        self._init_variables()
+        self._init_widgets()
+        self._config_layout()
 
-    def initVariables(self):
+    def _init_variables(self):
         self.DEFAULT_WIDTH = 1200 * 2
         self.DEFAULT_HEIGHT = 1024 * 2
 
-    def initWidgets(self):
-        self.im = QPixmap(self.filePath)
+    def _init_widgets(self):
+        self.im = QPixmap(self.file_path)
         self.label = QLabel()
         self.grid = QGridLayout()
 
-    def configLayout(self):
+    def _config_layout(self):
         self.grid.addWidget(self.label, 1, 1)
         self.setLayout(self.grid)
 
@@ -38,9 +38,9 @@ class DiagramWindow(QWidget):
 
         # self.setGeometry(50,50,320,200)
         self.setWindowTitle("Diagram")
-        self.setWindowPosition()
+        self.set_window_position()
 
-    def setWindowPosition(self):
+    def set_window_position(self):
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
@@ -57,91 +57,91 @@ class DiagramWindow(QWidget):
 class ResultUi(QVBoxLayout):
     def __init__(self, mainWindow, analyzerLogic):
         super().__init__()
-        self.mainWindow = mainWindow
-        self.analyzerLogic = analyzerLogic
-        self.initVariables()
-        self.initWidgets()
-        self.configSignals()
-        self.configLayout()
+        self.main_window = mainWindow
+        self.analyzer_logic = analyzerLogic
+        self._init_variables()
+        self._init_widgets()
+        self._config_signals()
+        self._config_layout()
 
-    def initVariables(self):
+    def _init_variables(self):
         self.diagram = None
-        self.lstDiagrams = []
+        self.lst_diagrams = []
 
-    def initWidgets(self):
-        self.lstResults = QListWidget()
-        self.layoutButton = QHBoxLayout()
-        self.grpLayout = QVBoxLayout()
-        self.grpResult = QGroupBox("Results")
+    def _init_widgets(self):
+        self.lst_results = QListWidget()
+        self.layout_button = QHBoxLayout()
+        self.grp_layout = QVBoxLayout()
+        self.grp_result = QGroupBox("Results")
 
-        self.lstResults.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.lst_results.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
-        self.btnDeleteSelected = UiUtility.createButton(
+        self.btn_delete_selected = UiUtility.create_button(
             "Delete the selected file", QIcon(
                 ICON_PATH + "delete.png"), 24, 24)
-        self.btnOpenMultiple = UiUtility.createButton(
+        self.btn_open_multiple = UiUtility.create_button(
             "Open selected files(Multiple", QIcon(
                 ICON_PATH + "multiple.png"), 24, 24)
-        self.btnOpenSingle = UiUtility.createButton(
+        self.btn_open_single = UiUtility.create_button(
             "Open the selected file(Single)", QIcon(
                 ICON_PATH + "single.png"), 24, 24)
 
-    def configSignals(self):
-        self.btnDeleteSelected.clicked.connect(self.onDeleteSelectedFile)
-        self.btnOpenSingle.clicked.connect(self.onOpenSingleFile)
-        self.btnOpenMultiple.clicked.connect(self.onOpenMultipleFiles)
-        self.analyzerLogic.set_ui_update_signal(self.onAnalyzeFinished)
+    def _config_signals(self):
+        self.btn_delete_selected.clicked.connect(self._on_delete_selected_file)
+        self.btn_open_single.clicked.connect(self.on_open_single_file)
+        self.btn_open_multiple.clicked.connect(self.on_open_multiple_files)
+        self.analyzer_logic.set_ui_update_signal(self.on_analyze_finished)
 
-    def configLayout(self):
-        self.layoutButton.addWidget(self.btnDeleteSelected)
-        self.layoutButton.addWidget(self.btnOpenMultiple)
-        self.layoutButton.addWidget(self.btnOpenSingle)
+    def _config_layout(self):
+        self.layout_button.addWidget(self.btn_delete_selected)
+        self.layout_button.addWidget(self.btn_open_multiple)
+        self.layout_button.addWidget(self.btn_open_single)
 
-        self.grpLayout.addWidget(self.lstResults)
-        self.grpLayout.addLayout(self.layoutButton)
-        self.grpResult.setLayout(self.grpLayout)
+        self.grp_layout.addWidget(self.lst_results)
+        self.grp_layout.addLayout(self.layout_button)
+        self.grp_result.setLayout(self.grp_layout)
 
-        self.addWidget(self.grpResult)
+        self.addWidget(self.grp_result)
 
-    def onDeleteSelectedFile(self):
-        items = self.lstResults.selectedItems()
+    def _on_delete_selected_file(self):
+        items = self.lst_results.selectedItems()
         if not items:
             return
         for item in items:
             filePath = item.text()
-            self.lstResults.takeItem(self.lstResults.row(item))
-            self.analyzerLogic.remove_file(filePath)
+            self.lst_results.takeItem(self.lst_results.row(item))
+            self.analyzer_logic.remove_file(filePath)
 
-    def onResultAdded(self, filePath):
+    def on_result_added(self, filePath):
         item = QListWidgetItem(filePath)
-        self.lstResults.addItem(item)
+        self.lst_results.addItem(item)
 
-    def onAnalyzeFinished(self):
-        self.lstResults.clear()
-        for file in self.analyzerLogic.list_of_diagrams:
-            self.lstResults.addItem(QListWidgetItem(file))
+    def on_analyze_finished(self):
+        self.lst_results.clear()
+        for file in self.analyzer_logic.list_of_diagrams:
+            self.lst_results.addItem(QListWidgetItem(file))
 
-    def onSelectedResult(self):
-        listItems = self.lstResults.selectedItems()
-        if len(listItems) > 0:
-            self.diagram = DiagramWindow(listItems[0].text())
+    def on_selected_result(self):
+        list_items = self.lst_results.selectedItems()
+        if len(list_items) > 0:
+            self.diagram = DiagramWindow(list_items[0].text())
             self.diagram.show()
 
-    def onOpenSingleFile(self):
-        self.onSelectedResult()
+    def on_open_single_file(self):
+        self.on_selected_result()
 
-    def onOpenMultipleFiles(self):
-        listItems = self.lstResults.selectedItems()
-        if len(listItems) > 0:
-            for item in listItems:
+    def on_open_multiple_files(self):
+        list_items = self.lst_results.selectedItems()
+        if len(list_items) > 0:
+            for item in list_items:
                 diagram = DiagramWindow(item.text())
                 diagram.show()
-                self.lstDiagrams.append(diagram)
+                self.lst_diagrams.append(diagram)
 
-    def onDispose(self):
+    def on_dispose(self):
         if self.diagram is not None:
             self.diagram.close()
 
-        if len(self.lstDiagrams) > 0:
-            for diagram in self.lstDiagrams:
+        if len(self.lst_diagrams) > 0:
+            for diagram in self.lst_diagrams:
                 diagram.close()

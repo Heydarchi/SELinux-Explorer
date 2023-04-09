@@ -8,13 +8,13 @@ from model.PolicyEntities import *
 class AnalyzerLogic:
     def __init__(self):
         super().__init__()
-        self.init_variables()
+        self._init_variables()
         self.init_analyzer()
 
-    def init_variables(self):
+    def _init_variables(self):
         self.keep_result = False
         self.list_of_diagrams = []
-        self.ref_policy_file = PolicyFiles()
+        self.ref_policy_file = PolicyFile()
         self.drawer = RelationDrawer()
 
     def init_analyzer(self):
@@ -35,7 +35,7 @@ class AnalyzerLogic:
         if policy_files is None or len(policy_files) == 0:
             return None
 
-        ref_policy_file = PolicyFiles()
+        ref_policy_file = PolicyFile()
         for policyFile in policy_files:
             ref_policy_file.typeDef.extend(policyFile.typeDef)
             ref_policy_file.attribute.extend(policyFile.attribute)
@@ -88,7 +88,7 @@ class AnalyzerLogic:
         SystemUtility().delete_files(os.path.splitext(file_path)[0] + ".puml")
 
     def clear(self):
-        self.ref_policy_file = PolicyFiles()
+        self.ref_policy_file = PolicyFile()
 
     def get_image_path(self, filePath):
         return generate_diagram_file_name(filePath)

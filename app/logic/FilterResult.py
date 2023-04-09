@@ -40,7 +40,7 @@ class FilterResult:
 
     def filter(self, lst_rules, policy_file):
 
-        self.filtered_policy_file = PolicyFiles()
+        self.filtered_policy_file = PolicyFile()
         self.filtered_policy_file.fileName = "domain_filtered"
 
         for filter_rule in lst_rules:
@@ -107,7 +107,7 @@ class FilterResult:
             self.filter_attribute(filter_rule, policy_file))
 
     def filter_filename(self, filter_rule, policy_file):
-        # print("----filterFilename")
+        # print("----filter_filename")
         if self.check_similarity(filter_rule, policy_file.fileName):
             self.filtered_policy_file.typeDef.extend(policy_file.typeDef)
             self.filtered_policy_file.contexts.extend(policy_file.contexts)
@@ -118,7 +118,7 @@ class FilterResult:
 
     def filter_permission(self, filter_rule, policy_file):
         '''Filter rules having permission in the policy_file and put them in filtered_policy_file'''
-        # print("----filterPermission: ", filter_rule)
+        # print("----filter_permission: ", filter_rule)
         for rule in policy_file.rules:
             if filter_rule.keyword in rule.permissions:
                 # print(rule)

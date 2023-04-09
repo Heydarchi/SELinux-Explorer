@@ -11,71 +11,71 @@ class FileUi(QVBoxLayout):
     def __init__(self, mainWindow):
         super().__init__()
         self.mainWindow = mainWindow
-        self.initVariables()
-        self.initWidgets()
-        self.configSignals()
-        self.configLayout()
+        self._init_variables()
+        self._init_widgets()
+        self._config_signals()
+        self._config_layout()
 
-    def initVariables(self):
-        self.lastOpenedPath = ""
+    def _init_variables(self):
+        self.last_opened_path = ""
         self.LIST_MINIMUM_HEIGHT = 120
         self.LIST_MINIMUM_WIDTH = 680
 
-    def initWidgets(self):
-        self.grpResult = QGroupBox("Files and Paths")
+    def _init_widgets(self):
+        self.grp_result = QGroupBox("Files and Paths")
 
-        self.layoutSelectedPath = QVBoxLayout()
-        self.layoutSelectedPathButton = QVBoxLayout()
+        self.layout_selected_path = QVBoxLayout()
+        self.layout_selected_path_button = QVBoxLayout()
 
-        self.lstSelectedPath = QListWidget()
-        self.btnRemoveFromList = QPushButton(
+        self.lst_selected_path = QListWidget()
+        self.btn_remove_from_list = QPushButton(
             icon=QIcon(ICON_PATH + "delete.png"))
-        self.btnRemoveFromList.setToolTip("Remove selected item from the list")
-        self.btnRemoveFromList.setMinimumSize(24, 24)
-        self.btnRemoveFromList.setIconSize(QSize(24, 24))
+        self.btn_remove_from_list.setToolTip("Remove selected item from the list")
+        self.btn_remove_from_list.setMinimumSize(24, 24)
+        self.btn_remove_from_list.setIconSize(QSize(24, 24))
 
-    def configSignals(self):
-        self.btnRemoveFromList.clicked.connect(self.removeFromTheList)
+    def _config_signals(self):
+        self.btn_remove_from_list.clicked.connect(self.remove_from_the_list)
 
-    def configLayout(self):
+    def _config_layout(self):
 
-        # layoutSelectedPath
-        self.layoutSelectedPathButton.addWidget(self.btnRemoveFromList)
-        self.layoutSelectedPathButton.setAlignment(Qt.AlignTop)
+        # layout_selected_path
+        self.layout_selected_path_button.addWidget(self.btn_remove_from_list)
+        self.layout_selected_path_button.setAlignment(Qt.AlignTop)
 
-        self.lstSelectedPath.setMinimumHeight(self.LIST_MINIMUM_HEIGHT)
-        self.lstSelectedPath.setMinimumWidth(self.LIST_MINIMUM_WIDTH)
-        self.layoutSelectedPath.setAlignment(Qt.AlignTop)
+        self.lst_selected_path.setMinimumHeight(self.LIST_MINIMUM_HEIGHT)
+        self.lst_selected_path.setMinimumWidth(self.LIST_MINIMUM_WIDTH)
+        self.layout_selected_path.setAlignment(Qt.AlignTop)
 
-        self.layoutSelectedPath.addWidget(self.lstSelectedPath)
-        self.layoutSelectedPath.addLayout(self.layoutSelectedPathButton)
+        self.layout_selected_path.addWidget(self.lst_selected_path)
+        self.layout_selected_path.addLayout(self.layout_selected_path_button)
 
-        self.grpResult.setLayout(self.layoutSelectedPath)
+        self.grp_result.setLayout(self.layout_selected_path)
 
-        self.addWidget(self.grpResult)
-        # self.addLayout(self.layoutSelectedPath)
+        self.addWidget(self.grp_result)
+        # self.addLayout(self.layout_selected_path)
 
-    def removeFromTheList(self):
-        listItems = self.lstSelectedPath.selectedItems()
-        if not listItems:
+    def remove_from_the_list(self):
+        list_items = self.lst_selected_path.selectedItems()
+        if not list_items:
             return
-        for item in listItems:
-            self.lstSelectedPath.takeItem(self.lstSelectedPath.row(item))
+        for item in list_items:
+            self.lst_selected_path.takeItem(self.lst_selected_path.row(item))
 
-    def getSelectedPaths(self):
+    def get_selected_paths(self):
         paths = []
-        items = self.lstSelectedPath.selectedItems()
+        items = self.lst_selected_path.selectedItems()
         for item in items:
             paths.append(item.text())
         return paths
 
-    def getAllPaths(self):
+    def get_all_paths(self):
         paths = []
-        for i in range(self.lstSelectedPath.count()):
-            paths.append(self.lstSelectedPath.item(i).text())
+        for i in range(self.lst_selected_path.count()):
+            paths.append(self.lst_selected_path.item(i).text())
         return paths
 
-    def onAddFileFolder(self, path):
+    def on_add_file_folder(self, path):
         print(path)
         item = QListWidgetItem(path)
-        self.lstSelectedPath.addItem(item)
+        self.lst_selected_path.addItem(item)

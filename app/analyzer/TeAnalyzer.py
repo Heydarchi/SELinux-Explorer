@@ -13,7 +13,7 @@ class TeAnalyzer(AbstractAnalyzer):
 
     def analyze(self, file_path):
         self.file_path = file_path
-        self.policyFile = PolicyFiles(file_path, "", FileTypeEnum.TE_FILE)
+        self.policyFile = PolicyFile(file_path, "", FileTypeEnum.TE_FILE)
         file_reader = FR.FileReader()
         temp_lines = file_reader.read_file_lines(file_path)
         last_line = ""

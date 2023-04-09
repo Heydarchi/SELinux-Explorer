@@ -14,19 +14,19 @@ class ContextsAnalyzer(AbstractAnalyzer):
 
     def analyze(self, filePath):
         if "file_contexts" in filePath:
-            self.policyFile = PolicyFiles(
+            self.policyFile = PolicyFile(
                 filePath, "", FileTypeEnum.FILE_CONTEXTS)
         elif "vndservice_contexts" in filePath:
-            self.policyFile = PolicyFiles(
+            self.policyFile = PolicyFile(
                 filePath, "", FileTypeEnum.VNDSERVICE_CONTEXTS)
         elif "hwservice_contexts" in filePath:
-            self.policyFile = PolicyFiles(
+            self.policyFile = PolicyFile(
                 filePath, "", FileTypeEnum.HWSERVICE_CONTEXTS)
         elif "service_contexts" in filePath:
-            self.policyFile = PolicyFiles(
+            self.policyFile = PolicyFile(
                 filePath, "", FileTypeEnum.SERVICE_CONTEXTS)
         elif "property_contexts" in filePath:
-            self.policyFile = PolicyFiles(
+            self.policyFile = PolicyFile(
                 filePath, "", FileTypeEnum.PROPERTY_CONTEXTS)
         else:
             return
