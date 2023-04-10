@@ -25,9 +25,9 @@ class TeAnalyzer(AbstractAnalyzer):
             if macro_found:
                 if ")" in line:
                     macro_found = False
-                    self.process_line(last_line + " " + line)
+                    self.process_line(last_line + "\n " + line)
                 else:
-                    last_line = last_line + " " + line
+                    last_line = last_line + "\n " + line
             else:
                 if "define" in line:
                     macro_found = True
@@ -194,6 +194,7 @@ class TeAnalyzer(AbstractAnalyzer):
 
     def extract_macro(self, input_string):
         try:
+            print("input_string: ", input_string)
             lst_lines = input_string.splitlines()
             macro = PolicyMacro()
             # It's supposed to have define in the first item
