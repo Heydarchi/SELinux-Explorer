@@ -40,6 +40,11 @@ To run SELinux Explorer, you need to have Python 3.x and some other packages ins
 - Dataclasses
 
 ## Installation
+#### Note : The 1st & 2nd steps can be skipped by runnig the `setup.sh` script.
+```
+sudo ./setup.sh
+```
+&ensp;
 
 1. Install Python 3.8 or a newer version, PythonIsPython3, Graphviz, and PyQt5:
 
@@ -49,18 +54,12 @@ sudo apt install python3.8 python-is-python3 graphviz python3-pyqt5 -y
 &ensp;
 
 
-2. Install dataclass-wizard and pyqt5:
+2. Install python packages
 
 ```
-pip install dataclass-wizard pyqt5
+pip install -r requirements.txt
 ```
-&ensp;
 
-**Note: You can skip the 1st & 2nd steps and only run the command below:**
-
-```
-./setup.sh
-```
 &ensp;
 
 3. Clone the project and its submodule:
@@ -100,6 +99,27 @@ There is a script to run spell check locally. It will check all the files in the
 ```
 codespell -I app/config/codespell_ignore.txt app/
 ```
+&ensp;
+### How to run spell check locally
+Before pushing any changes, please run the following command to check the code style:
+
+```
+black --check app/
+```
+To fix the code style, run the following command:
+
+```
+black app/
+```
+
+### How to run the tests
+To run the tests, run the following command:
+
+```
+pytest app/tests/
+```
+
+&ensp;
 
 ## Features and TODOs
 
@@ -112,17 +132,14 @@ codespell -I app/config/codespell_ignore.txt app/
 ### GUI
 
 - [ ] Show the progress of the analysis
-- [ ] Display the number of files and folders in the list
-- [ ] Add a new window for search
 - [ ] Search the input file
 - [ ] Search the generated files
-- [ ] Generate output for the selected items
-- [ ] Generate output for the selected files
 - [ ] Sort result files by date
 - [ ] Add AND/OR for combining the filter rules
 - [ ] Create references from paths and files
-- [ ] Add autocomplete for the filter edit box
-
+- [ ] Add a new window for the reference files
+- [ ] Display the number of files and folders in the list
+ 
 ## Contributing
 
 We welcome any form of contribution, from bug reports to suggestions and code improvements. Feel free to create an issue or send a message/report.
