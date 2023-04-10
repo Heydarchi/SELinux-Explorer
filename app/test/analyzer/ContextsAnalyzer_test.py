@@ -1,7 +1,8 @@
-'''This class is going to test the ContextsAnalyzer class'''
+"""This class is going to test the ContextsAnalyzer class"""
 import unittest
 from analyzer.ContextsAnalyzer import ContextsAnalyzer
 from model.PolicyEntities import *
+
 
 class TestContextsAnalyzer(unittest.TestCase):
     def test_extract_definition(self):

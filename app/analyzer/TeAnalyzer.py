@@ -97,16 +97,20 @@ class TeAnalyzer(AbstractAnalyzer):
             return False
 
     def extract_attribute(self, input_string):
-        '''Need to extract multiple attribute in one line
+        """Need to extract multiple attribute in one line
         typeattribute type1 attribute1, attribute2;
-        '''
+        """
         try:
             input_string = clean_line(input_string)
             if input_string is None:
                 return
 
             types = (
-                input_string.replace(";", "").replace(",", " ").replace("typeattribute ", "").strip().split()
+                input_string.replace(";", "")
+                .replace(",", " ")
+                .replace("typeattribute ", "")
+                .strip()
+                .split()
             )
             attribute = Attribute()
             attribute.name = types[0].strip()
@@ -115,7 +119,6 @@ class TeAnalyzer(AbstractAnalyzer):
         except Exception as err:
             MyLogger.log_error(sys, err, input_string)
             return None
-
 
     def extract_rule(self, input_string):
         lst_rules = []
@@ -217,7 +220,7 @@ class TeAnalyzer(AbstractAnalyzer):
             macro_call.parameters = (
                 input_string.split("(")[1].replace(")", "").strip().split(",")
             )
-            #remove white spaces in parameters
+            # remove white spaces in parameters
             macro_call.parameters = [x.strip() for x in macro_call.parameters]
             return macro_call
         except Exception as err:
