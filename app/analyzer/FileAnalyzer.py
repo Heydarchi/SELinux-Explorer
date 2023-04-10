@@ -5,7 +5,7 @@ from analyzer.TeAnalyzer import *
 from analyzer.ContextsAnalyzer import ContextsAnalyzer
 from analyzer.SeAppAnalyzer import SeAppAnalyzer
 from analyzer.AnalyzerEntities import *
-import MyLogger
+from MyLogger import MyLogger
 
 
 class FileAnalyzer(AbstractAnalyzer):
