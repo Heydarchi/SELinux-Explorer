@@ -91,6 +91,7 @@ class SecurityContext(JSONWizard):
 @dataclass
 class TypeDef(JSONWizard):
     name: str = ""
+    alises: List[str] = field(default_factory=list)
     types: List[str] = field(default_factory=list)
 
 

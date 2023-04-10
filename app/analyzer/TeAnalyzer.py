@@ -49,7 +49,7 @@ class TeAnalyzer(AbstractAnalyzer):
                 if type_def is not None:
                     self.policy_file.type_def.append(type_def)
             elif items[0].strip() == "typeattribute":
-                attribute = self.extract_attribite(input_string)
+                attribute = self.extract_attribute(input_string)
                 if attribute is not None:
                     self.policy_file.attribute.append(attribute)
             elif items[0] in ["allow", "neverallow"]:
@@ -73,6 +73,7 @@ class TeAnalyzer(AbstractAnalyzer):
             type_def = TypeDef()
             type_def.name = types[0].strip()
             type_def.types.extend(types[1:])
+            type_def.types = [x.strip() for x in type_def.types]
             if DOMAIN_EXECUTABLE in type_def.name:
                 if not self.merge_exec_domain(type_def):
                     return type_def
@@ -95,22 +96,26 @@ class TeAnalyzer(AbstractAnalyzer):
             MyLogger.log_error(sys, err, type_def_exec)
             return False
 
-    def extract_attribite(self, input_string):
+    def extract_attribute(self, input_string):
+        '''Need to extract multiple attribute in one line
+        typeattribute type1 attribute1, attribute2;
+        '''
         try:
-            attribute = Attribute()
-            types = (
-                input_string.replace(";", "")
-                .replace("typeattribute ", "")
-                .strip()
-                .split(" ")
-            )
-            attribute.name = types[0]
-            attribute.types.extend(types[1:])
-            return attribute
+            input_string = clean_line(input_string)
+            if input_string is None:
+                return
 
+            types = (
+                input_string.replace(";", "").replace(",", " ").replace("typeattribute ", "").strip().split()
+            )
+            attribute = Attribute()
+            attribute.name = types[0].strip()
+            attribute.attributes.extend(types[1:])
+            return attribute
         except Exception as err:
             MyLogger.log_error(sys, err, input_string)
             return None
+
 
     def extract_rule(self, input_string):
         lst_rules = []
@@ -147,7 +152,6 @@ class TeAnalyzer(AbstractAnalyzer):
                             )
                             lst_bracket_items.append(bracket_string)
                             offset = start
-
                     items = (
                         input_string.replace(";", "").replace(": ", ":").strip().split()
                     )
@@ -156,30 +160,29 @@ class TeAnalyzer(AbstractAnalyzer):
                         if "###" not in items[1]
                         else lst_bracket_items.pop(0).strip().split()
                     )
+
                     sec_context = (
                         items[2]
                         if "###" not in items[2]
                         else (lst_bracket_items.pop(0) + ":" + items[2].split(":")[1])
                     )
+
                     permissions = (
                         [items[3]]
                         if "###" not in items[3] != "###"
                         else lst_bracket_items.pop(0).strip().split()
                     )
-
                     for source in sources:
-                        rule = Rule()
-                        rule.rule = rule_enum
-                        rule.source = source
                         dst_items = sec_context.split(":")
                         targets = dst_items[0].split()
                         for target in targets:
+                            rule = Rule()
+                            rule.rule = rule_enum
+                            rule.source = source
                             rule.target = target
                             rule.class_type = dst_items[1]
                             rule.permissions = permissions
-                        lst_rules.append(rule)
-
-                    return
+                            lst_rules.append(rule)
 
         except Exception as err:
             MyLogger.log_error(sys, err, input_string)
@@ -195,11 +198,12 @@ class TeAnalyzer(AbstractAnalyzer):
             first_line = first_line.replace("`", "").replace("(", "").replace(",", "")
             macro.name = first_line.strip()
             for line in lst_lines:
+                if line.strip() == "":
+                    continue
                 if ")" in line.strip():
                     break
                 macro.rules_string.append(line)
                 macro.rules.extend(self.extract_rule(line))
-            # print("macro: ", macro)
             return macro
         except Exception as err:
             MyLogger.log_error(sys, err, input_string)
@@ -213,6 +217,8 @@ class TeAnalyzer(AbstractAnalyzer):
             macro_call.parameters = (
                 input_string.split("(")[1].replace(")", "").strip().split(",")
             )
+            #remove white spaces in parameters
+            macro_call.parameters = [x.strip() for x in macro_call.parameters]
             return macro_call
         except Exception as err:
             MyLogger.log_error(sys, err, input_string)
