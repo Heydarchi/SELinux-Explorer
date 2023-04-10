@@ -29,6 +29,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Run Black
+      run: |
+        pip install black
+        black --check .
+
     - name: Run codespell
       run: codespell --ignore-words=config/codespell_ignore.txt **/*
 
