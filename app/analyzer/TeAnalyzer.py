@@ -63,7 +63,9 @@ class TeAnalyzer(AbstractAnalyzer):
                 if macro_call is not None:
                     self.policy_file.macro_calls.append(macro_call)
             else:
-                MyLogger.log_error(sys, "Unknown line", input_string)
+                MyLogger.log_error(
+                    None, "Unknown input from " + self.file_path, input_string
+                )
 
     def extract_definition(self, input_string):
         try:

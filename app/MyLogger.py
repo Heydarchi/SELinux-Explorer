@@ -9,11 +9,12 @@ logging.basicConfig(
 class MyLogger:
     @staticmethod
     def log_error(_sys, _exception, _message=None):
-        exception_type, exception_object, exception_traceback = _sys.exc_info()
-        filename = exception_traceback.tb_frame.f_code.co_filename
-        line_number = exception_traceback.tb_lineno
-        logging.error("Error in file: " + os.path.basename(filename))
-        logging.error("Error in line: " + str(line_number))
+        if _sys is not None:
+            exception_type, exception_object, exception_traceback = _sys.exc_info()
+            filename = exception_traceback.tb_frame.f_code.co_filename
+            line_number = exception_traceback.tb_lineno
+            logging.error("Error in file: " + os.path.basename(filename))
+            logging.error("Error in line: " + str(line_number))
         logging.error("Error in exception: " + str(_exception))
         if _message is not None:
             logging.error("_message: " + str(_message))
