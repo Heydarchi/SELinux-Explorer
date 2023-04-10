@@ -121,6 +121,17 @@ pytest app/tests/
 
 &ensp;
 
+### Pattern to create a new branch
+Please use the patterns below to create a new branch for your changes:
+&ensp;
+
+- feature/<feature-name>: For new features or enhancements.
+- bugfix/<bug-name>: For bug fixes.
+- hotfix/<issue-name>: For critical fixes that need to be merged quickly.
+- refactor/<component-name>: For code refactoring.
+- docs/<documentation-change>: For changes in documentation.
+&ensp;
+
 ## Features and TODOs
 
 ### Analyzer
