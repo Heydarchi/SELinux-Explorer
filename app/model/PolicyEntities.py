@@ -55,6 +55,8 @@ class Controls(JSONWizard):
 class RuleEnum(Enum):
     ALLOW = 0, "allow"
     NEVER_ALLOW = 1, "neverallow"
+    DONT_AUDIT = 2, "dontaudit"
+    AUDIT_ALLOW = 3, "auditallow"
 
     def __str__(self):
         return str(self.value)

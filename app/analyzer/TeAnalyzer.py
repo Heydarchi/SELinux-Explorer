@@ -15,9 +15,21 @@ class TeAnalyzer(AbstractAnalyzer):
         self.policy_file = PolicyFile(file_path, "", FileTypeEnum.TE_FILE)
         file_reader = FR.FileReader()
         temp_lines = file_reader.read_file_lines(file_path)
+        lstItems = self.extract_items_to_process(temp_lines)
+        for line in lstItems:
+            self.process_line(line)
+
+        return self.policy_file
+
+    """This function is used to extract the items from the file as a list. 
+    Then the out put of this function is passed to the process_line function."""
+
+    def extract_items_to_process(self, file_lines):
+        lstItems = []
         last_line = ""
         macro_found = False
-        for line in temp_lines:
+        multi_line = False
+        for line in file_lines:
             line = clean_line(line)
             if line is None:
                 continue
@@ -25,17 +37,26 @@ class TeAnalyzer(AbstractAnalyzer):
             if macro_found:
                 if ")" in line:
                     macro_found = False
-                    self.process_line(last_line + "\n " + line)
+                    lstItems.append(last_line + "\n " + line)
                 else:
                     last_line = last_line + "\n " + line
+            elif multi_line:
+                if ";" in line:
+                    multi_line = False
+                    lstItems.append(last_line + " " + line)
+                else:
+                    last_line = last_line + " " + line
             else:
                 if "define" in line:
                     macro_found = True
                     last_line = line
+                elif ";" not in line:
+                    multi_line = True
+                    last_line = line
                 else:
-                    self.process_line(line)
+                    lstItems.append(line)
 
-        return self.policy_file
+        return lstItems
 
     def process_line(self, input_string):
         input_string = clean_line(input_string)
@@ -48,11 +69,11 @@ class TeAnalyzer(AbstractAnalyzer):
                 type_def = self.extract_definition(input_string)
                 if type_def is not None:
                     self.policy_file.type_def.append(type_def)
-            elif items[0].strip() == "typeattribute":
+            elif items[0].strip() in ["typeattribute", "attribute"]:
                 attribute = self.extract_attribute(input_string)
                 if attribute is not None:
                     self.policy_file.attribute.append(attribute)
-            elif items[0] in ["allow", "neverallow"]:
+            elif items[0] in ["allow", "neverallow", "auditallow", "dontaudit"]:
                 self.policy_file.rules.extend(self.extract_rule(input_string))
             elif "define" in input_string:
                 macro = self.extract_macro(input_string)
@@ -111,12 +132,14 @@ class TeAnalyzer(AbstractAnalyzer):
                 input_string.replace(";", "")
                 .replace(",", " ")
                 .replace("typeattribute ", "")
+                .replace("attribute ", "")
                 .strip()
                 .split()
             )
             attribute = Attribute()
             attribute.name = types[0].strip()
-            attribute.attributes.extend(types[1:])
+            if len(types) > 1:
+                attribute.attributes.extend(types[1:])
             return attribute
         except Exception as err:
             MyLogger.log_error(sys, err, input_string)
