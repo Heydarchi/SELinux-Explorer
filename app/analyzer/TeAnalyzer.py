@@ -75,6 +75,14 @@ class TeAnalyzer(AbstractAnalyzer):
                     self.policy_file.attribute.append(attribute)
             elif items[0] in ["allow", "neverallow", "auditallow", "dontaudit"]:
                 self.policy_file.rules.extend(self.extract_rule(input_string))
+            elif items[0] == "permissive":
+                permissive = self.extract_permissive(input_string)
+                if permissive is not None:
+                    self.policy_file.permissives.append(permissive)
+            elif items[0] == "typealias":
+                type_alias = self.extract_type_alias(input_string)
+                if type_alias is not None:
+                    self.policy_file.type_aliases.append(type_alias)
             elif "define" in input_string:
                 macro = self.extract_macro(input_string)
                 if macro is not None:
@@ -83,10 +91,35 @@ class TeAnalyzer(AbstractAnalyzer):
                 macro_call = self.extract_macro_call(input_string)
                 if macro_call is not None:
                     self.policy_file.macro_calls.append(macro_call)
+            # if any values of NotSupportedRuleEnum can be found in input_string, then continue
+            elif any(x.value in input_string for x in NotSupportedRuleEnum):
+                return
             else:
                 MyLogger.log_error(
                     None, "Unknown input from " + self.file_path, input_string
                 )
+
+    # will extract typealias type_id alias alias_id;
+    def extract_type_alias(self, input_string):
+        try:
+            items = input_string.split()
+            type_alias = TypeAlias()
+            type_alias.name = items[1].strip()
+            type_alias.alias = items[2].strip()
+            return type_alias
+        except Exception as err:
+            MyLogger.log_error(sys, err, input_string)
+            return None
+
+    def extract_permissive(self, input_string):
+        try:
+            items = input_string.split()
+            permissive = Permissive()
+            permissive.name = items[1].strip()
+            return permissive
+        except Exception as err:
+            MyLogger.log_error(sys, err, input_string)
+            return None
 
     def extract_definition(self, input_string):
         try:
@@ -165,7 +198,7 @@ class TeAnalyzer(AbstractAnalyzer):
             # print("inputString; " + inputString)
             items = input_string.replace(";", "").split()
             for rule_enum in RuleEnum:
-                if rule_enum.label == items[0].strip():
+                if rule_enum.value == items[0].strip():
                     count_brackets = input_string.count("}")
                     lst_bracket_items = []
                     if count_brackets > 0:
