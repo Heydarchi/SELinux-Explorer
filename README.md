@@ -90,70 +90,22 @@ cd app
 python main.py
 ```
 <br/>
-<br/>
 
-## Development
-### How to run spell check locally
-There is a script to run spell check locally. It will check all the files in the `app` directory and ignore the words in the `app/config/codespell_ignore.txt` file.
+## Contributing
 
-```
-codespell -I app/config/codespell_ignore.txt app/
-```
-&ensp;
-### How to run spell check locally
-Before pushing any changes, please run the following command to check the code style:
-
-```
-black --check app/
-```
-To fix the code style, run the following command:
-
-```
-black app/
-```
-
-### How to run the tests
-To run the tests, run the following command:
-
-```
-pytest app/tests/
-```
-
-&ensp;
-
-### Pattern to create a new branch
-Please use the patterns below to create a new branch for your changes:
-&ensp;
-
-- feature/<feature-name>: For new features or enhancements.
-- bugfix/<bug-name>: For bug fixes.
-- hotfix/<issue-name>: For critical fixes that need to be merged quickly.
-- refactor/<component-name>: For code refactoring.
-- docs/<documentation-change>: For changes in documentation.
-&ensp;
+Thank you for your interest in contributing to SELinux Explorer! We welcome and appreciate any contributions, whether it's bug reports, feature requests, code, documentation, or testing. Please refer to our [CONTRIBUTION.md](CONTRIBUTION.md) file for detailed guidelines on how to set up your development environment, check code style, run tests, and submit your changes.
 
 ## Features and TODOs
 
-### Analyzer
+This project is under active development, and we're continuously working on improving and expanding its functionality. For a detailed list of features and tasks that we're planning to implement, please refer to the [TODO List](TODO.md) file. We welcome your contributions and feedback, so feel free
 
-- [ ] Enable multi-threading
-- [ ] Analyze only the changed files to save time
-- [ ] Refactor the code architecture
+## Bug Reports:
 
-### GUI
+If you encounter any issues or bugs while using SELinux Explorer, we encourage you to report them so we can address and fix them promptly. Please create a new issue using our [Bug Report Template](bug_report.md) and provide all the necessary details to help us reproduce and understand the problem. Your feedback is invaluable in helping us maintain the tool's reliability and stability.
 
-- [ ] Show the progress of the analysis
-- [ ] Search the input file
-- [ ] Search the generated files
-- [ ] Sort result files by date
-- [ ] Add AND/OR for combining the filter rules
-- [ ] Create references from paths and files
-- [ ] Add a new window for the reference files
-- [ ] Display the number of files and folders in the list
- 
-## Contributing
+## Feature Requests:
 
-We welcome any form of contribution, from bug reports to suggestions and code improvements. Feel free to create an issue or send a message/report.
+We're always looking to improve and expand the functionality of SELinux Explorer. If you have a suggestion for a new feature or an enhancement to an existing one, we'd love to hear from you. Please create a new issue using our [Feature Request Template](feature_request.md) and provide a clear and concise description of your idea, including the problem it aims to solve and the benefits it would bring. Your input is essential in shaping the future development and direction of the project.
 
 ## License
 
