@@ -247,7 +247,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_type_alias(self):
         # Arrange
         te_analyzer = TeAnalyzer()
-        input_string = "typealias type_id alis alias;"
+        input_string = "typealias type_id alias alias;"
         # Act
         type_alias = te_analyzer.extract_type_alias(input_string)
         # Assert
