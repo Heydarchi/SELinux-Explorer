@@ -101,11 +101,11 @@ This project is under active development, and we're continuously working on impr
 
 ## Bug Reports:
 
-If you encounter any issues or bugs while using SELinux Explorer, we encourage you to report them so we can address and fix them promptly. Please create a new issue using our [Bug Report Template](bug_report.md) and provide all the necessary details to help us reproduce and understand the problem. Your feedback is invaluable in helping us maintain the tool's reliability and stability.
+If you encounter any issues or bugs while using SELinux Explorer, we encourage you to report them so we can address and fix them promptly. Please create a new issue using our [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md) and provide all the necessary details to help us reproduce and understand the problem. Your feedback is invaluable in helping us maintain the tool's reliability and stability.
 
 ## Feature Requests:
 
-We're always looking to improve and expand the functionality of SELinux Explorer. If you have a suggestion for a new feature or an enhancement to an existing one, we'd love to hear from you. Please create a new issue using our [Feature Request Template](feature_request.md) and provide a clear and concise description of your idea, including the problem it aims to solve and the benefits it would bring. Your input is essential in shaping the future development and direction of the project.
+We're always looking to improve and expand the functionality of SELinux Explorer. If you have a suggestion for a new feature or an enhancement to an existing one, we'd love to hear from you. Please create a new issue using our [Feature Request Template](.github/ISSUE_TEMPLATE/feature_request.md) and provide a clear and concise description of your idea, including the problem it aims to solve and the benefits it would bring. Your input is essential in shaping the future development and direction of the project.
 
 ## License
 
