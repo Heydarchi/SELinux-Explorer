@@ -102,10 +102,10 @@ class TeAnalyzer(AbstractAnalyzer):
     # will extract typealias type_id alias alias_id;
     def extract_type_alias(self, input_string):
         try:
-            items = input_string.split()
+            items = input_string.replace(";", "").split()
             type_alias = TypeAlias()
             type_alias.name = items[1].strip()
-            type_alias.alias = items[2].strip()
+            type_alias.alias = items[3].strip()
             return type_alias
         except Exception as err:
             MyLogger.log_error(sys, err, input_string)
@@ -113,7 +113,7 @@ class TeAnalyzer(AbstractAnalyzer):
 
     def extract_permissive(self, input_string):
         try:
-            items = input_string.split()
+            items = input_string.replace(";", "").split()
             permissive = Permissive()
             permissive.name = items[1].strip()
             return permissive
