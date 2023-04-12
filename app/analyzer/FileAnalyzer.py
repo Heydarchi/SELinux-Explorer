@@ -46,6 +46,8 @@ class FileAnalyzer(AbstractAnalyzer):
             try:
                 analyzer_info = AnalyzerInfo()
                 analyzer_info.source_file = system_utility.get_file_info(file)
+                if analyzer_info.source_file is None:
+                    continue
                 self.list_of_analyzer_info.append(analyzer_info)
             except Exception as err:
                 MyLogger.log_error(sys, err)

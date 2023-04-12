@@ -47,26 +47,36 @@ class FileTypeEnum(Enum):
 
 
 @dataclass
+class Permissive(JSONWizard):
+    name: str = ""
+
+
+class TypeAlias(JSONWizard):
+    name: str = ""
+    alias: str = ""
+
+
+@dataclass
 class Controls(JSONWizard):
     class_name: str
     permissions: List[str] = field(default_factory=list)
 
 
 class RuleEnum(Enum):
-    ALLOW = 0, "allow"
-    NEVER_ALLOW = 1, "neverallow"
+    ALLOW = "allow"
+    NEVER_ALLOW = "neverallow"
+    DONT_AUDIT = "dontaudit"
+    AUDIT_ALLOW = "auditallow"
+    AUDIT_DENY = "auditdeny"
 
-    def __str__(self):
-        return str(self.value)
 
-    def __init__(self, rank, label):
-        self.rank = rank
-        self.label = label
+class NotSupportedRuleEnum(Enum):
+    ALLOWXPERM = "allowxperm"
+    EXPANDATTRIBUTE = "expandattribute"
+    EXPANDTYPEATTRIBUTE = "expandtypeattribute"
 
 
 # allow source target:class permissions
-
-
 @dataclass
 class Rule(JSONWizard):
     rule: str = ""
@@ -118,6 +128,7 @@ class SeAppContext(JSONWizard):
     level_from: str = ""
     type_def: TypeDef = field(default_factory=TypeDef)
     attribute: Attribute = field(default_factory=Attribute)
+    is_permissive: bool = False
 
 
 # pathname_regexp [file_type] security_context
@@ -130,6 +141,7 @@ class Context(JSONWizard):
     security_context: SecurityContext = None
     type_def: TypeDef = field(default_factory=TypeDef)
     domain_name: str = ""
+    is_permissive: bool = False
 
 
 @dataclass
@@ -157,6 +169,8 @@ class PolicyFile(JSONWizard):
     rules: List[Rule] = field(default_factory=list)
     macros: List[PolicyMacro] = field(default_factory=list)
     macro_calls: List[PolicyMacroCall] = field(default_factory=list)
+    permissives: List[Permissive] = field(default_factory=list)
+    type_aliases: List[TypeAlias] = field(default_factory=list)
 
 
 @dataclass

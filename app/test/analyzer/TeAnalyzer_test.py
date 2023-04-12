@@ -76,6 +76,16 @@ class TestTeAnalyzer(unittest.TestCase):
             ["source1", "target1", "class1", "source2", "target2", "class2"],
         )
 
+    def test_extract_macrocall_no_param(self):
+        # Arrange
+        te_analyzer = TeAnalyzer()
+        input_string = "call_macro()"
+        # Act
+        macro_call = te_analyzer.extract_macro_call(input_string)
+        # Assert
+        self.assertEqual(macro_call.name, "call_macro")
+        self.assertEqual(macro_call.parameters, [""])
+
     def test_extract_rule(self):
         # Arrange
         te_analyzer = TeAnalyzer()
@@ -185,6 +195,45 @@ class TestTeAnalyzer(unittest.TestCase):
         self.assertEqual(definition.types[0], "type1")
         self.assertEqual(definition.types[1], "type2")
         self.assertEqual(definition.types[2], "type3")
+
+    def test_extract_items_to_process(self):
+        # Arrange
+        te_analyzer = TeAnalyzer()
+        file_lines = [
+            "allow { ",
+            "source1 ",
+            "source2}",
+            " target1:class1 permission1;",
+            "allow source3 target3:class3 permission3;",
+            "type type_id, type1, type2, type3;",
+            "typeattribute type_id attr1, attr2;",
+            "allow ",
+            " source4 ",
+            "target4:class4 permission4;",
+            "define(`call_macro`,`",
+            "allow $1 $2:$3 $4;",
+            "allow $5 {$6 $7}:$8 $9;",
+            " `)",
+        ]
+        # Act
+        items_to_process = te_analyzer.extract_items_to_process(file_lines)
+        # Assert
+        self.assertEqual(len(items_to_process), 6)
+        self.assertEqual(
+            items_to_process[0], "allow { source1 source2} target1:class1 permission1;"
+        )
+        self.assertEqual(
+            items_to_process[1], "allow source3 target3:class3 permission3;"
+        )
+        self.assertEqual(items_to_process[2], "type type_id, type1, type2, type3;")
+        self.assertEqual(items_to_process[3], "typeattribute type_id attr1, attr2;")
+        self.assertEqual(
+            items_to_process[4], "allow source4 target4:class4 permission4;"
+        )
+        self.assertEqual(
+            items_to_process[5],
+            "define(`call_macro`,`\n allow $1 $2:$3 $4;\n allow $5 {$6 $7}:$8 $9;\n `)",
+        )
 
     """def test_extract_definition_with_alis(self):
         
