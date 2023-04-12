@@ -252,7 +252,7 @@ class TeAnalyzer(AbstractAnalyzer):
 
     def extract_macro(self, input_string):
         try:
-            print("input_string: ", input_string)
+            # print("input_string: ", input_string)
             lst_lines = input_string.splitlines()
             macro = PolicyMacro()
             # It's supposed to have define in the first item
