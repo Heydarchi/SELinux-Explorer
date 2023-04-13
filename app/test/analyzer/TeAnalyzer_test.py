@@ -235,6 +235,25 @@ class TestTeAnalyzer(unittest.TestCase):
             "define(`call_macro`,`\n allow $1 $2:$3 $4;\n allow $5 {$6 $7}:$8 $9;\n `)",
         )
 
+    def test_extract_permissive(self):
+        # Arrange
+        te_analyzer = TeAnalyzer()
+        input_string = "permissive domain;"
+        # Act
+        permissive = te_analyzer.extract_permissive(input_string)
+        # Assert
+        self.assertEqual(permissive.name, "domain")
+
+    def test_extract_type_alias(self):
+        # Arrange
+        te_analyzer = TeAnalyzer()
+        input_string = "typealias type_id alias alias;"
+        # Act
+        type_alias = te_analyzer.extract_type_alias(input_string)
+        # Assert
+        self.assertEqual(type_alias.name, "type_id")
+        self.assertEqual(type_alias.alias, "alias")
+
     """def test_extract_definition_with_alis(self):
         
         Need to be implemented !!!
