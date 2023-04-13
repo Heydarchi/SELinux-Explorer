@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QComboBox
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 from PyQt5.QtWidgets import QGroupBox, QLabel, QCheckBox, QLineEdit
+from PyQt5.QtWidgets import QSizePolicy, QSpacerItem
 from logic.AnalyzerLogic import *
 from PythonUtilityClasses.SystemUtility import *
 from logic.FilterResult import *
@@ -32,7 +33,7 @@ class AnalyzerResultUi(QVBoxLayout):
         self.COL_TITLE_INDEX = 0
         self.COL_TYPE_INDEX = 1
         self.BTN_WIDTH = 28
-        self.BTN_HEIGHT = 28
+        self.BTN_HEIGHT = 48
 
     def _init_widgets(self):
         self.lbl_search = QLabel("Search")
@@ -44,12 +45,20 @@ class AnalyzerResultUi(QVBoxLayout):
             self.BTN_WIDTH,
             self.BTN_HEIGHT,
         )
+
+        self.btn_item_info = UiUtility.create_button(
+            "Info of the selected item",
+            ICON_PATH + "information.png",
+            self.BTN_WIDTH,
+            self.BTN_HEIGHT,
+        )
         self.tbl_result = QTableWidget()
-        self.layout_button = QHBoxLayout()
         self.layout_filter = QHBoxLayout()
         self.group_box = QGroupBox("Analyzer result")
         self.grp_layout = QVBoxLayout()
         self.layout_search = QHBoxLayout()
+        self.layout_right = QVBoxLayout()
+        self.layout_table = QHBoxLayout()
 
         self.chk_case_sensitive.setChecked(False)
 
@@ -93,12 +102,23 @@ class AnalyzerResultUi(QVBoxLayout):
         self.layout_filter.addWidget(self.lbl_filter_type)
         self.layout_filter.addWidget(self.cmb_filter)
 
-        self.layout_button.addWidget(self.btn_add_selected)
+        self.layout_right.addWidget(self.btn_item_info)
+        self.layout_right.addSpacerItem(
+            QSpacerItem(
+                self.BTN_WIDTH,
+                self.BTN_WIDTH,
+                QSizePolicy.Minimum,
+                QSizePolicy.Expanding,
+            )
+        )
+        self.layout_right.addWidget(self.btn_add_selected)
+
+        self.layout_table.addWidget(self.tbl_result)
+        self.layout_table.addLayout(self.layout_right)
 
         self.grp_layout.addLayout(self.layout_search)
         self.grp_layout.addLayout(self.layout_filter)
-        self.grp_layout.addWidget(self.tbl_result)
-        self.grp_layout.addLayout(self.layout_button)
+        self.grp_layout.addLayout(self.layout_table)
 
         self.group_box.setLayout(self.grp_layout)
 
