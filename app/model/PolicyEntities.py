@@ -69,6 +69,9 @@ class RuleEnum(Enum):
     AUDIT_ALLOW = "auditallow"
     AUDIT_DENY = "auditdeny"
 
+    def __str__(self):
+        return str(self.value)
+
 
 class NotSupportedRuleEnum(Enum):
     ALLOWXPERM = "allowxperm"
@@ -85,10 +88,21 @@ class Rule(JSONWizard):
     class_type: str = ""
     permissions: List[str] = field(default_factory=list)
 
+    def to_string(self):
+        return (
+            self.rule
+            + " source: "
+            + self.source
+            + " target: "
+            + self.target
+            + " class_type: "
+            + self.class_type
+            + "\n\t permissions: "
+            + " ".join(self.permissions)
+        )
+
 
 # user:role:type:sensitivity[:categories]
-
-
 @dataclass
 class SecurityContext(JSONWizard):
     user: str = ""
@@ -97,6 +111,20 @@ class SecurityContext(JSONWizard):
     level: str = ""
     categories: str = ""
 
+    def to_string(self):
+        return (
+            "user: "
+            + self.user
+            + " role: "
+            + self.role
+            + " type: "
+            + self.type
+            + " level: "
+            + self.level
+            + " categories: "
+            + self.categories
+        )
+
 
 @dataclass
 class TypeDef(JSONWizard):
@@ -104,11 +132,22 @@ class TypeDef(JSONWizard):
     alises: List[str] = field(default_factory=list)
     types: List[str] = field(default_factory=list)
 
+    def to_string(self):
+        return (
+            self.name
+            + ": "
+            + "\n\t types: ".join(self.types)
+            + "\n\t alises: ".join(self.alises)
+        )
+
 
 @dataclass
 class Attribute(JSONWizard):
     name: str = ""
     attributes: List[str] = field(default_factory=list)
+
+    def to_string(self):
+        return self.name + ": " + "\n\t attributes: ".join(self.attributes)
 
 
 @dataclass
@@ -125,15 +164,44 @@ class SeAppContext(JSONWizard):
     domain: str = ""
     type: str = ""
     level_from: str = ""
-    level_from: str = ""
     type_def: TypeDef = field(default_factory=TypeDef)
     attribute: Attribute = field(default_factory=Attribute)
     is_permissive: bool = False
 
+    def to_string(self):
+        return (
+            "name: "
+            + self.name
+            + " user: "
+            + self.user
+            + " seinfo: "
+            + self.seinfo
+            + " is_system_server: "
+            + str(self.is_system_server)
+            + " is_ephemeral_app: "
+            + str(self.is_ephemeral_app)
+            + " is_priv_app: "
+            + str(self.is_priv_app)
+            + " min_target_sdk_version: "
+            + str(self.min_target_sdk_version)
+            + " from_run_as: "
+            + str(self.from_run_as)
+            + " domain: "
+            + self.domain
+            + " type: "
+            + self.type
+            + " level_from: "
+            + self.level_from
+            + " is_permissive: "
+            + str(self.is_permissive)
+            + " \n\ttype_def: "
+            + str(self.type_def.to_string())
+            + " \n\tattribute: "
+            + str(self.attribute.to_string())
+        )
+
 
 # pathname_regexp [file_type] security_context
-
-
 @dataclass
 class Context(JSONWizard):
     path_name: str = ""
@@ -142,6 +210,19 @@ class Context(JSONWizard):
     type_def: TypeDef = field(default_factory=TypeDef)
     domain_name: str = ""
     is_permissive: bool = False
+
+    def to_string(self):
+        return (
+            self.path_name
+            + " file_type: "
+            + self.file_type
+            + " domain_name:"
+            + self.domain_name
+            + " security_conetext: "
+            + str(self.security_context.to_string())
+            + "\n\t type_def:"
+            + str(self.type_def.to_string())
+        )
 
 
 @dataclass
