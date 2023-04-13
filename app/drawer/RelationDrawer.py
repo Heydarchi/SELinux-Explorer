@@ -113,7 +113,7 @@ class RelationDrawer(AbstractDrawer):
                     + ' -----[#red]>x "'
                     + rule.target
                     + '" : '
-                    + rule.rule.label
+                    + rule.rule.value
                     + " ("
                     + ", ".join(rule.permissions)
                     + ")"
@@ -125,7 +125,7 @@ class RelationDrawer(AbstractDrawer):
                     + ' -----[#green]> "'
                     + rule.target
                     + '" : '
-                    + rule.rule.label
+                    + rule.rule.value
                     + " ("
                     + ", ".join(rule.permissions)
                     + ")"

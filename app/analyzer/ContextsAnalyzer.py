@@ -57,6 +57,8 @@ class ContextsAnalyzer(AbstractAnalyzer):
                 context.security_context.role = security_items[1]
                 context.security_context.type = security_items[2]
                 context.security_context.level = security_items[3]
+
+                context.domain_name = context.security_context.type
                 if len(security_items) > 4:
                     context.security_context.categories = security_items[4]
             # print(context)

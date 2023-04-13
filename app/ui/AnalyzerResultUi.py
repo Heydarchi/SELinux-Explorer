@@ -92,6 +92,7 @@ class AnalyzerResultUi(QVBoxLayout):
         self.edt_search.textChanged.connect(self._on_seach_text_changed)
         self.btn_reset_search.clicked.connect(self.on_reset_search)
         self.chk_case_sensitive.clicked.connect(self._on_case_sensitive_changed)
+        self.btn_item_info.clicked.connect(self.on_item_info)
 
     def _config_layout(self):
         self.layout_search.addWidget(self.lbl_search)
@@ -332,3 +333,21 @@ class AnalyzerResultUi(QVBoxLayout):
             return keyword.lower() in target.lower()
         else:
             return keyword in target
+
+    def on_item_info(self):
+        # print("onItemInfo")
+        row = self.tbl_result.currentRow()
+        if row < 0:
+            return
+
+        filter_type = FilterRule(
+            FilterRule.get_filter_type_from_str(
+                self.tbl_result.item(row, self.COL_TYPE_INDEX).text()
+            ),
+            self.tbl_result.item(row, self.COL_TITLE_INDEX).text(),
+            True,
+        )
+
+        item_info = self.analyzer_logic.get_info_of_item(filter_type)
+        for item in item_info:
+            print(item.to_string())
