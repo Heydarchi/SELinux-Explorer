@@ -360,3 +360,6 @@ class AnalyzerResultUi(QVBoxLayout):
             self._info_window.show()
         else:
             UiUtility.show_message("Info", "Nothing to show!")
+
+    def on_dispose(self):
+        self._info_window.close()

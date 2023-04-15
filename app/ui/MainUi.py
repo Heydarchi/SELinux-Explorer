@@ -105,6 +105,7 @@ class MainWindow(QMainWindow):
     def dispose_objects(self):
         self.layout_result.on_dispose()
         self.toolbar.on_dispose()
+        self.layout_analyzer_result.on_dispose()
 
     def closeEvent(self, event):
         result = QMessageBox().question(

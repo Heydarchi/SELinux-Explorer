@@ -23,6 +23,7 @@ class TextWindow(QWidget):
 
         self.edt_data.setMinimumWidth(self._DEFAULT_WIDTH / 2)
         self.edt_data.setMinimumHeight(self._DEFAULT_HEIGHT / 2)
+        self.edt_data.setReadOnly(True)
 
     def _config_layout(self):
         self.layout.addWidget(self.label)
