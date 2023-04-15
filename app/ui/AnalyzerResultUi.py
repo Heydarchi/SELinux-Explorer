@@ -6,6 +6,7 @@ from logic.AnalyzerLogic import *
 from PythonUtilityClasses.SystemUtility import *
 from logic.FilterResult import *
 from ui.UiUtility import *
+from ui.utility.TextWindow import TextWindow
 from AppSetting import *
 from model.PolicyEntities import *
 
@@ -34,6 +35,7 @@ class AnalyzerResultUi(QVBoxLayout):
         self.COL_TYPE_INDEX = 1
         self.BTN_WIDTH = 28
         self.BTN_HEIGHT = 48
+        self._info_window = None
 
     def _init_widgets(self):
         self.lbl_search = QLabel("Search")
@@ -349,5 +351,12 @@ class AnalyzerResultUi(QVBoxLayout):
         )
 
         item_info = self.analyzer_logic.get_info_of_item(filter_type)
-        for item in item_info:
-            print(item.to_string())
+
+        if item_info != None:
+            self._info_window = TextWindow(
+                self.tbl_result.item(row, self.COL_TITLE_INDEX).text(),
+                "".join([item.to_string() for item in item_info]),
+            )
+            self._info_window.show()
+        else:
+            UiUtility.show_message("Info", "Nothing to show!")

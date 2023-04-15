@@ -91,14 +91,14 @@ class Rule(JSONWizard):
     def to_string(self):
         return (
             self.rule
-            + " source: "
+            + "\n source: "
             + self.source
-            + " target: "
+            + "\n target: "
             + self.target
-            + " class_type: "
+            + "\n class_type: "
             + self.class_type
             + "\n\t permissions: "
-            + " ".join(self.permissions)
+            + "\n ".join(self.permissions)
         )
 
 
@@ -115,13 +115,13 @@ class SecurityContext(JSONWizard):
         return (
             "user: "
             + self.user
-            + " role: "
+            + "\n role: "
             + self.role
-            + " type: "
+            + "\n type: "
             + self.type
-            + " level: "
+            + "\n level: "
             + self.level
-            + " categories: "
+            + "\n categories: "
             + self.categories
         )
 
@@ -172,32 +172,32 @@ class SeAppContext(JSONWizard):
         return (
             "name: "
             + self.name
-            + " user: "
+            + "\n user: "
             + self.user
-            + " seinfo: "
+            + "\n seinfo: "
             + self.seinfo
-            + " is_system_server: "
+            + "\n is_system_server: "
             + str(self.is_system_server)
-            + " is_ephemeral_app: "
+            + "\n is_ephemeral_app: "
             + str(self.is_ephemeral_app)
-            + " is_priv_app: "
+            + "\n is_priv_app: "
             + str(self.is_priv_app)
-            + " min_target_sdk_version: "
+            + "\n min_target_sdk_version: "
             + str(self.min_target_sdk_version)
-            + " from_run_as: "
+            + "\n from_run_as: "
             + str(self.from_run_as)
-            + " domain: "
+            + "\n domain: "
             + self.domain
-            + " type: "
+            + "\n type: "
             + self.type
-            + " level_from: "
+            + "\n level_from: "
             + self.level_from
-            + " is_permissive: "
+            + "\n is_permissive: "
             + str(self.is_permissive)
-            + " \n\ttype_def: "
-            + str(self.type_def.to_string())
-            + " \n\tattribute: "
-            + str(self.attribute.to_string())
+            + "\n \n\ttype_def: \n\t"
+            + str(self.type_def.to_string()).replace("\n", "\n\t")
+            + "\n \n\tattribute: \n\t"
+            + str(self.attribute.to_string()).replace("\n", "\n\t")
         )
 
 
@@ -214,14 +214,14 @@ class Context(JSONWizard):
     def to_string(self):
         return (
             self.path_name
-            + " file_type: "
+            + "\n file_type: "
             + self.file_type
-            + " domain_name:"
+            + "\n domain_name: "
             + self.domain_name
-            + " security_conetext: "
-            + str(self.security_context.to_string())
-            + "\n\t type_def:"
-            + str(self.type_def.to_string())
+            + "\n security_conetext: \n\t"
+            + str(self.security_context.to_string()).replace("\n", "\n\t")
+            + "\n\t type_def: \n\t"
+            + str(self.type_def.to_string()).replace("\n", "\n\t")
         )
 
 
