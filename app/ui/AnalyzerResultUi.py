@@ -362,4 +362,5 @@ class AnalyzerResultUi(QVBoxLayout):
             UiUtility.show_message("Info", "Nothing to show!")
 
     def on_dispose(self):
-        self._info_window.close()
+        if self._info_window is not None:
+            self._info_window.close()

@@ -194,9 +194,9 @@ class SeAppContext(JSONWizard):
             + self.level_from
             + "\n is_permissive: "
             + str(self.is_permissive)
-            + "\n \n\ttype_def: \n\t"
+            + "\n \n\ttype_def: \t"
             + str(self.type_def.to_string()).replace("\n", "\n\t")
-            + "\n \n\tattribute: \n\t"
+            + "\n \n\tattribute: \t"
             + str(self.attribute.to_string()).replace("\n", "\n\t")
         )
 
@@ -218,9 +218,9 @@ class Context(JSONWizard):
             + self.file_type
             + "\n domain_name: "
             + self.domain_name
-            + "\n security_conetext: \n\t"
+            + "\n security_conetext: \t"
             + str(self.security_context.to_string()).replace("\n", "\n\t")
-            + "\n\t type_def: \n\t"
+            + "\n\t type_def: \t"
             + str(self.type_def.to_string()).replace("\n", "\n\t")
         )
 
