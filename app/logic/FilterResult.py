@@ -63,7 +63,7 @@ class FilterResult:
                     filter_rule, policy_file, filtered_policy_file
                 )
             elif FilterType(filter_rule.filter_type) == FilterType.CLASS_TYPE:
-                filtered_policy_file = self.filter_classyype(
+                filtered_policy_file = self.filter_classtype(
                     filter_rule, policy_file, filtered_policy_file
                 )
 
@@ -242,7 +242,7 @@ class FilterResult:
 
         return filtered_policy_file
 
-    def filter_classyype(self, filter_rule, policy_file, filtered_policy_file):
+    def filter_classtype(self, filter_rule, policy_file, filtered_policy_file):
         """find domain and rule with the same class type
         and then filter based on the found domain"""
         for type_def in policy_file.type_def:
