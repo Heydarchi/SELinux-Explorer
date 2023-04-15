@@ -45,30 +45,41 @@ class AnalyzerLogic:
             ref_policy_file.macros.extend(policy_file.macros)
             ref_policy_file.macro_calls.extend(policy_file.macro_calls)
 
-        for maco_call in ref_policy_file.macro_calls:
-            # print("macroCall.name: ", maco_call.name)
-            for macro in ref_policy_file.macros:
+        ref_policy_file.rules.extend(
+            self.convert_macrocall_to_rule(
+                ref_policy_file.macro_calls, ref_policy_file.macros
+            )
+        )
+
+        return ref_policy_file
+
+    def convert_macrocall_to_rule(self, macro_calls, macros):
+        lst_rules = []
+
+        for macro_call in macro_calls:
+            # print("macroCall.name: ", macro_call.name)
+            for macro in macros:
                 # print("macro.name: ", macro.name)
-                if macro.name == maco_call.name:
+                if macro.name == macro_call.name:
                     rules = macro.rules
                     for rule in rules:
                         """Need to replace $number in source, target or
                         class_type with parameter from macro call with
                          the same number"""
-                        for i in range(0, len(maco_call.parameters)):
+                        for i in range(0, len(macro_call.parameters)):
                             rule.source = rule.source.replace(
-                                "$" + str(i + 1), maco_call.parameters[i]
+                                "$" + str(i + 1), macro_call.parameters[i]
                             )
                             rule.target = rule.target.replace(
-                                "$" + str(i + 1), maco_call.parameters[i]
+                                "$" + str(i + 1), macro_call.parameters[i]
                             )
                             rule.class_type = rule.class_type.replace(
-                                "$" + str(i), maco_call.parameters[i]
+                                "$" + str(i), macro_call.parameters[i]
                             )
                         # print("rule: ", rule)
-                        ref_policy_file.rules.append(rule)
-                        ref_policy_file.macro_calls.clear()
-        return ref_policy_file
+                        lst_rules.append(rule)
+
+        return rules
 
     def clear_output(self):
         files = SystemUtility().get_list_of_files(os.getcwd() + "/" + OUT_DIR, "*")

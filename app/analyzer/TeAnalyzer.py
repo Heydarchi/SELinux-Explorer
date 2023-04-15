@@ -25,38 +25,55 @@ class TeAnalyzer(AbstractAnalyzer):
     Then the out put of this function is passed to the process_line function."""
 
     def extract_items_to_process(self, file_lines):
-        lstItems = []
-        last_line = ""
-        macro_found = False
+        lst_lines = []
+        tmp_lst_lines = ""
+        define_macro_found = False
+        macro_call_found = False
         multi_line = False
         for line in file_lines:
             line = clean_line(line)
             if line is None:
                 continue
 
-            if macro_found:
+            if define_macro_found:
                 if ")" in line:
-                    macro_found = False
-                    lstItems.append(last_line + "\n " + line)
+                    define_macro_found = False
+                    lst_lines.append(tmp_lst_lines + "\n " + line)
+                    tmp_lst_lines = ""
                 else:
-                    last_line = last_line + "\n " + line
+                    tmp_lst_lines = tmp_lst_lines + "\n " + line
+            elif macro_call_found:
+                if ")" in line:
+                    macro_call_found = False
+                    lst_lines.append(tmp_lst_lines + "\n " + line)
+                    tmp_lst_lines = ""
+                else:
+                    tmp_lst_lines = tmp_lst_lines + "\n " + line
             elif multi_line:
                 if ";" in line:
                     multi_line = False
-                    lstItems.append(last_line + " " + line)
+                    lst_lines.append(tmp_lst_lines + " " + line)
+                    tmp_lst_lines = ""
                 else:
-                    last_line = last_line + " " + line
+                    tmp_lst_lines = tmp_lst_lines + " " + line
             else:
                 if "define" in line:
-                    macro_found = True
-                    last_line = line
-                elif ";" not in line:
-                    multi_line = True
-                    last_line = line
+                    define_macro_found = True
+                    tmp_lst_lines = line
+                elif ";" in line:
+                    lst_lines.append(line)
+                elif "(" in line:
+                    if ")" not in line:
+                        macro_call_found = True
+                        lst_lines.append(line)
+                    else:
+                        lst_lines.append(line)
                 else:
-                    lstItems.append(line)
+                    multi_line = True
+                    tmp_lst_lines = line
 
-        return lstItems
+        print("lst_lines: ", "\n\n\n".join(lst_lines))
+        return lst_lines
 
     def process_line(self, input_string):
         input_string = clean_line(input_string)
