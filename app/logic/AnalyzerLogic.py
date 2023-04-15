@@ -3,6 +3,7 @@ from drawer.RelationDrawer import *
 from drawer.DrawerHelper import *
 from AppSetting import *
 from model.PolicyEntities import *
+from logic.FilterResult import *
 
 
 class AnalyzerLogic:
@@ -110,3 +111,41 @@ class AnalyzerLogic:
             os.getcwd() + "/" + OUT_DIR, "*" + DIAGEAM_FILE_EXTENSION
         )
         self.update_result()
+
+    """This function collects all the information of a filter rule and returns it as a list of string"""
+
+    def get_info_of_item(self, filter_rule):
+        if self.ref_policy_file is None:
+            return None
+
+        lst_info = []
+        filter_result = FilterResult()
+        # print("filter_rule: ", filter_rule)
+        if filter_rule.filter_type == FilterType.DOMAIN:
+            lst_info.extend(
+                filter_result.filter_se_app(filter_rule, self.ref_policy_file)
+            )
+            lst_info.extend(
+                filter_result.filter_context(filter_rule, self.ref_policy_file)
+            )
+            lst_info.extend(
+                filter_result.filter_context(
+                    FilterRule(
+                        filter_rule.filter_type,
+                        filter_rule.keyword + DOMAIN_EXECUTABLE,
+                        filter_rule.exact_word,
+                    ),
+                    self.ref_policy_file,
+                )
+            )
+            return lst_info
+        elif filter_rule.filter_type == FilterType.CLASS_TYPE:
+            lst_info.extend(
+                filter_result.filter_context(filter_rule, self.ref_policy_file)
+            )
+            lst_info.extend(
+                filter_result.filter_se_app(filter_rule, self.ref_policy_file)
+            )
+            return lst_info
+        else:
+            return None

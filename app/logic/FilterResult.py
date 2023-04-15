@@ -51,7 +51,9 @@ class FilterResult:
             )
 
             if FilterType(filter_rule.filter_type) == FilterType.DOMAIN:
-                self.filter_domain(filter_rule, policy_file)
+                self.filtered_policy_file = self.filter_domain(
+                    filter_rule, policy_file, self.filtered_policy_file
+                )
             elif FilterType(filter_rule.filter_type) == FilterType.PERMISSION:
                 self.filter_permission(filter_rule, policy_file)
             elif FilterType(filter_rule.filter_type) == FilterType.FILE_PATH:
@@ -105,25 +107,25 @@ class FilterResult:
             {get_hashable_rule(r): r for r in self.filtered_policy_file.rules}.values()
         )
 
-    def filter_domain(self, filter_rule, policy_file):
-        self.filtered_policy_file.type_def.extend(
+    def filter_domain(self, filter_rule, policy_file, filtered_policy_file):
+        filtered_policy_file.type_def.extend(
             self.filter_typedef(filter_rule, policy_file)
         )
-        self.filtered_policy_file.contexts.extend(
+        filtered_policy_file.contexts.extend(
             self.filter_context(filter_rule, policy_file)
         )
-        self.filtered_policy_file.se_apps.extend(
+        filtered_policy_file.se_apps.extend(
             self.filter_se_app(filter_rule, policy_file)
         )
-        self.filtered_policy_file.rules.extend(
-            self.filter_rule(filter_rule, policy_file)
-        )
-        self.filtered_policy_file.macros.extend(
+        filtered_policy_file.rules.extend(self.filter_rule(filter_rule, policy_file))
+        filtered_policy_file.macros.extend(
             self.filter_function(filter_rule, policy_file)
         )
-        self.filtered_policy_file.attribute.extend(
+        filtered_policy_file.attribute.extend(
             self.filter_attribute(filter_rule, policy_file)
         )
+
+        return filtered_policy_file
 
     def filter_filename(self, filter_rule, policy_file):
         # print("----filter_filename")
