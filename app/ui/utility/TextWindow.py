@@ -57,5 +57,5 @@ class TextWindow(QWidget):
         pattern = r"(\w+):"
         replacement = r"%s\1:%s" % (pre_suffix, suffix)
         out_put = re.sub(pattern, replacement, input_str)
-        print(out_put)
+        # print(out_put)
         return out_put

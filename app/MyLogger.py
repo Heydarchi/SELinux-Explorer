@@ -1,5 +1,6 @@
 import logging
 import os
+import psutil
 
 logging.basicConfig(
     filename="app.log", filemode="w", format="%(name)s - %(levelname)s - %(message)s"
@@ -30,3 +31,11 @@ class MyLogger:
     @staticmethod
     def log_debug(_message):
         logging.debug(_message)
+
+    @staticmethod
+    def print_memory_footprint(tag=None):
+        process = psutil.Process(os.getpid())
+        mem_info = process.memory_info()
+        if tag:
+            print("TAG: ", tag)
+        print(mem_info.rss)

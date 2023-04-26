@@ -11,32 +11,40 @@ class ContextsAnalyzer(AbstractAnalyzer):
         self.policy_file = None
 
     def analyze(self, file_path):
-        if "file_contexts" in file_path:
-            self.policy_file = PolicyFile(file_path, "", FileTypeEnum.FILE_CONTEXTS)
-        elif "vndservice_contexts" in file_path:
-            self.policy_file = PolicyFile(
-                file_path, "", FileTypeEnum.VNDSERVICE_CONTEXTS
-            )
-        elif "hwservice_contexts" in file_path:
-            self.policy_file = PolicyFile(
-                file_path, "", FileTypeEnum.HWSERVICE_CONTEXTS
-            )
-        elif "service_contexts" in file_path:
-            self.policy_file = PolicyFile(file_path, "", FileTypeEnum.SERVICE_CONTEXTS)
-        elif "property_contexts" in file_path:
-            self.policy_file = PolicyFile(file_path, "", FileTypeEnum.PROPERTY_CONTEXTS)
-        else:
-            return
+        try:
+            if "file_contexts" in file_path:
+                self.policy_file = PolicyFile(file_path, "", FileTypeEnum.FILE_CONTEXTS)
+            elif "vndservice_contexts" in file_path:
+                self.policy_file = PolicyFile(
+                    file_path, "", FileTypeEnum.VNDSERVICE_CONTEXTS
+                )
+            elif "hwservice_contexts" in file_path:
+                self.policy_file = PolicyFile(
+                    file_path, "", FileTypeEnum.HWSERVICE_CONTEXTS
+                )
+            elif "service_contexts" in file_path:
+                self.policy_file = PolicyFile(
+                    file_path, "", FileTypeEnum.SERVICE_CONTEXTS
+                )
+            elif "property_contexts" in file_path:
+                self.policy_file = PolicyFile(
+                    file_path, "", FileTypeEnum.PROPERTY_CONTEXTS
+                )
+            else:
+                return
 
-        file_reader = FR.FileReader()
-        temp_lines = file_reader.read_file_lines(file_path)
-        for line in temp_lines:
-            context = self.extract_definition(line)
-            if context is not None:
-                self.policy_file.contexts.append(context)
+            file_reader = FR.FileReader()
+            temp_lines = file_reader.read_file_lines(file_path)
+            for line in temp_lines:
+                context = self.extract_definition(line)
+                if context is not None:
+                    self.policy_file.contexts.append(context)
 
-        # print(self.policy_file)
-        return self.policy_file
+            # print(self.policy_file)
+            return self.policy_file
+        except Exception as err:
+            MyLogger.log_error(sys, err, file_path)
+            return None
 
     def extract_definition(self, input_string):
         try:

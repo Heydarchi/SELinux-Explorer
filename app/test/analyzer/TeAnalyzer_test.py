@@ -171,6 +171,34 @@ class TestTeAnalyzer(unittest.TestCase):
         self.assertEqual(rules[3].class_type, "class1")
         self.assertEqual(rules[3].permissions, ["permission1", "permission2"])
 
+    """def test_extract_rule_multiple_class_and_macrocall(self):
+        # Arrange
+        te_analyzer = TeAnalyzer()
+        input_string = ["  # debugfs",
+                          "neverallow {",
+                            "coredomain",
+                            "no_debugfs_restriction(`",
+                              "-dumpstate",
+                              "-init",
+                              "-system_server",
+                            "')",
+                          "} debugfs:file no_rw_file_perms;"]
+        # Act
+        line = te_analyzer.extract_items_to_process(input_string)
+        print(line)
+        rules = te_analyzer.extract_rule(line)
+        # Assert
+        self.assertEqual(len(rules), 2)
+        self.assertEqual(rules[0].source, "coredomain")
+        self.assertEqual(rules[0].target, "debugfs")
+        self.assertEqual(rules[0].class_type, "file")
+        self.assertEqual(rules[0].permissions, ["no_rw_file_perms"])
+        self.assertEqual(rules[1].source, "no_debugfs_restriction(`-dumpstate -init -system_server')")
+        self.assertEqual(rules[1].target, "debugfs")
+        self.assertEqual(rules[1].class_type, "file")
+        self.assertEqual(rules[1].permissions, ["no_rw_file_perms"])
+    """
+
     def test_extract_attribute(self):
         # Arrange
         te_analyzer = TeAnalyzer()
@@ -233,6 +261,74 @@ class TestTeAnalyzer(unittest.TestCase):
         self.assertEqual(
             items_to_process[5],
             "define(`call_macro`,`\n allow $1 $2:$3 $4;\n allow $5 {$6 $7}:$8 $9;\n `)",
+        )
+
+    def test_extract_items_to_process_miltiple_macro_define(self):
+        # Arrange
+        te_analyzer = TeAnalyzer()
+        file_lines = [
+            "#The dumpstate HAL reads debugFs files, which become part of the bug report",
+            "#But there are some restrictions according to system/sepolicy/private/domain.te line 529",
+            "#This is only needed in userdebug",
+            "userdebug_or_eng(`dontaudit dumpstate debugfs_wakeup_sources:file read;",
+            "')",
+        ]
+        # Act
+        items_to_process = te_analyzer.extract_items_to_process(file_lines)
+        # Assert
+        self.assertEqual(len(items_to_process), 1)
+        self.assertEqual(
+            items_to_process[0].replace("\n", ""),
+            "userdebug_or_eng(`dontaudit dumpstate debugfs_wakeup_sources:file read; ')",
+        )
+
+    def test_extact_items_to_process_miltiple_class_and_macrocall(self):
+        # Arrange
+        te_analyzer = TeAnalyzer()
+        file_lines = [
+            "full_treble_only(`",
+            "  # Vendor apps are permitted to use only stable public services. If they were to use arbitrary",
+            "  # services which can change any time framework/core is updated, breakage is likely.",
+            "  #",
+            "  # Note, this same logic applies to untrusted apps, but neverallows for these are separate.",
+            "  neverallow {",
+            "    appdomain",
+            "    -coredomain",
+            "  } {",
+            "    service_manager_type",
+            "",
+            "    -app_api_service",
+            "    -vendor_service # must be @VintfStability to be used by an app",
+            "    -ephemeral_app_api_service",
+            "",
+            "    -apc_service",
+            "    -audioserver_service # TODO(b/36783122) remove exemptions below once app_api_service is fixed",
+            "    -cameraserver_service",
+            "    -drmserver_service",
+            "    -credstore_service",
+            "    -keystore_maintenance_service",
+            "    -keystore_service",
+            "    -legacykeystore_service",
+            "    -mediadrmserver_service",
+            "    -mediaextractor_service",
+            "    -mediametrics_service",
+            "    -mediaserver_service",
+            "    -nfc_service",
+            "    -radio_service",
+            "    -virtual_touchpad_service",
+            "    -vr_hwc_service",
+            "    -vr_manager_service",
+            "    userdebug_or_eng(`-hal_face_service')",
+            "  }:service_manager find;",
+            "')",
+        ]
+        # Act
+        items_to_process = te_analyzer.extract_items_to_process(file_lines)
+        # Assert
+        self.assertEqual(len(items_to_process), 1)
+        self.assertEqual(
+            items_to_process[0].replace("\n", ""),
+            "full_treble_only(` neverallow { appdomain -coredomain } { service_manager_type -app_api_service -vendor_service -ephemeral_app_api_service -apc_service -audioserver_service -cameraserver_service -drmserver_service -credstore_service -keystore_maintenance_service -keystore_service -legacykeystore_service -mediadrmserver_service -mediaextractor_service -mediametrics_service -mediaserver_service -nfc_service -radio_service -virtual_touchpad_service -vr_hwc_service -vr_manager_service userdebug_or_eng(`-hal_face_service') }:service_manager find; ')",
         )
 
     def test_extract_permissive(self):

@@ -5,7 +5,7 @@ from dataclass_wizard import JSONWizard
 from PythonUtilityClasses.FileWriter import *
 
 ICON_PATH = "./ui/icons/"
-APP_VERSION = "0.2.15-beta"
+APP_VERSION = "0.2.20-beta"
 APP_NAME = "SELinux Explorer"
 APP_AUTHOR = "Mohammad Hossein Heydarchi"
 AUTHOR_EMAIL = "m.h.heydarchi@gmail.com"

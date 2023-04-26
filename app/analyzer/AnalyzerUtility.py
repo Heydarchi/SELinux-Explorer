@@ -1,8 +1,12 @@
 def clean_line(input_str):
     # print(input_str)
+    input_str = input_str.replace("--", "")
     if "#" in input_str:
         if input_str.strip().index("#") > 0:
-            cleaned_str = input_str.strip()[: input_str.index("#")].strip()
+            # cleaned_str = input_str.strip()[: input_str.index("#")].strip()
+            cleaned_str = input_str.split("#")[
+                0
+            ].strip()  # [: input_str.index("#")].strip()
             if cleaned_str == "" or cleaned_str is None:
                 return None
             return cleaned_str
