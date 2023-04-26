@@ -42,7 +42,7 @@ To run SELinux Explorer, you need to have Python 3.x and some other packages ins
 ## Installation
 #### Note : The 1st & 2nd steps can be skipped by runnig the `setup.sh` script.
 ```
-sudo ./setup.sh
+./setup.sh
 ```
 &ensp;
 
