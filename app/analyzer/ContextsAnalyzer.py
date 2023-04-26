@@ -23,9 +23,13 @@ class ContextsAnalyzer(AbstractAnalyzer):
                     file_path, "", FileTypeEnum.HWSERVICE_CONTEXTS
                 )
             elif "service_contexts" in file_path:
-                self.policy_file = PolicyFile(file_path, "", FileTypeEnum.SERVICE_CONTEXTS)
+                self.policy_file = PolicyFile(
+                    file_path, "", FileTypeEnum.SERVICE_CONTEXTS
+                )
             elif "property_contexts" in file_path:
-                self.policy_file = PolicyFile(file_path, "", FileTypeEnum.PROPERTY_CONTEXTS)
+                self.policy_file = PolicyFile(
+                    file_path, "", FileTypeEnum.PROPERTY_CONTEXTS
+                )
             else:
                 return
 

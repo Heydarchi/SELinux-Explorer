@@ -191,13 +191,13 @@ class FilterResult:
         """filter context having path_name or se_apps havong name
         in policy_file and add to filtered_policy_file"""
         for context in policy_file.contexts:
-            print("context.path_name: ", context.path_name, filter_rule)
+            # print("context.path_name: ", context.path_name, filter_rule)
             if self.check_similarity(filter_rule, context.path_name):
                 if context.security_context.type.strip().endswith("_exec"):
                     domain = context.security_context.type.strip().replace("_exec", "")
                 else:
                     domain = context.security_context.type
-                print("context.security_context.type: ", context.security_context.type)
+                # print("context.security_context.type: ", context.security_context.type)
                 filtered_policy_file.contexts.append(context)
                 filtered_policy_file.type_def.extend(
                     self.filter_typedef(
@@ -216,13 +216,13 @@ class FilterResult:
                 )
 
         for se_app in policy_file.se_apps:
-            print("se_apps.name: ", se_app.name, filter_rule)
+            # print("se_apps.name: ", se_app.name, filter_rule)
             if self.check_similarity(filter_rule, se_app.name):
                 if se_app.domain.strip().endswith("_exec"):
                     domain = se_app.domain.strip().replace("_exec", "")
                 else:
                     domain = se_app.domain.strip()
-                print("domain: ", domain)
+                # print("domain: ", domain)
                 filtered_policy_file.se_apps.append(se_app)
                 filtered_policy_file.type_def.extend(
                     self.filter_typedef(
