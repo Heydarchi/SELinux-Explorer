@@ -11,17 +11,21 @@ class TeAnalyzer(AbstractAnalyzer):
         self.policy_file = None
 
     def analyze(self, file_path):
-        self.file_path = file_path
-        self.policy_file = PolicyFile(file_path, "", FileTypeEnum.TE_FILE)
-        file_reader = FR.FileReader()
-        temp_lines = file_reader.read_file_lines(file_path)
-        lstItems = self.extract_items_to_process(temp_lines)
-        for line in lstItems:
-            # print("line: ", line)
-            self.process_line(line)
+        try:
+            self.file_path = file_path
+            self.policy_file = PolicyFile(file_path, "", FileTypeEnum.TE_FILE)
+            file_reader = FR.FileReader()
+            temp_lines = file_reader.read_file_lines(file_path)
+            lstItems = self.extract_items_to_process(temp_lines)
+            for line in lstItems:
+                # print("line: ", line)
+                self.process_line(line)
 
-        # print("self.policy_file: ", self.policy_file)
-        return self.policy_file
+            # print("self.policy_file: ", self.policy_file)
+            return self.policy_file
+        except Exception as err:
+            MyLogger.log_error(sys, err)
+            return None
 
     """This function is used to extract the items from the file as a list. 
     Then the out put of this function is passed to the process_line function."""

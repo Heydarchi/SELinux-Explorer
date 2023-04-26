@@ -11,14 +11,18 @@ class SeAppAnalyzer(AbstractAnalyzer):
         self.policy_file = None
 
     def analyze(self, filePath):
-        self.policy_file = PolicyFile(filePath, "", FileTypeEnum.SEAPP_CONTEXTS)
-        file_reader = FR.FileReader()
-        temp_lines = file_reader.read_file_lines(filePath)
-        for line in temp_lines:
-            self.process_line(line)
+        try:
+            self.policy_file = PolicyFile(filePath, "", FileTypeEnum.SEAPP_CONTEXTS)
+            file_reader = FR.FileReader()
+            temp_lines = file_reader.read_file_lines(filePath)
+            for line in temp_lines:
+                self.process_line(line)
 
-        # print(self.policy_file)
-        return self.policy_file
+            # print(self.policy_file)
+            return self.policy_file
+        except Exception as err:
+            MyLogger.log_error(sys, err, filePath)
+            return None
 
     def process_line(self, input_string):
         input_string = clean_line(input_string)

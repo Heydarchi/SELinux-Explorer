@@ -32,7 +32,8 @@ class FileAnalyzer(AbstractAnalyzer):
             if file_type != FileTypeEnum.UNDEFINED:
                 print("Analyzing: " + file_path)
                 policy_file = self.invoke_analyzer_class(file_type, file_path)
-                self.list_of_policy_files.append(policy_file)
+                if policy_file is not None:
+                    self.list_of_policy_files.append(policy_file)
             else:
                 pass
                 # print("Undefined file extension : " + file_path)
