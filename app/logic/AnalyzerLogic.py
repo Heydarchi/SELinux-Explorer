@@ -79,7 +79,7 @@ class AnalyzerLogic:
                         # print("rule: ", rule)
                         lst_rules.append(rule)
 
-        return rules
+        return lst_rules
 
     def clear_output(self):
         files = SystemUtility().get_list_of_files(os.getcwd() + "/" + OUT_DIR, "*")
