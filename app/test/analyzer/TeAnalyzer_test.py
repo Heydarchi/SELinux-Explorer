@@ -287,7 +287,7 @@ class TestTeAnalyzer(unittest.TestCase):
         te_analyzer = TeAnalyzer()
         file_lines = [
             "full_treble_only(`",
-            "  # Vendor apps are permited to use only stable public services. If they were to use arbitrary",
+            "  # Vendor apps are permitted to use only stable public services. If they were to use arbitrary",
             "  # services which can change any time framework/core is updated, breakage is likely.",
             "  #",
             "  # Note, this same logic applies to untrusted apps, but neverallows for these are separate.",
