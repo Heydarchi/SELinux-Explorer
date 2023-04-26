@@ -17,8 +17,10 @@ class TeAnalyzer(AbstractAnalyzer):
         temp_lines = file_reader.read_file_lines(file_path)
         lstItems = self.extract_items_to_process(temp_lines)
         for line in lstItems:
+            # print("line: ", line)
             self.process_line(line)
 
+        # print("self.policy_file: ", self.policy_file)
         return self.policy_file
 
     """This function is used to extract the items from the file as a list. 
@@ -36,14 +38,19 @@ class TeAnalyzer(AbstractAnalyzer):
                 continue
 
             if define_macro_found:
-                if ")" in line:
+                if (
+                    ")" in line
+                    and tmp_lst_lines.count("(") == tmp_lst_lines.count(")") + 1
+                ):
                     define_macro_found = False
                     lst_lines.append(tmp_lst_lines + "\n " + line)
                     tmp_lst_lines = ""
                 else:
                     tmp_lst_lines = tmp_lst_lines + "\n " + line
             elif macro_call_found:
-                if ")" in line:
+                if ")" in line and (tmp_lst_lines.count("(") + line.count("(")) == (
+                    tmp_lst_lines.count(")") + line.count(")")
+                ):
                     macro_call_found = False
                     lst_lines.append(tmp_lst_lines + "\n " + line)
                     tmp_lst_lines = ""
@@ -60,19 +67,23 @@ class TeAnalyzer(AbstractAnalyzer):
                 if "define" in line:
                     define_macro_found = True
                     tmp_lst_lines = line
-                elif ";" in line:
+                elif (
+                    ";" in line
+                    and line.count("(") == line.count(")")
+                    and line.count("{") == line.count("}")
+                ):
                     lst_lines.append(line)
                 elif "(" in line:
-                    if ")" not in line:
-                        macro_call_found = True
+                    if line.count("(") == line.count(")"):
                         lst_lines.append(line)
                     else:
-                        lst_lines.append(line)
+                        macro_call_found = True
+                        tmp_lst_lines = line
                 else:
                     multi_line = True
                     tmp_lst_lines = line
 
-        print("lst_lines: ", "\n\n\n".join(lst_lines))
+        # print("lst_lines: ", "\n\n\n".join(lst_lines))
         return lst_lines
 
     def process_line(self, input_string):
@@ -290,14 +301,15 @@ class TeAnalyzer(AbstractAnalyzer):
 
     def extract_macro_call(self, input_string):
         try:
+            # print("extract_macro_call input_string: ", input_string)
             # Convert string to PolicyMacroCall
             macro_call = PolicyMacroCall()
             macro_call.name = input_string.split("(")[0].strip()
-            macro_call.parameters = (
-                input_string.split("(")[1].replace(")", "").strip().split(",")
-            )
-            # remove white spaces in parameters
-            macro_call.parameters = [x.strip() for x in macro_call.parameters]
+            parameters = input_string.split("(")[1].replace(")", "").strip().split(",")
+
+            # remove white clearspaces in parameters
+            # print("parameters: ", parameters)
+            macro_call.parameters = [x.strip() for x in parameters]
             return macro_call
         except Exception as err:
             MyLogger.log_error(sys, err, input_string)
