@@ -27,14 +27,16 @@ class FileAnalyzer(AbstractAnalyzer):
             print("Nothing to analyze!")
             return
 
+        index = 0
         for file_path in list_of_files:
             file_type = self.detect_lang(file_path)
+            index = index + 1
             if file_type != FileTypeEnum.UNDEFINED:
-                print("Analyzing: " + file_path)
+                print(len(list_of_files), "/", index, " ", "Analyzing: " + file_path)
                 policy_file = self.invoke_analyzer_class(file_type, file_path)
                 self.list_of_policy_files.append(policy_file)
             else:
-                pass
+                print(len(list_of_files), "/", index, " ", "Rejected: " + file_path)
                 # print("Undefined file extension : " + file_path)
 
         return self.list_of_policy_files
@@ -86,3 +88,4 @@ if __name__ == "__main__":
     # print("-----------------------------------------------------")
     # fileAnalyzer = FileAnalyzer()
     # fileAnalyzer.analyzeAndDraw(sys.argv[1], None)
+
