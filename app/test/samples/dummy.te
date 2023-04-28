@@ -24,3 +24,5 @@ hal_server_domain(dummy, hal_dummy)
 allow dummy servicemanager:binder { call transfer };
 
 init_hal(dummy)
+
+neverallow * { system_file_type vendor_file_type rootfs }:system module_load;

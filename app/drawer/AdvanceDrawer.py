@@ -128,7 +128,7 @@ class AdvancedDrawer(AbstractDrawer):
                 if rule.rule == RuleEnum.NEVER_ALLOW:
                     rule_list.append(
                         ""
-                        + self.insert_new_participant(rule.source)
+                        + self.correct_name(rule.source)
                         + ' .....[#red]> "'
                         + rule.target
                         + '" : '
@@ -139,7 +139,7 @@ class AdvancedDrawer(AbstractDrawer):
                 else:
                     rule_list.append(
                         ""
-                        + self.insert_new_participant(rule.source)
+                        + self.correct_name(rule.source)
                         + ' -----[#green]> "'
                         + rule.target
                         + '" : '
