@@ -132,6 +132,9 @@ class AnalyzerResultUi(QVBoxLayout):
 
     def on_add_selected_filter(self):
         row = self.tbl_result.currentRow()
+        if row < 0:
+            return
+
         rule = FilterRule()
         rule.exact_word = UiUtility.ask_question(
             self.main_window, "Exact word", "Do you want to add the exact word?"

@@ -31,7 +31,7 @@ class AbstractDrawer:
         return name
 
     def correct_name(self, name):
-        if any(x in name for x in ["*", "/", ":", "-"]):
+        if any(x in name for x in ["*", "/", ":", "-", "~"]):
             return '"' + name + '"'
         return name
 
