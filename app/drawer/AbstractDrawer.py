@@ -32,7 +32,7 @@ class AbstractDrawer:
 
     def correct_name(self, name):
         if any(x in name for x in ["*", "/", ":", "-"]):
-            return "\"" + name + "\""
+            return '"' + name + '"'
         return name
 
     def draw_se_app(self, se_apps):

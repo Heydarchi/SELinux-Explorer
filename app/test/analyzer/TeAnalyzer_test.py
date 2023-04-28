@@ -193,7 +193,6 @@ class TestTeAnalyzer(unittest.TestCase):
         self.assertEqual(rules[2].class_type, "system")
         self.assertEqual(rules[2].permissions, ["module_load"])
 
-
     """def test_extract_rule_multiple_class_and_macrocall(self):
         # Arrange
         te_analyzer = TeAnalyzer()
