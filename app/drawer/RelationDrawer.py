@@ -66,7 +66,7 @@ class RelationDrawer(AbstractDrawer):
             # type_def.append("\"" + type_def.name + "\" -----> \"" + type_def.types + "\"" )
             type_def_list.append(
                 "participant "
-                + self.insert_new_participant(type_def.name)
+                + self.correct_name(type_def.name)
                 + " [\n="
                 + type_def.name
                 + '\n ----- \n""'
@@ -80,7 +80,7 @@ class RelationDrawer(AbstractDrawer):
         for context in contexts:
             context_list.append(
                 "participant "
-                + self.insert_new_participant(context.security_context.type)
+                + self.correct_name(context.security_context.type)
                 + " [\n="
                 + context.security_context.type
                 + '\n ----- \n""'
@@ -94,7 +94,7 @@ class RelationDrawer(AbstractDrawer):
         for se_app_context in se_apps:
             se_app_list.append(
                 "participant "
-                + self.insert_new_participant(se_app_context.domain)
+                + self.correct_name(se_app_context.domain)
                 + " [\n="
                 + se_app_context.domain
                 + '\n ----- \n""'
@@ -109,7 +109,7 @@ class RelationDrawer(AbstractDrawer):
             if rule.rule == RuleEnum.NEVER_ALLOW:
                 rule_list.append(
                     ""
-                    + self.insert_new_participant(rule.source)
+                    + self.correct_name(rule.source)
                     + ' -----[#red]>x "'
                     + rule.target
                     + '" : '
@@ -121,7 +121,7 @@ class RelationDrawer(AbstractDrawer):
             else:
                 rule_list.append(
                     ""
-                    + self.insert_new_participant(rule.source)
+                    + self.correct_name(rule.source)
                     + ' -----[#green]> "'
                     + rule.target
                     + '" : '

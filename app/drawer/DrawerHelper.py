@@ -45,12 +45,15 @@ class DrawingColor(Enum):
 
 
 class DrawingTool:
+    default_height = 1500
+    default_width = 2500
+
     @staticmethod
-    def generate_start_of_puml():
+    def generate_start_of_puml(height=default_height, width=default_width):
         lst_output = []
         lst_output.append("@startuml")
-        lst_output.append("scale max 2560 height")
-        lst_output.append("scale max 2048 width")
+        lst_output.append("scale max %s height" % height)
+        lst_output.append("scale max %s width" % width)
         lst_output.append("")
         return lst_output
 
