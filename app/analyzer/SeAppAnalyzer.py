@@ -81,6 +81,7 @@ class SeAppAnalyzer(AbstractAnalyzer):
         else:
             return None
 
+
 if __name__ == "__main__":
     print(sys.argv)
     seAppAnalyzer = SeAppAnalyzer()
