@@ -97,7 +97,7 @@ class AnalyzerLogic:
 
     def remove_file(self, file_path):
         SystemUtility().delete_files(
-            os.path.splitext(file_path)[0] + DIAGEAM_FILE_EXTENSION
+            os.path.splitext(file_path)[0] + DIAGRAM_FILE_EXTENSION
         )
         SystemUtility().delete_files(os.path.splitext(file_path)[0] + ".puml")
 
@@ -120,7 +120,7 @@ class AnalyzerLogic:
 
     def on_analyze_finished(self, filtered_policy_file):
         self.list_of_diagrams = SystemUtility().get_list_of_files(
-            os.getcwd() + "/" + OUT_DIR, "*" + DIAGEAM_FILE_EXTENSION
+            os.getcwd() + "/" + OUT_DIR, "*" + DIAGRAM_FILE_EXTENSION
         )
         self.update_generated_diagram_list(self.list_of_diagrams)
 

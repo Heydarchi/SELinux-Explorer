@@ -22,7 +22,7 @@ class RelationDrawer(AbstractDrawer):
 
         plant_uml_list.append("@enduml")
 
-        # Remove redundance items
+        # Remove redundant items
         plant_uml_list = list(dict.fromkeys(plant_uml_list))
         # print(plant_uml_list)
         file_path = OUT_DIR + "seq_" + generate_puml_file_name(policy_file.file_name)
@@ -45,7 +45,7 @@ class RelationDrawer(AbstractDrawer):
 
         plant_uml_list.extend(DrawingTool.generate_end_of_puml())
 
-        # Remove redundance items
+        # Remove redundant items
         plant_uml_list = list(dict.fromkeys(plant_uml_list))
         # print(plant_uml_list)
         file_path = (

@@ -188,7 +188,7 @@ class FilterResult:
         return filtered_policy_file
 
     def filter_pathname(self, filter_rule, policy_file, filtered_policy_file):
-        """filter context having path_name or se_apps havong name
+        """filter context having path_name or se_apps having name
         in policy_file and add to filtered_policy_file"""
         for context in policy_file.contexts:
             # print("context.path_name: ", context.path_name, filter_rule)

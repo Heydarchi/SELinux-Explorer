@@ -46,7 +46,7 @@ class SeAppAnalyzer(AbstractAnalyzer):
                 elif "is_priv_app" in split[0]:
                     se_app.is_priv_app = split[1]
                 elif "is_system_server" in split[0]:
-                    se_app.is_system_serverer = split[1]
+                    se_app.is_system_server = split[1]
                 elif "is_ephemeral_app" in split[0]:
                     se_app.is_ephemeral_app = split[1]
                 elif "name" in split[0]:

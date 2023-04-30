@@ -1,7 +1,7 @@
 import os
 from enum import Enum
 
-DIAGEAM_FILE_EXTENSION = ".png"
+DIAGRAM_FILE_EXTENSION = ".png"
 
 
 def generate_puml_file_name(file_name):
@@ -9,7 +9,7 @@ def generate_puml_file_name(file_name):
 
 
 def generate_diagram_file_name(file_name):
-    return file_name.replace("/", "-") + "" + DIAGEAM_FILE_EXTENSION
+    return file_name.replace("/", "-") + "" + DIAGRAM_FILE_EXTENSION
 
 
 def generate_png(filepath):

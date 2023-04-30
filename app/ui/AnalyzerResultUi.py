@@ -93,7 +93,7 @@ class AnalyzerResultUi(QVBoxLayout):
             self.update_analyzer_output_data
         )
         self.cmb_filter.currentIndexChanged.connect(self.on_filter_changed)
-        self.edt_search.textChanged.connect(self._on_seach_text_changed)
+        self.edt_search.textChanged.connect(self._on_search_text_changed)
         self.btn_reset_search.clicked.connect(self.on_reset_search)
         self.chk_case_sensitive.clicked.connect(self._on_case_sensitive_changed)
         self.btn_item_info.clicked.connect(self.on_item_info)
@@ -130,10 +130,12 @@ class AnalyzerResultUi(QVBoxLayout):
         self.addWidget(self.group_box)
 
     def _on_case_sensitive_changed(self):
-        self._on_seach_text_changed()
+        self._on_search_text_changed()
 
     def on_add_selected_filter(self):
         row = self.tbl_result.currentRow()
+        if row < 0:
+            return
         rule = FilterRule()
         rule.exact_word = UiUtility.ask_question(
             self.main_window, "Exact word", "Do you want to add the exact word?"
@@ -151,7 +153,7 @@ class AnalyzerResultUi(QVBoxLayout):
         self.result_policy_file = ref_policy_file
         self.on_filter_changed()
 
-    def _on_seach_text_changed(self):
+    def _on_search_text_changed(self):
         lst_rules = []
         if self.edt_search.text().strip() != "":
             lst_rules = self.search_result(

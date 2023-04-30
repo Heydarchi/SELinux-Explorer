@@ -47,9 +47,9 @@ class TextWindow(QWidget):
     def _set_data(self, title, data):
         self.label.setText(title)
         if data != None:
-            self.edt_data.setText(self._coloroze_item_names(data))
+            self.edt_data.setText(self._colorize_item_names(data))
 
-    def _coloroze_item_names(self, input_str):
+    def _colorize_item_names(self, input_str):
         input_str = input_str.replace("\n", "<br/>")
         input_str = input_str.replace("\t", "&nbsp; &nbsp; &nbsp; &nbsp; ")
         pre_suffix = '<span style=" font-size:10pt; font-weight:600; color:#0000aa;" >'
