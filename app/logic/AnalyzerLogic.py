@@ -88,7 +88,6 @@ class AnalyzerLogic:
             if os.path.isfile(file):
                 SystemUtility().delete_files(file)
         self.on_analyze_finished(None)
-        self.update_analyzer_output_data(None)
 
     def clear_file_from_analyzer(self, file_path):
         self.analyzer.clear()
@@ -104,6 +103,7 @@ class AnalyzerLogic:
 
     def clear(self):
         self.ref_policy_file = PolicyFile()
+        self.update_analyzer_output_data(None)
 
     def get_image_path(self, file_path):
         return generate_diagram_file_name(file_path)
@@ -122,7 +122,7 @@ class AnalyzerLogic:
         self.list_of_diagrams = SystemUtility().get_list_of_files(
             os.getcwd() + "/" + OUT_DIR, "*" + DIAGEAM_FILE_EXTENSION
         )
-        self.update_generated_diagram_list()
+        self.update_generated_diagram_list(self.list_of_diagrams)
 
     def set_statusbar_update_signal(self, _update_statusbar):
         self.update_statusbar = _update_statusbar

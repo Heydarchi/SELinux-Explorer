@@ -90,7 +90,7 @@ class ToolbarUi(QToolBar):
         self.act_add_path.triggered.connect(self.on_add_path)
         self.act_analyze_all.triggered.connect(self.on_analyze_all)
         self.act_clear_analyze.triggered.connect(self.on_clear_analyze)
-        self.act_remove_output.triggered.connect(self.on_clear_output)
+        self.act_remove_output.triggered.connect(self.on_clear_output_folder)
         self.act_wipe_all.triggered.connect(self.on_wipe_all)
         self.act_keep_result.triggered.connect(self.on_clicked_keep_result)
         self.act_make_reference.triggered.connect(self.on_make_reference)
@@ -141,12 +141,12 @@ class ToolbarUi(QToolBar):
         self.analyzer_logic.clear()
         print("Cleared analyzer!")
 
-    def on_clear_output(self):
+    def on_clear_output_folder(self):
         self.analyzer_logic.clear_output()
         print("Cleared output!")
 
     def on_wipe_all(self):
-        self.on_clear_output()
+        self.on_clear_output_folder()
         self.on_clear_analyze()
         self.analyzer_logic.on_analyze_finished(None)
         print("Wiped all!")

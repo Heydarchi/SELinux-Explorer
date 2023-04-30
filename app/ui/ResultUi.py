@@ -73,9 +73,9 @@ class ResultUi(QVBoxLayout):
         item = QListWidgetItem(file_path)
         self.lst_results.addItem(item)
 
-    def update_generated_diagrams(self):
+    def update_generated_diagrams(self, list_of_diagrams):
         self.lst_results.clear()
-        for file in self.analyzer_logic.list_of_diagrams:
+        for file in list_of_diagrams:
             self.lst_results.addItem(QListWidgetItem(file))
 
     def on_selected_result(self):
