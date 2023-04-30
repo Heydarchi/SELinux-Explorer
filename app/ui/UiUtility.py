@@ -7,7 +7,7 @@ class UiUtility:
     @staticmethod
     def show_message(title, message, icon_type=QMessageBox.Information):
         msg = QMessageBox()
-        msg.setIcon(QMessageBox.Information)
+        msg.setIcon(icon_type)
         msg.setText(message)
         msg.setWindowTitle(title)
         msg.setStandardButtons(QMessageBox.Ok)
