@@ -1,5 +1,7 @@
 import os
 from enum import Enum
+from dataclasses import dataclass, field
+from typing import List
 
 DIAGRAM_FILE_EXTENSION = ".png"
 
@@ -18,6 +20,17 @@ def generate_png(filepath):
 
 def generate_svg(filepath):
     os.system("java -jar plantuml/plantuml.jar -tsvg " + filepath)
+
+
+@dataclass
+class DrawingPackage:
+    domain: str = ""
+    names: List[str] = field(default_factory=list)
+    type_defs: List[str] = field(default_factory=list)
+    attributes: List[str] = field(default_factory=list)
+    notes: List[str] = field(default_factory=list)
+    users: List[str] = field(default_factory=list)
+    aliases: List[str] = field(default_factory=list)
 
 
 class DrawingPosition(Enum):

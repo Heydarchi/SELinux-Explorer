@@ -19,6 +19,7 @@
 - [ ] Sort result files by date
 - [ ] Enhance the GUI with more customization options, such as themes and layout preferences
 - [ ] Implement an in-app editor for creating and modifying policy files
+- [ ] Add some buttons to save/load paths and files
 
 ### Integration and Performance
 
@@ -33,6 +34,5 @@
 
 ### Miscellaneous
 
-- [ ] Add support for other file formats, such as CSV and JSON
 - [ ] Add support for other SELinux variants, such as SELinux for Linux Containers
 
