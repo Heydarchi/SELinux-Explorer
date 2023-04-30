@@ -162,5 +162,15 @@ class AnalyzerLogic:
                 filter_result.filter_se_app(filter_rule, self.ref_policy_file)
             )
             return lst_info
+        elif filter_rule.filter_type == FilterType.FILE_PATH:
+            lst_info.extend(
+                filter_result.filter_context_by_pathname(
+                    filter_rule, self.ref_policy_file
+                )
+            )
+            lst_info.extend(
+                filter_result.filter_se_app_by_name(filter_rule, self.ref_policy_file)
+            )
+            return lst_info
         else:
             return None

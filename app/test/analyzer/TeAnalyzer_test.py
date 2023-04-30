@@ -171,6 +171,28 @@ class TestTeAnalyzer(unittest.TestCase):
         self.assertEqual(rules[3].class_type, "class1")
         self.assertEqual(rules[3].permissions, ["permission1", "permission2"])
 
+    def test_extract_rule_multiple_class_everything(self):
+        # Arrange
+        te_analyzer = TeAnalyzer()
+        input_string = "neverallow * { system_file_type vendor_file_type rootfs }:system module_load;"
+
+        # Act
+        rules = te_analyzer.extract_rule(input_string)
+        # Assert
+        self.assertEqual(len(rules), 3)
+        self.assertEqual(rules[0].source, "*")
+        self.assertEqual(rules[0].target, "system_file_type")
+        self.assertEqual(rules[0].class_type, "system")
+        self.assertEqual(rules[0].permissions, ["module_load"])
+        self.assertEqual(rules[1].source, "*")
+        self.assertEqual(rules[1].target, "vendor_file_type")
+        self.assertEqual(rules[1].class_type, "system")
+        self.assertEqual(rules[1].permissions, ["module_load"])
+        self.assertEqual(rules[2].source, "*")
+        self.assertEqual(rules[2].target, "rootfs")
+        self.assertEqual(rules[2].class_type, "system")
+        self.assertEqual(rules[2].permissions, ["module_load"])
+
     """def test_extract_rule_multiple_class_and_macrocall(self):
         # Arrange
         te_analyzer = TeAnalyzer()

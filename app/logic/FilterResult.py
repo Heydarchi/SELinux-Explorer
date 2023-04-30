@@ -347,10 +347,24 @@ class FilterResult:
                 lst_context.append(context)
         return lst_context
 
+    def filter_context_by_pathname(self, filter_rule, policy_file):
+        lst_context = []
+        for context in policy_file.contexts:
+            if self.check_similarity(filter_rule, context.path_name):
+                lst_context.append(context)
+        return lst_context
+
     def filter_se_app(self, filter_rule, policy_file):
         lst_se_app = []
         for se_app in policy_file.se_apps:
             if self.check_similarity(filter_rule, se_app.domain):
+                lst_se_app.append(se_app)
+        return lst_se_app
+
+    def filter_se_app_by_name(self, filter_rule, policy_file):
+        lst_se_app = []
+        for se_app in policy_file.se_apps:
+            if self.check_similarity(filter_rule, se_app.name):
                 lst_se_app.append(se_app)
         return lst_se_app
 

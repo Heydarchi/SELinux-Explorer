@@ -13,8 +13,19 @@ class AdvancedDrawer(AbstractDrawer):
         self.dict_of_participant = {}
         self.drawer_class = DrawerClass()
 
+        height = DrawingTool.default_height
+        width = DrawingTool.default_width
+        if (
+            len(policy_file.se_apps)
+            + len(policy_file.contexts)
+            + len(policy_file.rules)
+            > 20
+        ):
+            height = DrawingTool.default_height * 2
+            width = DrawingTool.default_width * 2
+
         plant_uml_list = []
-        plant_uml_list.extend(DrawingTool.generate_start_of_puml())
+        plant_uml_list.extend(DrawingTool.generate_start_of_puml(height, width))
         plant_uml_list.extend(self.generate_reference())
 
         self.dump_policy_file(policy_file)
@@ -128,7 +139,7 @@ class AdvancedDrawer(AbstractDrawer):
                 if rule.rule == RuleEnum.NEVER_ALLOW:
                     rule_list.append(
                         ""
-                        + self.insert_new_participant(rule.source)
+                        + self.correct_name(rule.source)
                         + ' .....[#red]> "'
                         + rule.target
                         + '" : '
@@ -139,7 +150,7 @@ class AdvancedDrawer(AbstractDrawer):
                 else:
                     rule_list.append(
                         ""
-                        + self.insert_new_participant(rule.source)
+                        + self.correct_name(rule.source)
                         + ' -----[#green]> "'
                         + rule.target
                         + '" : '
