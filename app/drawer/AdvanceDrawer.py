@@ -37,8 +37,8 @@ class AdvancedDrawer(AbstractDrawer):
 
         plant_uml_list.extend(DrawingTool.generate_end_of_puml())
 
-        # Remove redundance items
-        # Temporary disabled since removes blindlt : plant_uml_list =
+        # Remove redundant items
+        # Temporary disabled  : plant_uml_list =
         # list(dict.fromkeys(plant_uml_list))
 
         # print(plant_uml_list)
@@ -161,7 +161,7 @@ class AdvancedDrawer(AbstractDrawer):
 
     def generate_reference(self):
         lst_note = []
-        lst_note.append("Sumbols")
+        lst_note.append("Symbols")
         lst_note.append("Green Line: Allow")
         lst_note.append("Red Line: Never Allow")
         return DrawingTool.generate_legend(

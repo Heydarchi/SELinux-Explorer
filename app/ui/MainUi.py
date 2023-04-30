@@ -95,6 +95,7 @@ class MainWindow(QMainWindow):
         self.layout_analyzer_result.connect_to_filter_ui(
             self.layout_filter.on_get_filter
         )
+        self.analyzer_logic.set_statusbar_update_signal(self.statusbar.update_statusbar)
 
     def _set_window_position(self):
         qr = self.frameGeometry()

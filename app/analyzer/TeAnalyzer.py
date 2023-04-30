@@ -287,7 +287,7 @@ class TeAnalyzer(AbstractAnalyzer):
             # print("input_string: ", input_string)
             lst_lines = input_string.splitlines()
             macro = PolicyMacro()
-            # It's supposed to have define in the first item
+            # It's supposed to have "define" in the first item
             first_line = lst_lines.pop(0).replace("define", "").replace("'", "")
             first_line = first_line.replace("`", "").replace("(", "").replace(",", "")
             macro.name = first_line.strip()

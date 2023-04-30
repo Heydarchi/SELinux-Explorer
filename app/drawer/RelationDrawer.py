@@ -22,43 +22,13 @@ class RelationDrawer(AbstractDrawer):
 
         plant_uml_list.append("@enduml")
 
-        # Remove redundance items
+        # Remove redundant items
         plant_uml_list = list(dict.fromkeys(plant_uml_list))
         # print(plant_uml_list)
         file_path = OUT_DIR + "seq_" + generate_puml_file_name(policy_file.file_name)
         self.write_to_file(file_path, plant_uml_list)
         print("drawing: ", file_path)
         generate_png(file_path)
-
-    def draw_list_of_uml(self, policy_files: List[PolicyFile]):
-        self.dict_of_participant = {}
-        self.drawer_class = DrawerClass()
-
-        plant_uml_list = []
-        plant_uml_list.extend(DrawingTool.generate_start_of_puml())
-
-        for policy_file in policy_files:
-            self.dump_policy_file(policy_file)
-
-        plant_uml_list.extend(self.drawer_class.participants)
-        plant_uml_list.extend(self.drawer_class.rules)
-
-        plant_uml_list.extend(DrawingTool.generate_end_of_puml())
-
-        # Remove redundance items
-        plant_uml_list = list(dict.fromkeys(plant_uml_list))
-        # print(plant_uml_list)
-        file_path = (
-            OUT_DIR
-            + "/Integrated-"
-            + datetime.today().strftime("%d-%m-%y---%H-%M-%s")
-            + "_relation.puml"
-        )
-        """self.writeToFile(file_path, plant_uml_list)
-        print("drawing: ", file_path)"""
-
-        self.generate_png(file_path)
-        # print(policy_file)
 
     def draw_type_def(self, type_defs: List[TypeDef]):
         type_def_list = []

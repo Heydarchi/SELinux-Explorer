@@ -89,9 +89,11 @@ class AnalyzerResultUi(QVBoxLayout):
 
     def _config_signals(self):
         self.btn_add_selected.clicked.connect(self.on_add_selected_filter)
-        self.analyzer_logic.set_ui_update_analyzer_data_signal(self.on_analyze_finished)
+        self.analyzer_logic.set_ui_update_analyzer_data_signal(
+            self.update_analyzer_output_data
+        )
         self.cmb_filter.currentIndexChanged.connect(self.on_filter_changed)
-        self.edt_search.textChanged.connect(self._on_seach_text_changed)
+        self.edt_search.textChanged.connect(self._on_search_text_changed)
         self.btn_reset_search.clicked.connect(self.on_reset_search)
         self.chk_case_sensitive.clicked.connect(self._on_case_sensitive_changed)
         self.btn_item_info.clicked.connect(self.on_item_info)
@@ -128,7 +130,7 @@ class AnalyzerResultUi(QVBoxLayout):
         self.addWidget(self.group_box)
 
     def _on_case_sensitive_changed(self):
-        self._on_seach_text_changed()
+        self._on_search_text_changed()
 
     def on_add_selected_filter(self):
         row = self.tbl_result.currentRow()
@@ -145,14 +147,14 @@ class AnalyzerResultUi(QVBoxLayout):
         )
         self.send_to_filter_ui(rule)
 
-    def on_analyze_finished(self, ref_policy_file):
+    def update_analyzer_output_data(self, ref_policy_file):
         print("onAnalyzeFinished")
         if ref_policy_file is None:
             ref_policy_file = PolicyFile()
         self.result_policy_file = ref_policy_file
         self.on_filter_changed()
 
-    def _on_seach_text_changed(self):
+    def _on_search_text_changed(self):
         lst_rules = []
         if self.edt_search.text().strip() != "":
             lst_rules = self.search_result(
@@ -355,7 +357,7 @@ class AnalyzerResultUi(QVBoxLayout):
 
         item_info = self.analyzer_logic.get_info_of_item(filter_type)
 
-        if item_info != None:
+        if item_info is not None:
             self._info_window = TextWindow(
                 self.tbl_result.item(row, self.COL_TITLE_INDEX).text(),
                 "".join([item.to_string() for item in item_info]),

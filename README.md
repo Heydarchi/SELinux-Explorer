@@ -40,7 +40,7 @@ To run SELinux Explorer, you need to have Python 3.x and some other packages ins
 - Dataclasses
 
 ## Installation
-#### Note : The 1st & 2nd steps can be skipped by runnig the `setup.sh` script.
+#### Note : The 1st & 2nd steps can be skipped by running the `setup.sh` script.
 ```
 ./setup.sh
 ```
@@ -93,7 +93,7 @@ python main.py
 
 ## Contributing
 
-Thank you for your interest in contributing to SELinux Explorer! We welcome and appreciate any contributions, whether it's bug reports, feature requests, code, documentation, or testing. Please refer to our [CONTRIBUTION.md](CONTRIBUTION.md) file for detailed guidelines on how to set up your development environment, check code style, run tests, and submit your changes.
+Thank you for your interest in contributing to SELinux Explorer! We welcome and appreciate any contributions, whether it's bug reports, feature requests, code, documentation, or testing. Please refer to our [CONTRIBUTION.md](CONTRIBUTING.md) file for detailed guidelines on how to set up your development environment, check code style, run tests, and submit your changes.
 
 ## Features and TODOs
 
@@ -101,7 +101,7 @@ This project is under active development, and we're continuously working on impr
 
 ## Bug Reports:
 
-If you encounter any issues or bugs while using SELinux Explorer, we encourage you to report them so we can address and fix them promptly. Please create a new issue using our [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md) and provide all the necessary details to help us reproduce and understand the problem. Your feedback is invaluable in helping us maintain the tool's reliability and stability.
+If you encounter any issues or bugs while using SELinux Explorer, we encourage you to report them, so we can address and fix them promptly. Please create a new issue using our [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md) and provide all the necessary details to help us reproduce and understand the problem. Your feedback is invaluable in helping us maintain the tool's reliability and stability.
 
 ## Feature Requests:
 

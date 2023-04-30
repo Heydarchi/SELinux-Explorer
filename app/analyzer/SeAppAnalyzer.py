@@ -44,11 +44,11 @@ class SeAppAnalyzer(AbstractAnalyzer):
                 if "user" in split[0]:
                     se_app.user = split[1]
                 elif "is_priv_app" in split[0]:
-                    se_app.is_priv_app = split[1]
+                    se_app.is_priv_app = self.convert_to_boolean(split[1])
                 elif "is_system_server" in split[0]:
-                    se_app.is_system_serverer = split[1]
+                    se_app.is_system_server = self.convert_to_boolean(split[1])
                 elif "is_ephemeral_app" in split[0]:
-                    se_app.is_ephemeral_app = split[1]
+                    se_app.is_ephemeral_app = self.convert_to_boolean(split[1])
                 elif "name" in split[0]:
                     se_app.name = split[1]
                 elif "min_target_sdk_version" in split[0]:
@@ -71,6 +71,14 @@ class SeAppAnalyzer(AbstractAnalyzer):
 
         except Exception as err:
             MyLogger.log_error(sys, err, input_string)
+            return None
+
+    def convert_to_boolean(self, input_string):
+        if "true" in input_string or "True" in input_string:
+            return True
+        elif "false" in input_string or "False" in input_string:
+            return False
+        else:
             return None
 
 

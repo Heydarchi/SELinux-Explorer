@@ -188,7 +188,7 @@ class FilterResult:
         return filtered_policy_file
 
     def filter_pathname(self, filter_rule, policy_file, filtered_policy_file):
-        """filter context having path_name or se_apps havong name
+        """filter context having path_name or se_apps having name
         in policy_file and add to filtered_policy_file"""
         for context in policy_file.contexts:
             # print("context.path_name: ", context.path_name, filter_rule)
@@ -246,8 +246,8 @@ class FilterResult:
         """find domain and rule with the same class type
         and then filter based on the found domain"""
         for type_def in policy_file.type_def:
-            for type in type_def.types:
-                if self.check_similarity(filter_rule, type):
+            for type_ in type_def.types:
+                if self.check_similarity(filter_rule, type_):
                     filtered_policy_file.type_def.append(type_def)
                     filtered_policy_file.rules.extend(
                         self.filter_rule(
@@ -303,8 +303,8 @@ class FilterResult:
                 )
 
         for se_app in policy_file.se_apps:
-            for type in se_app.type_def.types:
-                if self.check_similarity(filter_rule, type):
+            for type_ in se_app.type_def.types:
+                if self.check_similarity(filter_rule, type_):
                     filtered_policy_file.type_def.append(se_app.type_def)
                     filtered_policy_file.rules.extend(
                         self.filter_rule(

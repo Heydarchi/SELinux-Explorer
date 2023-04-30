@@ -26,12 +26,13 @@ class AnalyzerLogic:
             policy_files.extend(self.analyzer.analyze(paths))
         else:
             policy_files = self.analyzer.analyze(paths)
-
+        self.update_statusbar("Analyze finished")
         self.ref_policy_file = self.make_ref_policy_file(policy_files)
         self.on_analyze_finished(None)
-        self.update_analyzer_data_result(self.ref_policy_file)
+        self.update_analyzer_output_data(self.ref_policy_file)
 
     def make_ref_policy_file(self, policy_files):
+        self.update_statusbar("Make reference policy file finished")
         if policy_files is None or len(policy_files) == 0:
             return None
 
@@ -87,7 +88,6 @@ class AnalyzerLogic:
             if os.path.isfile(file):
                 SystemUtility().delete_files(file)
         self.on_analyze_finished(None)
-        self.update_analyzer_data_result(None)
 
     def clear_file_from_analyzer(self, file_path):
         self.analyzer.clear()
@@ -97,12 +97,13 @@ class AnalyzerLogic:
 
     def remove_file(self, file_path):
         SystemUtility().delete_files(
-            os.path.splitext(file_path)[0] + DIAGEAM_FILE_EXTENSION
+            os.path.splitext(file_path)[0] + DIAGRAM_FILE_EXTENSION
         )
         SystemUtility().delete_files(os.path.splitext(file_path)[0] + ".puml")
 
     def clear(self):
         self.ref_policy_file = PolicyFile()
+        self.update_analyzer_output_data(None)
 
     def get_image_path(self, file_path):
         return generate_diagram_file_name(file_path)
@@ -111,17 +112,20 @@ class AnalyzerLogic:
         self.keep_result = state
         print("self.keep_result:", self.keep_result)
 
-    def set_ui_update_signal(self, update_result):
-        self.update_result = update_result
+    def set_ui_update_generated_diagrams_signal(self, _update_generated_diagram_list):
+        self.update_generated_diagram_list = _update_generated_diagram_list
 
-    def set_ui_update_analyzer_data_signal(self, update_result):
-        self.update_analyzer_data_result = update_result
+    def set_ui_update_analyzer_data_signal(self, _update_analyzer_output_data):
+        self.update_analyzer_output_data = _update_analyzer_output_data
 
     def on_analyze_finished(self, filtered_policy_file):
         self.list_of_diagrams = SystemUtility().get_list_of_files(
-            os.getcwd() + "/" + OUT_DIR, "*" + DIAGEAM_FILE_EXTENSION
+            os.getcwd() + "/" + OUT_DIR, "*" + DIAGRAM_FILE_EXTENSION
         )
-        self.update_result()
+        self.update_generated_diagram_list(self.list_of_diagrams)
+
+    def set_statusbar_update_signal(self, _update_statusbar):
+        self.update_statusbar = _update_statusbar
 
     """This function collects all the information of a filter rule and returns it as a list of string"""
 

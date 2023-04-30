@@ -350,7 +350,13 @@ class TestTeAnalyzer(unittest.TestCase):
         self.assertEqual(len(items_to_process), 1)
         self.assertEqual(
             items_to_process[0].replace("\n", ""),
-            "full_treble_only(` neverallow { appdomain -coredomain } { service_manager_type -app_api_service -vendor_service -ephemeral_app_api_service -apc_service -audioserver_service -cameraserver_service -drmserver_service -credstore_service -keystore_maintenance_service -keystore_service -legacykeystore_service -mediadrmserver_service -mediaextractor_service -mediametrics_service -mediaserver_service -nfc_service -radio_service -virtual_touchpad_service -vr_hwc_service -vr_manager_service userdebug_or_eng(`-hal_face_service') }:service_manager find; ')",
+            "full_treble_only(` neverallow { appdomain -coredomain }"
+            + " { service_manager_type -app_api_service -vendor_service -ephemeral_app_api_service"
+            + " -apc_service -audioserver_service -cameraserver_service -drmserver_service -credstore_service"
+            + " -keystore_maintenance_service -keystore_service -legacykeystore_service -mediadrmserver_service"
+            + " -mediaextractor_service -mediametrics_service -mediaserver_service -nfc_service -radio_service"
+            + " -virtual_touchpad_service -vr_hwc_service -vr_manager_service userdebug_or_eng(`-hal_face_service')"
+            + " }:service_manager find; ')",
         )
 
     def test_extract_permissive(self):
