@@ -89,7 +89,9 @@ class AnalyzerResultUi(QVBoxLayout):
 
     def _config_signals(self):
         self.btn_add_selected.clicked.connect(self.on_add_selected_filter)
-        self.analyzer_logic.set_ui_update_analyzer_data_signal(self.on_analyze_finished)
+        self.analyzer_logic.set_ui_update_analyzer_data_signal(
+            self.update_analyzer_output_data
+        )
         self.cmb_filter.currentIndexChanged.connect(self.on_filter_changed)
         self.edt_search.textChanged.connect(self._on_seach_text_changed)
         self.btn_reset_search.clicked.connect(self.on_reset_search)
@@ -142,7 +144,7 @@ class AnalyzerResultUi(QVBoxLayout):
         )
         self.send_to_filter_ui(rule)
 
-    def on_analyze_finished(self, ref_policy_file):
+    def update_analyzer_output_data(self, ref_policy_file):
         print("onAnalyzeFinished")
         if ref_policy_file is None:
             ref_policy_file = PolicyFile()
