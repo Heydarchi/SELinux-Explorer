@@ -46,7 +46,7 @@ class TextWindow(QWidget):
 
     def _set_data(self, title, data):
         self.label.setText(title)
-        if data != None:
+        if data is not None:
             self.edt_data.setText(self._colorize_item_names(data))
 
     def _colorize_item_names(self, input_str):

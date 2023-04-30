@@ -239,9 +239,9 @@ class TeAnalyzer(AbstractAnalyzer):
                             # print (inputString[offset:])
                             start = input_string.find("{", offset)
                             end = input_string.find("}", start)
-                            bracket_string = input_string[start + 1 : end]
+                            bracket_string = input_string[start + 1: end]
                             input_string = (
-                                input_string[:start] + "###" + input_string[end + 1 :]
+                                input_string[:start] + "###" + input_string[end + 1:]
                             )
                             lst_bracket_items.append(bracket_string)
                             offset = start

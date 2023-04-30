@@ -356,7 +356,7 @@ class AnalyzerResultUi(QVBoxLayout):
 
         item_info = self.analyzer_logic.get_info_of_item(filter_type)
 
-        if item_info != None:
+        if item_info is not None:
             self._info_window = TextWindow(
                 self.tbl_result.item(row, self.COL_TITLE_INDEX).text(),
                 "".join([item.to_string() for item in item_info]),
