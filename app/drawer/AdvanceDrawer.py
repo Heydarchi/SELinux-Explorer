@@ -53,7 +53,7 @@ class AdvancedDrawer(AbstractDrawer):
         # print(plant_uml_list)
         file_path = OUT_DIR + generate_puml_file_name(policy_file.file_name)
         self.write_to_file(file_path, plant_uml_list)
-        print("drawing: ", file_path)
+        #print("drawing: ", file_path)
 
         generate_png(file_path)
         # print(policy_file)
@@ -367,7 +367,7 @@ class AdvancedDrawer(AbstractDrawer):
                 )
             )
 
-        print(drawing_package_list)
+        #print(drawing_package_list)
         return drawing_package_list
 
     def write_to_file(self, file_name, list_of_str):
