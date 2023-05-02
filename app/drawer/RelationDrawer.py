@@ -27,7 +27,7 @@ class RelationDrawer(AbstractDrawer):
         # print(plant_uml_list)
         file_path = OUT_DIR + "seq_" + generate_puml_file_name(policy_file.file_name)
         self.write_to_file(file_path, plant_uml_list)
-        print("drawing: ", file_path)
+        # print("drawing: ", file_path)
         generate_png(file_path)
 
     def draw_type_def(self, type_defs: List[TypeDef]):
