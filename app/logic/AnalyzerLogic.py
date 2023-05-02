@@ -58,21 +58,23 @@ class AnalyzerLogic:
         lst_rules = []
 
         for macro_call in macro_calls:
-            #print("macroCall.name: ", macro_call.name)
+            # print("macroCall.name: ", macro_call.name)
             for macro in macros:
-                #print("macro.name: ", macro.name)
+                # print("macro.name: ", macro.name)
                 if macro.name == macro_call.name:
-                    #print("macro.name: ", macro.name)
+                    # print("macro.name: ", macro.name)
                     rules = macro.rules
                     for rule in rules:
                         """Need to replace $number in source, target or
                         class_type with parameter from macro call with
                          the same number"""
-                        new_rule = Rule(rule=rule.rule,
-                                        source=rule.source,
-                                        target=rule.target,
-                                        class_type=rule.class_type,
-                                        permissions=rule.permissions)
+                        new_rule = Rule(
+                            rule=rule.rule,
+                            source=rule.source,
+                            target=rule.target,
+                            class_type=rule.class_type,
+                            permissions=rule.permissions,
+                        )
                         for i in range(0, len(macro_call.parameters)):
                             new_rule.source = new_rule.source.replace(
                                 "$" + str(i + 1), macro_call.parameters[i]
@@ -83,7 +85,7 @@ class AnalyzerLogic:
                             new_rule.class_type = new_rule.class_type.replace(
                                 "$" + str(i), macro_call.parameters[i]
                             )
-                        #print("rule: ", new_rule)
+                        # print("rule: ", new_rule)
                         lst_rules.append(new_rule)
                     break
 
@@ -117,7 +119,7 @@ class AnalyzerLogic:
 
     def set_keep_result(self, state):
         self.keep_result = state
-        #print("self.keep_result:", self.keep_result)
+        # print("self.keep_result:", self.keep_result)
 
     def set_ui_update_generated_diagrams_signal(self, _update_generated_diagram_list):
         self.update_generated_diagram_list = _update_generated_diagram_list

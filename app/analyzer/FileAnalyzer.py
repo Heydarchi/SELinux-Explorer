@@ -62,14 +62,18 @@ class FileAnalyzer(AbstractAnalyzer):
             if os.path.basename(file_name).strip().endswith(file_type.label):
                 # print(os.path.basename(file_name))
                 break
-        if  os.path.basename(file_name).startswith(FileTypeEnum.TE_FILE_3.value[1]):
-            #print("TE_FILE_2", os.path.basename(file_name))
-            file_type =  FileTypeEnum.TE_FILE_3
+        if os.path.basename(file_name).startswith(FileTypeEnum.TE_FILE_3.value[1]):
+            # print("TE_FILE_2", os.path.basename(file_name))
+            file_type = FileTypeEnum.TE_FILE_3
 
         return file_type
 
     def invoke_analyzer_class(self, file_type, file_path):
-        if file_type in [ FileTypeEnum.TE_FILE, FileTypeEnum.TE_FILE_2, FileTypeEnum.TE_FILE_3]:
+        if file_type in [
+            FileTypeEnum.TE_FILE,
+            FileTypeEnum.TE_FILE_2,
+            FileTypeEnum.TE_FILE_3,
+        ]:
             return TeAnalyzer().analyze(file_path)
         elif file_type == FileTypeEnum.SEAPP_CONTEXTS:
             return SeAppAnalyzer().analyze(file_path)
