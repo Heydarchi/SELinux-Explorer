@@ -34,7 +34,9 @@ class FileTypeEnum(Enum):
     VNDSERVICE_CONTEXTS = 6, "vndservice_contexts"
     PROPERTY_CONTEXTS = 7, "property_contexts"
     # OTHER_CONTEXT = 8,"contexts"
-    UNDEFINED = 9, ""
+    TE_FILE_2 = 9, "_te"
+    UNDEFINED = 20, ""
+    TE_FILE_3 = 9, "te_"
 
     # GENFS_CONTEXTS = 10, "genfs_contexts"
 
