@@ -44,7 +44,8 @@ class TeAnalyzer(AbstractAnalyzer):
             if define_macro_found:
                 if (
                     ")" in line
-                    and tmp_lst_lines.count("(") == tmp_lst_lines.count(")") + 1
+                    and (tmp_lst_lines.count("(") + line.count("(")) == (
+                    tmp_lst_lines.count(")") + line.count(")"))
                 ):
                     define_macro_found = False
                     lst_lines.append(tmp_lst_lines + "\n " + line)
@@ -87,7 +88,7 @@ class TeAnalyzer(AbstractAnalyzer):
                     multi_line = True
                     tmp_lst_lines = line
 
-        # print("lst_lines: ", "\n\n\n".join(lst_lines))
+        #print("lst_lines: ", "\n-----------------\n".join(lst_lines))
         return lst_lines
 
     def process_line(self, input_string):
@@ -284,7 +285,7 @@ class TeAnalyzer(AbstractAnalyzer):
 
     def extract_macro(self, input_string):
         try:
-            # print("input_string: ", input_string)
+            #print("extract_macro input_string: ", input_string)
             lst_lines = input_string.splitlines()
             macro = PolicyMacro()
             # It's supposed to have "define" in the first item
@@ -305,7 +306,7 @@ class TeAnalyzer(AbstractAnalyzer):
 
     def extract_macro_call(self, input_string):
         try:
-            # print("extract_macro_call input_string: ", input_string)
+            #print("extract_macro_call input_string: ", input_string)
             # Convert string to PolicyMacroCall
             macro_call = PolicyMacroCall()
             macro_call.name = input_string.split("(")[0].strip()

@@ -63,7 +63,7 @@ class FileAnalyzer(AbstractAnalyzer):
                 # print(os.path.basename(file_name))
                 break
         if  os.path.basename(file_name).startswith(FileTypeEnum.TE_FILE_3.value[1]):
-            print("TE_FILE_2", os.path.basename(file_name))
+            #print("TE_FILE_2", os.path.basename(file_name))
             file_type =  FileTypeEnum.TE_FILE_3
 
         return file_type
