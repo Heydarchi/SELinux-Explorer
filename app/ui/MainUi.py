@@ -52,7 +52,7 @@ class MainWindow(QMainWindow):
         print("AppSetting saved!")
 
     def _initMainLayout(self):
-        self.layout_path = FileUi(self)
+        self.layout_path = FileUi(self, self.app_setting)
         self.layout_filter = FilterUi(self, self.analyzer_logic)
         self.layout_result = ResultUi(self, self.analyzer_logic)
         self.layout_analyzer_result = AnalyzerResultUi(self, self.analyzer_logic)
@@ -90,8 +90,11 @@ class MainWindow(QMainWindow):
 
     def _config_signals(self):
         self.toolbar.connect_to_get_selected_paths(self.layout_path.get_selected_paths)
-        self.toolbar.connect_to_get_all_paths(self.layout_path.get_all_paths)
-        self.toolbar.connect_on_add_file_folder(self.layout_path.on_add_file_folder)
+        self.toolbar.connect_to_get_included_paths(self.layout_path.get_included_paths)
+        self.toolbar.connect_to_get_excluded_paths(self.layout_path.get_excluded_paths)
+        self.toolbar.connect_on_add_file_folder_included(
+            self.layout_path.on_add_file_folder_included
+        )
         self.layout_analyzer_result.connect_to_filter_ui(
             self.layout_filter.on_get_filter
         )

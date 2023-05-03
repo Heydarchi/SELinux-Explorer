@@ -18,10 +18,16 @@ class FileAnalyzer(AbstractAnalyzer):
         self.list_of_analyzer_info = []
         print("The previous analyze result is cleared!")
 
-    def analyze(self, target_paths):
+    def analyze(self, target_paths, excluded_paths):
         list_of_files = []
         for path in target_paths:
             list_of_files.extend(self.gather_file_info(path, "*"))
+
+        # Remove any path starting with excluded_paths
+        for excluded_path in excluded_paths:
+            list_of_files = [
+                file for file in list_of_files if not file.startswith(excluded_path)
+            ]
 
         if list_of_files is None or len(list_of_files) == 0:
             print("Nothing to analyze!")

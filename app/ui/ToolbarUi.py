@@ -27,11 +27,6 @@ class ToolbarUi(QToolBar):
         self.lst_results = []
 
     def _init_widgets(self):
-        self.act_add_file = QAction(
-            QIcon(ICON_PATH + "add-file.png"),
-            "Add a file to the list",
-            self.main_window,
-        )
         self.act_add_path = QAction(
             QIcon(ICON_PATH + "add-folder.png"),
             "Add a Path to the list",
@@ -70,9 +65,6 @@ class ToolbarUi(QToolBar):
         self.act_keep_result.setCheckable(True)
 
     def _config_signals(self):
-        self.addAction(self.act_add_file)
-        self.addAction(self.act_add_path)
-        self.addSeparator()
         self.addAction(self.act_analyze_all)
         self.addSeparator()
         self.addAction(self.act_make_reference)
@@ -86,8 +78,6 @@ class ToolbarUi(QToolBar):
         self.addAction(self.act_about)
 
     def _config_layout(self):
-        self.act_add_file.triggered.connect(self.on_add_file)
-        self.act_add_path.triggered.connect(self.on_add_path)
         self.act_analyze_all.triggered.connect(self.on_analyze_all)
         self.act_clear_analyze.triggered.connect(self.on_clear_analyze)
         self.act_remove_output.triggered.connect(self.on_clear_output_folder)
@@ -98,30 +88,17 @@ class ToolbarUi(QToolBar):
 
         self.setOrientation(Qt.Vertical)
 
-    def connect_on_add_file_folder(self, on_add_file_folder):
-        self.add_file_folder = on_add_file_folder
+    def connect_on_add_file_folder_included(self, on_add_file_folder_included):
+        self.add_file_folder = on_add_file_folder_included
 
     def connect_to_get_selected_paths(self, get_selected_path):
         self.get_selected_paths = get_selected_path
 
-    def connect_to_get_all_paths(self, get_all_paths):
-        self.get_all_paths = get_all_paths
+    def connect_to_get_included_paths(self, get_included_paths):
+        self.get_included_paths = get_included_paths
 
-    def on_add_file(self):
-        dlg = QFileDialog(directory=self.app_setting.last_opened_path)
-        if dlg.exec_():
-            self.add_path_to_list(dlg.selectedFiles()[0])
-
-    def on_add_path(self):
-        self.add_path_to_list(
-            QFileDialog(
-                directory=self.app_setting.last_opened_path
-            ).getExistingDirectory(
-                self.main_window,
-                "Hey! Select a Folder",
-                options=QFileDialog.ShowDirsOnly,
-            )
-        )
+    def connect_to_get_excluded_paths(self, get_excluded_paths):
+        self.get_excluded_paths = get_excluded_paths
 
     def add_path_to_list(self, path):
         self.app_setting.last_opened_path = path
@@ -133,8 +110,9 @@ class ToolbarUi(QToolBar):
         UiUtility.show_message("Analyzer", "The selected files are analyzed!")
 
     def on_analyze_all(self):
-        paths = self.get_all_paths()
-        self.analyzer_logic.analyze_all(paths)
+        included_paths = self.get_included_paths()
+        excluded_paths = self.get_excluded_paths()
+        self.analyzer_logic.analyze_all(included_paths, excluded_paths)
         UiUtility.show_message("Analyzer", "All the files are analyzed!")
 
     def on_clear_analyze(self):
