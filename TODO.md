@@ -3,7 +3,6 @@
 ### Analyzer
 
 - [ ] Enable multi-threading
-- [ ] Analyze only the changed files to save time
 - [ ] Refactor the code architecture
 - [ ] Support additional policy file formats and SELinux variants
 - [ ] Implement rule-based analysis to suggest improvements or detect potential issues
@@ -30,7 +29,6 @@
 
 - [ ] Create comprehensive documentation and tutorials for users and contributors
 - [ ] Expand the test suite to cover more edge cases and improve overall code coverage
-- [ ] Add localization support for multiple languages
 
 ### Miscellaneous
 
