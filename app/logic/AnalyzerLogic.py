@@ -85,6 +85,7 @@ class AnalyzerLogic:
                             new_rule.class_type = new_rule.class_type.replace(
                                 "$" + str(i), macro_call.parameters[i]
                             )
+                        # print("macro_call.parameters: ", macro_call.parameters)
                         # print("rule: ", new_rule)
                         lst_rules.append(new_rule)
                     break
