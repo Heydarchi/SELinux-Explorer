@@ -142,6 +142,9 @@ class FilterUi(QHBoxLayout):
         print(file_name)
         self.analyzer_logic.on_analyze_finished(filtered_policy_file)
 
+        UiUtility.show_message("Filter", "The output files are generated!")
+        self.update_statusbar("The output files are generated!")
+
     def on_clear_filter_rules(self):
         self.lst_rules.clear()
         self.tbl_rule.clear()
@@ -199,3 +202,6 @@ class FilterUi(QHBoxLayout):
         if not isinstance(filter_type, type(FilterType)):
             filter_type = FilterType.DOMAIN
         self.selected_filter_type = FilterType(filter_type)
+
+    def set_statusbar_update_signal(self, _update_statusbar):
+        self.update_statusbar = _update_statusbar

@@ -21,11 +21,11 @@ class AnalyzerLogic:
     def init_analyzer(self):
         self.analyzer = FileAnalyzer()
 
-    def analyze_all(self, paths):
+    def analyze_all(self, included_paths, excluded_paths):
         if self.keep_result:
-            policy_files.extend(self.analyzer.analyze(paths))
+            policy_files.extend(self.analyzer.analyze(included_paths, excluded_paths))
         else:
-            policy_files = self.analyzer.analyze(paths)
+            policy_files = self.analyzer.analyze(included_paths, excluded_paths)
         self.update_statusbar("Analyze finished")
         self.ref_policy_file = self.make_ref_policy_file(policy_files)
         self.on_analyze_finished(None)
@@ -85,6 +85,7 @@ class AnalyzerLogic:
                             new_rule.class_type = new_rule.class_type.replace(
                                 "$" + str(i), macro_call.parameters[i]
                             )
+                        # print("macro_call.parameters: ", macro_call.parameters)
                         # print("rule: ", new_rule)
                         lst_rules.append(new_rule)
                     break

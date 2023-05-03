@@ -227,7 +227,8 @@ class TeAnalyzer(AbstractAnalyzer):
             )
 
             # print("inputString; " + inputString)
-            items = input_string.replace(";", "").split()
+            input_string = input_string.replace(";", "").strip()
+            items = input_string.split()
             for rule_enum in RuleEnum:
                 if rule_enum.value == items[0].strip():
                     count_brackets = input_string.count("}")
@@ -308,7 +309,13 @@ class TeAnalyzer(AbstractAnalyzer):
             # Convert string to PolicyMacroCall
             macro_call = PolicyMacroCall()
             macro_call.name = input_string.split("(")[0].strip()
-            parameters = input_string.split("(")[1].replace(")", "").strip().split(",")
+            parameters = (
+                input_string.split("(")[1]
+                .replace(")", "")
+                .replace(";", "")
+                .strip()
+                .split(",")
+            )
 
             # remove white clearspaces in parameters
             # print("parameters: ", parameters)
