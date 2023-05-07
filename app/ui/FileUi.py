@@ -1,9 +1,11 @@
-from PyQt5.QtWidgets import QGroupBox, QListWidget, QListWidgetItem
+from PyQt5.QtWidgets import QGroupBox, QListWidget, QListWidgetItem, QMessageBox
 from PyQt5.QtWidgets import QVBoxLayout, QPushButton, QHBoxLayout, QFileDialog
 from PyQt5.QtGui import QIcon, QColor
 from PyQt5.QtCore import Qt, QSize
 from logic.AnalyzerLogic import *
 from AppSetting import *
+from PythonUtilityClasses.FileReader import *
+from PythonUtilityClasses.FileWriter import *
 
 
 class FileUi(QVBoxLayout):
@@ -77,6 +79,30 @@ class FileUi(QVBoxLayout):
         self.btn_remove_from_excluded.setMinimumSize(24, 24)
         self.btn_remove_from_excluded.setIconSize(QSize(24, 24))
 
+        self.btn_save_included_file = QPushButton(icon=QIcon(ICON_PATH + "save.png"))
+        self.btn_save_included_file.setToolTip("Save the the included list to a file")
+        self.btn_save_included_file.setMinimumSize(24, 24)
+        self.btn_save_included_file.setIconSize(QSize(24, 24))
+
+        self.btn_load_included_file = QPushButton(
+            icon=QIcon(ICON_PATH + "open-file.png")
+        )
+        self.btn_load_included_file.setToolTip("Save the the included list from a file")
+        self.btn_load_included_file.setMinimumSize(24, 24)
+        self.btn_load_included_file.setIconSize(QSize(24, 24))
+
+        self.btn_save_excluded_file = QPushButton(icon=QIcon(ICON_PATH + "save.png"))
+        self.btn_save_excluded_file.setToolTip("Save the the excluded list to a file")
+        self.btn_save_excluded_file.setMinimumSize(24, 24)
+        self.btn_save_excluded_file.setIconSize(QSize(24, 24))
+
+        self.btn_load_excluded_file = QPushButton(
+            icon=QIcon(ICON_PATH + "open-file.png")
+        )
+        self.btn_load_excluded_file.setToolTip("Save the the excluded list from a file")
+        self.btn_load_excluded_file.setMinimumSize(24, 24)
+        self.btn_load_excluded_file.setIconSize(QSize(24, 24))
+
     def _config_signals(self):
         self.btn_add_included_file.clicked.connect(self.on_add_file_included)
         self.btn_add_excluded_file.clicked.connect(self.on_add_file_excluded)
@@ -84,17 +110,25 @@ class FileUi(QVBoxLayout):
         self.btn_add_excluded_path.clicked.connect(self.on_add_excluded_path)
         self.btn_remove_from_included.clicked.connect(self.remove_from_included_list)
         self.btn_remove_from_excluded.clicked.connect(self.remove_from_excluded_list)
+        self.btn_save_included_file.clicked.connect(self.save_included_file)
+        self.btn_save_excluded_file.clicked.connect(self.save_excluded_file)
+        self.btn_load_included_file.clicked.connect(self.load_included_file)
+        self.btn_load_excluded_file.clicked.connect(self.load_excluded_file)
 
     def _config_layout(self):
         # layout_included_path
         self.layout_included_path_button.addWidget(self.btn_add_included_file)
         self.layout_included_path_button.addWidget(self.btn_add_included_path)
         self.layout_included_path_button.addWidget(self.btn_remove_from_included)
+        self.layout_included_path_button.addWidget(self.btn_save_included_file)
+        self.layout_included_path_button.addWidget(self.btn_load_included_file)
         self.layout_included_path_button.setAlignment(Qt.AlignTop)
 
         self.layout_excluded_path_button.addWidget(self.btn_add_excluded_file)
         self.layout_excluded_path_button.addWidget(self.btn_add_excluded_path)
         self.layout_excluded_path_button.addWidget(self.btn_remove_from_excluded)
+        self.layout_excluded_path_button.addWidget(self.btn_save_excluded_file)
+        self.layout_excluded_path_button.addWidget(self.btn_load_excluded_file)
         self.layout_excluded_path_button.setAlignment(Qt.AlignTop)
 
         self.lst_included_path.setMinimumHeight(self.LIST_MINIMUM_HEIGHT)
@@ -195,3 +229,81 @@ class FileUi(QVBoxLayout):
         item = QListWidgetItem(path)
         item.setBackground(self.EXCLUDED_ITEM_COLOR)
         self.lst_excluded_path.addItem(item)
+
+    def save_included_file(self):
+        lst_file = list()
+        lst_file.append("SELINUX_EXPLORE_PATHS: INCLUDED")
+        lst_file.extend(self.get_included_paths())
+        file_path = QFileDialog(
+            directory=self.app_setting.last_opened_path
+        ).getSaveFileName(self.main_window, "Save an included path to a file")
+        if file_path[0]:
+            FileWriter.write_list_to_file(file_path[0], lst_file)
+
+    def save_excluded_file(self):
+        lst_file = list()
+        lst_file.append("SELINUX_EXPLORE_PATHS: EXCLUDED")
+        lst_file.extend(self.get_excluded_paths())
+        file_path = QFileDialog(
+            directory=self.app_setting.last_opened_path
+        ).getSaveFileName(self.main_window, "Save an excluded path to a file")
+        if file_path[0]:
+            FileWriter.write_list_to_file(file_path[0], lst_file)
+
+    def load_included_file(self):
+        file_path = QFileDialog(
+            directory=self.app_setting.last_opened_path
+        ).getOpenFileName(self.main_window, "Open an included file path")
+        if file_path[0]:
+            lst_file = FileReader.read_file_lines(file_path[0])
+            if "SELINUX_EXPLORE_PATHS:" not in lst_file[0]:
+                QMessageBox.warning(
+                    self.main_window,
+                    "Warning",
+                    "This is not a valid file",
+                    QMessageBox.Ok,
+                )
+                return
+
+            if "INCLUDED" not in lst_file[0]:
+                result = QMessageBox().question(
+                    self.main_window,
+                    "Warning",
+                    "This file is not included file. Do you want to continue?",
+                    QMessageBox.Yes | QMessageBox.No,
+                    QMessageBox.No,
+                )
+                if result == QMessageBox.No:
+                    return
+
+            for i in range(1, len(lst_file)):
+                self.on_add_file_folder_included(lst_file[i])
+
+    def load_excluded_file(self):
+        file_path = QFileDialog(
+            directory=self.app_setting.last_opened_path
+        ).getOpenFileName(self.main_window, "Open an excluded file path")
+        if file_path[0]:
+            lst_file = FileReader.read_file_lines(file_path[0])
+            if "SELINUX_EXPLORE_PATHS:" not in lst_file[0]:
+                QMessageBox.warning(
+                    self.main_window,
+                    "Warning",
+                    "This is not a valid file",
+                    QMessageBox.Ok,
+                )
+                return
+
+            if "EXCLUDED" not in lst_file[0]:
+                result = QMessageBox().question(
+                    self.main_window,
+                    "Warning",
+                    "This file is not excluded file. Do you want to continue?",
+                    QMessageBox.Yes | QMessageBox.No,
+                    QMessageBox.No,
+                )
+                if result == QMessageBox.No:
+                    return
+
+            for i in range(1, len(lst_file)):
+                self.on_add_file_folder_excluded(lst_file[i])
