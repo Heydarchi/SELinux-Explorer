@@ -154,26 +154,26 @@ class FileUi(QVBoxLayout):
         # self.addLayout(self.layout_included_path)
 
     def on_add_included_path(self):
-        self.on_add_file_folder_included(
-            QFileDialog(
-                directory=self.app_setting.last_opened_path
-            ).getExistingDirectory(
-                self.main_window,
-                "Hey! Select a Folder",
-                options=QFileDialog.ShowDirsOnly,
-            )
+        path = QFileDialog(
+            directory=self.app_setting.last_opened_path
+        ).getExistingDirectory(
+            self.main_window,
+            "Hey! Select a Folder",
+            options=QFileDialog.ShowDirsOnly,
         )
+        if path:
+            self.on_add_file_folder_included(path)
 
     def on_add_excluded_path(self):
-        self.on_add_file_folder_excluded(
-            QFileDialog(
-                directory=self.app_setting.last_opened_path
-            ).getExistingDirectory(
-                self.main_window,
-                "Hey! Select a Folder",
-                options=QFileDialog.ShowDirsOnly,
-            )
+        path = QFileDialog(
+            directory=self.app_setting.last_opened_path
+        ).getExistingDirectory(
+            self.main_window,
+            "Hey! Select a Folder",
+            options=QFileDialog.ShowDirsOnly,
         )
+        if path:
+            self.on_add_file_folder_excluded(path)
 
     def on_add_file_included(self):
         dlg = QFileDialog(directory=self.app_setting.last_opened_path)
