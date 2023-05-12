@@ -109,5 +109,5 @@ We're always looking to improve and expand the functionality of SELinux Explorer
 
 ## License
 
-This project is released under the [MIT License](LICENSE).
+This project is released under the [Apache 2.0 License](LICENSE).
 
