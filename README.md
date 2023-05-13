@@ -2,7 +2,7 @@
 # SELinux Explorer
 <br/>
 
-SELinux Explorer is a utility designed to help developers explore SELinux policies, with a focus on Android SELinux at present. The project initially started as a command-line tool but has since evolved to include a graphical user interface (GUI) for better usability and to provide additional features such as filtering, generating custom output, and reusing data.
+SELinux Explorer is a utility designed to help developers explore and visualize SELinux policies, with a focus on Android SELinux at present. The project initially started as a command-line tool but has since evolved to include a graphical user interface (GUI) for better usability and to provide additional features such as filtering, generating custom output, and reusing data.
 
 The tool supports the following file types:
 - `file_contexts`
@@ -15,6 +15,23 @@ The tool supports the following file types:
 
 **Please note**: The tool is a work in progress and might have some issues or require performance improvements. We welcome any bug reports, suggestions, or contributions.
 
+<br/>
+
+## Use cases
+
+- Threat assessment and cybersecurity analysis
+    - Identify potential vulnerabilities in policies
+    - Detect possible privilege escalation paths
+- Android app development
+    - Debug and optimize SELinux policies for custom apps
+    - Verify proper policy configuration
+- System administration
+    - Audit and review SELinux policies
+    - Improve system security and compliance
+- Security research
+    - Analyze and understand complex policy structures
+    - Develop new security solutions and enhancements
+- Documentation
 <br/>
 
 ### Screenshots of the GUI and the generated output
