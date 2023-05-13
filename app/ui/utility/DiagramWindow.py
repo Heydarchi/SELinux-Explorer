@@ -14,8 +14,8 @@ class DiagramWindow(QWidget):
         self._config_layout()
 
     def _init_variables(self):
-        self.DEFAULT_WIDTH = 1200 * 2
-        self.DEFAULT_HEIGHT = 1024 * 2
+        self.DEFAULT_WIDTH = 1100 * 2
+        self.DEFAULT_HEIGHT = 720 * 2
 
     def _init_widgets(self):
         self.im = QPixmap(self.file_path)

@@ -58,8 +58,8 @@ class DrawingColor(Enum):
 
 
 class DrawingTool:
-    default_height = 1500
-    default_width = 2500
+    default_height = 1200  # 1500
+    default_width = 2200  # 2500
 
     @staticmethod
     def generate_start_of_puml(height=default_height, width=default_width):
