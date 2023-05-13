@@ -23,9 +23,11 @@
 - [ ] Search the input file and the generated files
 - [ ] Add AND/OR for combining the filter rules
 - [ ] Sort result files by date
-- [ ] Enhance the GUI with more customization options, such as themes and layout preferences
+- [ ] Enhance the GUI with more customization options
+  - [ ] themes
+  - [ ] layout preferences
+  - [ ] diagram size
 - [ ] Implement an in-app editor for creating and modifying policy files
-- [ ] Add some buttons to save/load paths and files
 - [ ] Add other categories such as MACRO_CALL, MACRO_DEF, etc
 - [ ] Make it possible to search for all the categories
 - [ ] Suggest for the right place to add the new rules
