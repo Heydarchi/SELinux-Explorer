@@ -270,6 +270,20 @@ class AnalyzerResultUi(QVBoxLayout):
         class_type_rules = list(set(class_type_rules))
         return class_type_rules
 
+    def _collect_macro_def(self, policy_file):
+        macro_def_rules = []
+        if policy_file is None:
+            return macro_def_rules
+
+        for macro in policy_file.macros:
+            if macro.name.strip() != "":
+                macro_def_rules.append(
+                    FilterRule(FilterType.MACRO_DEF, macro.name, False)
+                )
+
+        macro_def_rules = list(set(macro_def_rules))
+        return macro_def_rules
+
     def on_dispose(self):
         if self.diagram is not None:
             self.diagram.close()
@@ -287,6 +301,7 @@ class AnalyzerResultUi(QVBoxLayout):
             lst_rules.extend(self._collect_file_path_rule(self.result_policy_file))
             lst_rules.extend(self._collect_permission_rule(self.result_policy_file))
             lst_rules.extend(self._collect_class_type(self.result_policy_file))
+            lst_rules.extend(self._collect_macro_def(self.result_policy_file))
         elif self.cmb_filter.currentText() == FilterType.DOMAIN.name:
             lst_rules.extend(self._collect_domain_rule(self.result_policy_file))
         elif self.cmb_filter.currentText() == FilterType.FILE_PATH.name:
@@ -295,6 +310,8 @@ class AnalyzerResultUi(QVBoxLayout):
             lst_rules.extend(self._collect_permission_rule(self.result_policy_file))
         elif self.cmb_filter.currentText() == FilterType.CLASS_TYPE.name:
             lst_rules.extend(self._collect_class_type(self.result_policy_file))
+        elif self.cmb_filter.currentText() == FilterType.MACRO_DEF.name:
+            lst_rules.extend(self._collect_macro_def(self.result_policy_file))
 
         self.last_rules_result = lst_rules
         # print("Total rules: " + str(len(lst_rules)))

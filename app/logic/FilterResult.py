@@ -69,6 +69,11 @@ class FilterResult:
                     filter_rule, policy_file, filtered_policy_file
                 )
 
+            elif FilterType(filter_rule.filter_type) == FilterType.MACRO_DEF:
+                filtered_policy_file = self.filter_macro_def(
+                    filter_rule, policy_file, filtered_policy_file
+                )
+
         filtered_policy_file = self.remove_duplicated_Items(filtered_policy_file)
 
         drawer = RelationDrawer()
@@ -127,7 +132,7 @@ class FilterResult:
         )
         filtered_policy_file.rules.extend(self.filter_rule(filter_rule, policy_file))
         filtered_policy_file.macros.extend(
-            self.filter_function(filter_rule, policy_file)
+            self.select_macro_def(filter_rule, policy_file)
         )
         filtered_policy_file.attribute.extend(
             self.filter_attribute(filter_rule, policy_file)
@@ -241,6 +246,14 @@ class FilterResult:
                         FilterRule(FilterType.DOMAIN, domain, True), policy_file
                     )
                 )
+
+        return filtered_policy_file
+
+    def filter_macro_def(self, filter_rule, policy_file, filtered_policy_file):
+        """filter macro_def having name in policy_file and add to filtered_policy_file"""
+        for macro in policy_file.macros:
+            if self.check_similarity(filter_rule, macro.name):
+                filtered_policy_file.macros.append(macro)
 
         return filtered_policy_file
 
@@ -379,16 +392,16 @@ class FilterResult:
                 lst_rule.append(rule)
         return lst_rule
 
-    def filter_function(self, filter_rule, policy_file):
-        lst_function = []
-        for function in policy_file.macros:
-            if self.check_similarity(filter_rule, function.name):
-                lst_function.append(function)
-        return lst_function
-
     def filter_attribute(self, filter_rule, policy_file):
         lst_attribute = []
         for attribute in policy_file.attribute:
             if self.check_similarity(filter_rule, attribute.name):
                 lst_attribute.append(attribute)
         return lst_attribute
+
+    def select_macro_def(self, filter_rule, policy_file):
+        lst_macro_def = []
+        for macro_def in policy_file.macros:
+            if self.check_similarity(filter_rule, macro_def.name):
+                lst_macro_def.append(macro_def)
+        return lst_macro_def
