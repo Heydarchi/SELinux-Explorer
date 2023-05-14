@@ -182,5 +182,10 @@ class AnalyzerLogic:
                 filter_result.filter_se_app_by_name(filter_rule, self.ref_policy_file)
             )
             return lst_info
+        elif filter_rule.filter_type == FilterType.MACRO_DEF:
+            lst_info.extend(
+                filter_result.select_macro_def(filter_rule, self.ref_policy_file)
+            )
+            return lst_info
         else:
             return None

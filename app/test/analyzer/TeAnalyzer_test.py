@@ -18,6 +18,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_macro_no_param(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = """define(`call_macro',`
         allow source1 target1:class1 permission1;
         allow source2 target2:class2 permission2;
@@ -27,6 +28,7 @@ class TestTeAnalyzer(unittest.TestCase):
         macro = te_analyzer.extract_macro(input_string)
         # Assert
         self.assertEqual(macro.name, "call_macro")
+        self.assertEqual(macro.file_name, "test.te")
         self.assertEqual(len(macro.rules), 2)
         self.assertEqual(macro.rules[0].source, "source1")
         self.assertEqual(macro.rules[0].target, "target1")
@@ -40,6 +42,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_macro_with_param(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = """define(`call_macro',`
         allow $1 $2:$3 $4;
         allow $5 {$6 $7}:$8 $9;
@@ -49,6 +52,7 @@ class TestTeAnalyzer(unittest.TestCase):
         macro = te_analyzer.extract_macro(input_string)
         # Assert
         self.assertEqual(macro.name, "call_macro")
+        self.assertEqual(macro.file_name, "test.te")
         self.assertEqual(len(macro.rules), 3)
         self.assertEqual(macro.rules[0].source, "$1")
         self.assertEqual(macro.rules[0].target, "$2")

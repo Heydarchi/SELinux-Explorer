@@ -28,7 +28,7 @@
   - [ ] layout preferences
   - [ ] diagram size
 - [ ] Implement an in-app editor for creating and modifying policy files
-- [ ] Add other categories such as MACRO_CALL, MACRO_DEF, etc
+- [ ] Add other categories such as MACRO_CALL, etc
 - [ ] Make it possible to search for all the categories
 - [ ] Suggest for the right place to add the new rules
 - [ ] Implement a Wizard if it has any advantages

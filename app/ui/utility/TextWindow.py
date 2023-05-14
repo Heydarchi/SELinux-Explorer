@@ -21,8 +21,8 @@ class TextWindow(QWidget):
         self.label = QLabel()
         self.layout = QVBoxLayout()
 
-        self.edt_data.setMinimumWidth(self._DEFAULT_WIDTH / 2)
-        self.edt_data.setMinimumHeight(self._DEFAULT_HEIGHT / 2)
+        self.edt_data.setMinimumWidth(int(self._DEFAULT_WIDTH / 2))
+        self.edt_data.setMinimumHeight(int(self._DEFAULT_HEIGHT / 2))
         self.edt_data.setReadOnly(True)
 
     def _config_layout(self):
@@ -50,12 +50,14 @@ class TextWindow(QWidget):
             self.edt_data.setText(self._colorize_item_names(data))
 
     def _colorize_item_names(self, input_str):
+        # print("input_str: ", input_str)
         input_str = input_str.replace("\n", "<br/>")
         input_str = input_str.replace("\t", "&nbsp; &nbsp; &nbsp; &nbsp; ")
+        # print("pre output: ", input_str)
         pre_suffix = '<span style=" font-size:10pt; font-weight:600; color:#0000aa;" >'
         suffix = "</span>"
-        pattern = r"(\w+):"
-        replacement = r"%s\1:%s" % (pre_suffix, suffix)
+        pattern = r"(<br/\>\s?(&nbsp;\s)*\s?(\w+):)"
+        replacement = r"%s\1%s" % (pre_suffix, suffix)
         out_put = re.sub(pattern, replacement, input_str)
         # print(out_put)
         return out_put

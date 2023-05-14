@@ -230,8 +230,18 @@ class Context(JSONWizard):
 @dataclass
 class PolicyMacro:
     name: str = ""
+    file_name: str = ""
     rules_string: List[str] = field(default_factory=list)
     rules: List[Rule] = field(default_factory=list)
+
+    def to_string(self):
+        return (
+            self.name
+            + "\n file_name: "
+            + self.file_name
+            + "\n rules_string: \n\t\t"
+            + "\n\t\t ".join(self.rules_string)
+        )
 
 
 @dataclass
