@@ -291,6 +291,7 @@ class TeAnalyzer(AbstractAnalyzer):
             first_line = lst_lines.pop(0).replace("define", "").replace("'", "")
             first_line = first_line.replace("`", "").replace("(", "").replace(",", "")
             macro.name = first_line.strip()
+            macro.file_name = self.policy_file.file_name
             for line in lst_lines:
                 if line.strip() == "":
                     continue

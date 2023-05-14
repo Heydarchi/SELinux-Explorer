@@ -230,6 +230,7 @@ class Context(JSONWizard):
 @dataclass
 class PolicyMacro:
     name: str = ""
+    file_name: str = ""
     rules_string: List[str] = field(default_factory=list)
     rules: List[Rule] = field(default_factory=list)
 

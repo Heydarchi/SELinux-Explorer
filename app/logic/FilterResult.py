@@ -12,6 +12,8 @@ class FilterType(Enum):
     PERMISSION = 3
     FILE_PATH = 4
     # ATTRIBUTE = 5
+    # MACRO_CALL = 5
+    MACRO_DEF = 5
 
 
 @dataclass
