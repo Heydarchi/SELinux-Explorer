@@ -239,7 +239,8 @@ class PolicyMacro:
             self.name
             + "\n file_name: "
             + self.file_name
-            + "\n\t rules_string: ".join(self.rules_string)
+            + "\n rules_string: \n\t\t"
+            + "\n\t\t ".join(self.rules_string)
         )
 
 
