@@ -277,7 +277,7 @@ class FileUi(QVBoxLayout):
                     return
 
             for i in range(1, len(lst_file)):
-                self.on_add_file_folder_included(lst_file[i])
+                self.on_add_file_folder_included(lst_file[i].replace("\n", ""))
 
     def load_excluded_file(self):
         file_path = QFileDialog(
@@ -306,4 +306,4 @@ class FileUi(QVBoxLayout):
                     return
 
             for i in range(1, len(lst_file)):
-                self.on_add_file_folder_excluded(lst_file[i])
+                self.on_add_file_folder_excluded(lst_file[i].replace("\n", ""))
