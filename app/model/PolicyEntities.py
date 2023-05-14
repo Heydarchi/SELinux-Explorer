@@ -234,6 +234,14 @@ class PolicyMacro:
     rules_string: List[str] = field(default_factory=list)
     rules: List[Rule] = field(default_factory=list)
 
+    def to_string(self):
+        return (
+            self.name
+            + "\n file_name: "
+            + self.file_name
+            + "\n\t rules_string: ".join(self.rules_string)
+        )
+
 
 @dataclass
 class PolicyMacroCall:
