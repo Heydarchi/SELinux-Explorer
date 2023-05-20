@@ -8,6 +8,7 @@ class TestContextsAnalyzer(unittest.TestCase):
     def test_extract_definition(self):
         # Test the extractDefinition function
         contexts_analyzer = ContextsAnalyzer()
+        contexts_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.FILE_CONTEXTS)
         context = contexts_analyzer.extract_definition(
             "/system/bin/app_process32 system_app:system_app:s0:c512:c768"
         )

@@ -8,11 +8,13 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_macro_call(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = "call_macro(1, 2, 3)"
         # Act
         macro_call = te_analyzer.extract_macro_call(input_string)
         # Assert
         self.assertEqual(macro_call.name, "call_macro")
+        self.assertEqual(macro_call.where_is_it, "test.te")
         self.assertEqual(macro_call.parameters, ["1", "2", "3"])
 
     def test_extract_macro_no_param(self):
@@ -70,6 +72,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_macrocall_with_param(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = "call_macro(source1, target1, class1, source2, target2, class2)"
         # Act
         macro_call = te_analyzer.extract_macro_call(input_string)
@@ -83,6 +86,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_macrocall_no_param(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = "call_macro()"
         # Act
         macro_call = te_analyzer.extract_macro_call(input_string)
@@ -93,6 +97,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_rule(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = "allow source1 target1:class1 permission1;"
         # Act
         rules = te_analyzer.extract_rule(input_string)
@@ -106,6 +111,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_rule_multiple_source(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = "allow {source1 source2} target1:class1 permission1;"
         # Act
         rules = te_analyzer.extract_rule(input_string)
@@ -123,6 +129,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_rule_multiple_target(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = "allow source1 {target1 target2}:class1 permission1;"
         # Act
         rules = te_analyzer.extract_rule(input_string)
@@ -140,6 +147,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_rule_multiple_permission(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = "allow source1 target1:class1 {permission1 permission2};"
         # Act
         rules = te_analyzer.extract_rule(input_string)
@@ -153,6 +161,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_rule_multiple_source_target_permission(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = "allow {source1 source2} {target1 target2}:class1 {permission1 permission2};"
         # Act
         rules = te_analyzer.extract_rule(input_string)
@@ -178,6 +187,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_rule_multiple_class_everything(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = "neverallow * { system_file_type vendor_file_type rootfs }:system module_load;"
 
         # Act
@@ -228,6 +238,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_attribute(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = "typeattribute type_id attr1, attr2;"
         # Act
         attribute = te_analyzer.extract_attribute(input_string)
@@ -240,6 +251,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_definition(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = "type type_id, type1, type2, type3;"
         # Act
         definition = te_analyzer.extract_definition(input_string)
@@ -253,6 +265,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_items_to_process(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         file_lines = [
             "allow { ",
             "source1 ",
@@ -292,6 +305,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_items_to_process_miltiple_macro_define(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         file_lines = [
             "#The dumpstate HAL reads debugFs files, which become part of the bug report",
             "#But there are some restrictions according to system/sepolicy/private/domain.te line 529",
@@ -311,6 +325,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extact_items_to_process_miltiple_class_and_macrocall(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         file_lines = [
             "full_treble_only(`",
             "  # Vendor apps are permitted to use only stable public services. If they were to use arbitrary",
@@ -366,6 +381,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_permissive(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = "permissive domain;"
         # Act
         permissive = te_analyzer.extract_permissive(input_string)
@@ -375,6 +391,7 @@ class TestTeAnalyzer(unittest.TestCase):
     def test_extract_type_alias(self):
         # Arrange
         te_analyzer = TeAnalyzer()
+        te_analyzer.policy_file = PolicyFile("test.te", "", FileTypeEnum.TE_FILE)
         input_string = "typealias type_id alias alias;"
         # Act
         type_alias = te_analyzer.extract_type_alias(input_string)
