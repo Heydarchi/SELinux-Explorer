@@ -164,11 +164,14 @@ class Attribute(JSONWizard):
     where_is_it: str = ""
 
     def to_string(self):
-        return ( "where_is_it: "
-                 + self.where_is_it
-                 + "\n\n"
-                 + self.name + ": "
-                 + "\n\t attributes: ".join(self.attributes) )
+        return (
+            "where_is_it: "
+            + self.where_is_it
+            + "\n\n"
+            + self.name
+            + ": "
+            + "\n\t attributes: ".join(self.attributes)
+        )
 
 
 @dataclass
