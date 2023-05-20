@@ -1,12 +1,16 @@
 # This class is going to test the SeAppAnalyzer class
 import unittest
 from analyzer.SeAppAnalyzer import SeAppAnalyzer
+from model.PolicyEntities import PolicyFile, FileTypeEnum
 
 
 class TestSeAppAnalyzer(unittest.TestCase):
     def test_extract_definition(self):
         # Test the extractDefinition function
         se_app_analyzer = SeAppAnalyzer()
+        se_app_analyzer.policy_file = PolicyFile(
+            "test.te", "", FileTypeEnum.SEAPP_CONTEXTS
+        )
         se_app = se_app_analyzer.extract_definition(
             "user=app0 name=app1 domain=app2 type=app3 level_from=app4 "
             "level=app5 seinfo=app6 is_priv_app=True is_system_server=False "

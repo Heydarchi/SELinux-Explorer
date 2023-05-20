@@ -147,6 +147,7 @@ class TeAnalyzer(AbstractAnalyzer):
             items = input_string.replace(";", "").split()
             permissive = Permissive()
             permissive.name = items[1].strip()
+            permissive.where_is_it = self.policy_file.where_is_it
             return permissive
         except Exception as err:
             MyLogger.log_error(sys, err, input_string)
@@ -161,6 +162,7 @@ class TeAnalyzer(AbstractAnalyzer):
             type_def.name = types[0].strip()
             type_def.types.extend(types[1:])
             type_def.types = [x.strip() for x in type_def.types]
+            type_def.where_is_it = self.policy_file.where_is_it
             if DOMAIN_EXECUTABLE in type_def.name:
                 if not self.merge_exec_domain(type_def):
                     return type_def
@@ -202,6 +204,7 @@ class TeAnalyzer(AbstractAnalyzer):
             )
             attribute = Attribute()
             attribute.name = types[0].strip()
+            attribute.where_is_it = self.policy_file.where_is_it
             if len(types) > 1:
                 attribute.attributes.extend(types[1:])
             return attribute
@@ -270,6 +273,7 @@ class TeAnalyzer(AbstractAnalyzer):
                         targets = dst_items[0].split()
                         for target in targets:
                             rule = Rule()
+                            rule.where_is_it = self.policy_file.where_is_it
                             rule.rule = rule_enum
                             rule.source = source
                             rule.target = target
@@ -291,7 +295,7 @@ class TeAnalyzer(AbstractAnalyzer):
             first_line = lst_lines.pop(0).replace("define", "").replace("'", "")
             first_line = first_line.replace("`", "").replace("(", "").replace(",", "")
             macro.name = first_line.strip()
-            macro.file_name = self.policy_file.file_name
+            macro.where_is_it = self.policy_file.where_is_it
             for line in lst_lines:
                 if line.strip() == "":
                     continue
@@ -310,6 +314,7 @@ class TeAnalyzer(AbstractAnalyzer):
             # Convert string to PolicyMacroCall
             macro_call = PolicyMacroCall()
             macro_call.name = input_string.split("(")[0].strip()
+            macro_call.where_is_it = self.policy_file.where_is_it
             parameters = (
                 input_string.split("(")[1]
                 .replace(")", "")
