@@ -28,7 +28,7 @@ class TestTeAnalyzer(unittest.TestCase):
         macro = te_analyzer.extract_macro(input_string)
         # Assert
         self.assertEqual(macro.name, "call_macro")
-        self.assertEqual(macro.file_name, "test.te")
+        self.assertEqual(macro.where_is_it, "test.te")
         self.assertEqual(len(macro.rules), 2)
         self.assertEqual(macro.rules[0].source, "source1")
         self.assertEqual(macro.rules[0].target, "target1")
@@ -52,7 +52,7 @@ class TestTeAnalyzer(unittest.TestCase):
         macro = te_analyzer.extract_macro(input_string)
         # Assert
         self.assertEqual(macro.name, "call_macro")
-        self.assertEqual(macro.file_name, "test.te")
+        self.assertEqual(macro.where_is_it, "test.te")
         self.assertEqual(len(macro.rules), 3)
         self.assertEqual(macro.rules[0].source, "$1")
         self.assertEqual(macro.rules[0].target, "$2")
