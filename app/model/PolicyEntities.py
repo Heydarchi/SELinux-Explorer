@@ -89,10 +89,14 @@ class Rule(JSONWizard):
     target: str = ""
     class_type: str = ""
     permissions: List[str] = field(default_factory=list)
+    where_is_it: str = ""
 
     def to_string(self):
         return (
-            self.rule
+            "where_is_it: "
+            + self.where_is_it
+            + "\n\n"
+            + self.rule
             + "\n source: "
             + self.source
             + "\n target: "
@@ -112,10 +116,14 @@ class SecurityContext(JSONWizard):
     type: str = ""
     level: str = ""
     categories: str = ""
+    where_is_it: str = ""
 
     def to_string(self):
         return (
-            "user: "
+            "where_is_it: "
+            + self.where_is_it
+            + "\n\n"
+            + " user: "
             + self.user
             + "\n role: "
             + self.role
@@ -133,10 +141,14 @@ class TypeDef(JSONWizard):
     name: str = ""
     alises: List[str] = field(default_factory=list)
     types: List[str] = field(default_factory=list)
+    where_is_it: str = ""
 
     def to_string(self):
         return (
-            self.name
+            "where_is_it: "
+            + self.where_is_it
+            + "\n\n"
+            + self.name
             + ": "
             + "\n\t types: ".join(self.types)
             + "\n\t alises: ".join(self.alises)
@@ -147,9 +159,15 @@ class TypeDef(JSONWizard):
 class Attribute(JSONWizard):
     name: str = ""
     attributes: List[str] = field(default_factory=list)
+    where_is_it: str = ""
 
     def to_string(self):
-        return self.name + ": " + "\n\t attributes: ".join(self.attributes)
+        return ( "where_is_it: "
+                 + self.where_is_it
+                 + "\n\n"
+                 + self.name + ": "
+                 + self.where_is_it
+                 + "\n\t attributes: ".join(self.attributes) )
 
 
 @dataclass
@@ -169,10 +187,14 @@ class SeAppContext(JSONWizard):
     type_def: TypeDef = field(default_factory=TypeDef)
     attribute: Attribute = field(default_factory=Attribute)
     is_permissive: bool = False
+    where_is_it: str = ""
 
     def to_string(self):
         return (
-            "name: "
+            "where_is_it: "
+            + self.where_is_it
+            + "\n\n"
+            + "name: "
             + self.name
             + "\n user: "
             + self.user
@@ -212,10 +234,14 @@ class Context(JSONWizard):
     type_def: TypeDef = field(default_factory=TypeDef)
     domain_name: str = ""
     is_permissive: bool = False
+    where_is_it: str = ""
 
     def to_string(self):
         return (
-            self.path_name
+            "where_is_it: "
+            + self.where_is_it
+            + "\n\n"
+            + self.path_name
             + "\n file_type: "
             + self.file_type
             + "\n domain_name: "
@@ -230,15 +256,16 @@ class Context(JSONWizard):
 @dataclass
 class PolicyMacro:
     name: str = ""
-    file_name: str = ""
+    where_is_it: str = ""
     rules_string: List[str] = field(default_factory=list)
     rules: List[Rule] = field(default_factory=list)
 
     def to_string(self):
         return (
-            self.name
-            + "\n file_name: "
-            + self.file_name
+            "where_is_it: "
+            + self.where_is_it
+            + "\n\n"
+            + self.name
             + "\n rules_string: \n\t\t"
             + "\n\t\t ".join(self.rules_string)
         )
@@ -248,11 +275,12 @@ class PolicyMacro:
 class PolicyMacroCall:
     name: str = ""
     params: List[str] = field(default_factory=list)
+    where_is_it: str = ""
 
 
 @dataclass
 class PolicyFile(JSONWizard):
-    file_name: str = ""
+    where_is_it: str = ""
     description: str = ""
     file_type: FileTypeEnum = FileTypeEnum.UNDEFINED
     type_def: List[TypeDef] = field(default_factory=list)
