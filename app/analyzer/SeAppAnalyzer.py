@@ -38,6 +38,8 @@ class SeAppAnalyzer(AbstractAnalyzer):
                 input_string = input_string.replace("neverallow", "").strip()
 
             items = input_string.strip().split(" ")
+            se_app.where_is_it = self.policy_file.where_is_it
+
             for item in items:
                 split = item.split("=")
                 # Input selectors

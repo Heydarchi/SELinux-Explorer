@@ -51,11 +51,13 @@ class FileTypeEnum(Enum):
 @dataclass
 class Permissive(JSONWizard):
     name: str = ""
+    where_is_it: str = ""
 
 
 class TypeAlias(JSONWizard):
     name: str = ""
     alias: str = ""
+    where_is_it: str = ""
 
 
 @dataclass
@@ -166,7 +168,6 @@ class Attribute(JSONWizard):
                  + self.where_is_it
                  + "\n\n"
                  + self.name + ": "
-                 + self.where_is_it
                  + "\n\t attributes: ".join(self.attributes) )
 
 
