@@ -1,18 +1,30 @@
-def clean_line(input_str):
-    # print(input_str)
+def clean_line(input_str: str):
+    """Normalize a policy file line.
+
+    - Removes occurrences of literal "--" (preserves previous behaviour).
+    - Strips inline comments starting with `#`, but ignores `#` inside quotes.
+    - Returns None for empty or comment-only lines.
+    """
+    if input_str is None:
+        return None
+
+    # Keep legacy behaviour of removing double-dash
     input_str = input_str.replace("--", "")
-    if "#" in input_str:
-        if input_str.strip().index("#") > 0:
-            # cleaned_str = input_str.strip()[: input_str.index("#")].strip()
-            cleaned_str = input_str.split("#")[
-                0
-            ].strip()  # [: input_str.index("#")].strip()
-            if cleaned_str == "" or cleaned_str is None:
-                return None
-            return cleaned_str
-        else:
-            return None
-    else:
-        if input_str.strip() == "":
-            return None
-        return input_str.strip()
+
+    # Walk the string and find first '#' that is not inside quotes
+    in_single = False
+    in_double = False
+    s = input_str
+    for i, ch in enumerate(s):
+        if ch == "'" and not in_double:
+            in_single = not in_single
+        elif ch == '"' and not in_single:
+            in_double = not in_double
+        elif ch == "#" and not in_single and not in_double:
+            s = s[:i]
+            break
+
+    cleaned = s.strip()
+    if cleaned == "":
+        return None
+    return cleaned
